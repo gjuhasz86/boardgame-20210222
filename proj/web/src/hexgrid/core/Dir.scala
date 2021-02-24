@@ -1,4 +1,4 @@
-package hexgrid
+package hexgrid.core
 
 sealed abstract class Dir(val idx: Int, val xOffs: Double, val yOffs: Double) {
   def rotate(n: Int): Dir = {

@@ -1,4 +1,4 @@
-package hexgrid
+package hexgrid.gui
 
 trait DrawContextHolder[T] {
   def ctx: T

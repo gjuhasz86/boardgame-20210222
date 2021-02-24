@@ -1,9 +1,23 @@
 package hexgrid
-import hexgrid.Tiles.GameTile
+import hexgrid.core.GameState
+import hexgrid.core.Tile
+import hexgrid.core.TileMap
+import hexgrid.core.Tiles
+import hexgrid.core.Tiles.GameTile
+import hexgrid.gui.DefaultScreenTranslator
+import hexgrid.gui.DrawContextHolder
+import hexgrid.gui.Drawable
+import hexgrid.gui.GameOverlay
+import hexgrid.gui.ScreenPos
+import hexgrid.gui.ScreenTranslator
 import org.scalajs.dom
 import org.scalajs.dom.CanvasRenderingContext2D
 import org.scalajs.dom.ext.KeyCode
 import org.scalajs.dom.html
+import hexgrid.drawables.GameOverlayDawable._
+import hexgrid.drawables.GameStateDrawable._
+import hexgrid.drawables.TileDrawables._
+import hexgrid.drawables.TileMapDrawable._
 
 import scala.scalajs.js.annotation.JSExportTopLevel
 
@@ -11,7 +25,6 @@ object Main {
   @JSExportTopLevel("main")
   def main(canvas: html.Canvas): Unit = {
     import Drawable._
-    import Drawables._
     import ScreenTranslator._
 
     val renderCtx: CanvasRenderingContext2D =
@@ -53,88 +66,5 @@ object Main {
       dom.window.requestAnimationFrame(updateScreen)
     }
   }
-
-}
-
-case class TilePos(r: Int, c: Int)
-case class ScreenPos(x: Int, y: Int)
-object ScreenPos {
-  def apply(x: Double, y: Double): ScreenPos = new ScreenPos(x.toInt, y.toInt)
-}
-
-
-trait Drawable[T] {
-  def draw(self: T, pos: ScreenPos): Unit
-}
-object Drawable {
-  implicit class DrawOnDrawable[T](self: T)(implicit d: Drawable[T]) {
-    def drawTo(pos: ScreenPos): Unit = d.draw(self, pos)
-  }
-}
-object Drawables {
-  import Drawable._
-  import ScreenTranslator._
-
-  type Dch = DrawContextHolder[dom.CanvasRenderingContext2D]
-
-  implicit def tileDrawable(implicit dch: Dch): Drawable[Tile] =
-    (self: Tile, pos: ScreenPos) => {
-
-      val innerTile: Tile = self match {
-        case Tiles.VirtualTile(inner) =>
-          dch.ctx.globalAlpha = 0.5
-          inner
-        case gt: GameTile =>
-          dch.ctx.globalAlpha = 1.0
-          gt
-        case blank@Tiles.Blank =>
-          dch.ctx.globalAlpha = 1.0
-          blank
-      }
-
-      innerTile match {
-        case path@Tiles.Path(_, _) =>
-          dch.ctx.beginPath()
-          dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
-          dch.ctx.lineWidth = 1
-          dch.ctx.strokeStyle = "black"
-          dch.ctx.fillStyle = "white"
-          dch.ctx.fill()
-          dch.ctx.stroke()
-
-          dch.ctx.strokeStyle = "red"
-          dch.ctx.lineWidth = 5
-          path.rotatedDirs.foreach { dir =>
-            dch.ctx.beginPath()
-            dch.ctx.moveTo(pos.x, pos.y)
-            dch.ctx.lineTo(pos.x + dch.tileSize * dir.xOffs, pos.y + dch.screenTranslator.rowDistance * dir.yOffs)
-            dch.ctx.stroke()
-          }
-        case _ =>
-      }
-    }
-
-  implicit def tileMapDrawable(implicit td: Drawable[Tile], dch: Dch): Drawable[TileMap] =
-    (self: TileMap, pos: ScreenPos) => {
-      implicit val st = dch.screenTranslator
-      self.tiles.foreach { case (pos, tile) =>
-        td.draw(tile, pos.toScreen)
-      }
-    }
-
-  implicit def gameStateDrawable(implicit tmd: Drawable[TileMap]): Drawable[GameState] =
-    (self: GameState, pos: ScreenPos) => self.tileMap.drawTo(pos)
-
-  implicit def overlayDrawable(implicit td: Drawable[Tile], dch: Dch): Drawable[GameOverlay] =
-    (self: GameOverlay, pos: ScreenPos) => {
-      implicit val st = dch.screenTranslator
-
-      val overlayTile = self.gameState.nextTile.map(Tiles.VirtualTile).getOrElse(Tiles.Blank)
-      td.draw(overlayTile, self.mousePos.toTile.toScreen)
-
-      dch.ctx.beginPath()
-      dch.ctx.arc(self.mousePos.x, self.mousePos.y, 10, 0, Math.PI * 2)
-      dch.ctx.stroke()
-    }
 
 }

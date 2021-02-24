@@ -1,4 +1,6 @@
-package hexgrid
+package hexgrid.gui
+
+import hexgrid.core.TilePos
 
 trait ScreenTranslator {
   def rowDistance: Double

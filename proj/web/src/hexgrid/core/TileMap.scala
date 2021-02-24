@@ -1,5 +1,6 @@
-package hexgrid
-import hexgrid.Tiles.GameTile
+package hexgrid.core
+
+import hexgrid.core.Tiles.GameTile
 
 case class TileMap(tiles: Map[TilePos, GameTile]) {
   def place(r: Int, c: Int, tile: GameTile): TileMap =

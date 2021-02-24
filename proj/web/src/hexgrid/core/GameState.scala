@@ -1,5 +1,6 @@
-package hexgrid
-import hexgrid.Tiles.GameTile
+package hexgrid.core
+
+import hexgrid.core.Tiles.GameTile
 
 import scala.util.Random
 

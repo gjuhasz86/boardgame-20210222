@@ -1,4 +1,10 @@
-package hexgrid
+package hexgrid.core
+
+sealed trait Tile {
+  def rotate(n: Int): Tile
+  def rotateRight: Tile = rotate(1)
+  def rotateLeft: Tile = rotate(-1)
+}
 
 object Tiles {
   case object Blank extends Tile {

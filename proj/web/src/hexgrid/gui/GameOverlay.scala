@@ -1,4 +1,6 @@
-package hexgrid
+package hexgrid.gui
+
+import hexgrid.core.GameState
 
 case class GameOverlay(mousePos: ScreenPos, gameState: GameState) {
   def setMouse(pos: ScreenPos) = copy(mousePos = pos)

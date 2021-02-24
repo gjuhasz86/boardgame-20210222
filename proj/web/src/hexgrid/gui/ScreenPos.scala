@@ -1,4 +1,4 @@
-package hexgrid
+package hexgrid.gui
 
 case class ScreenPos(x: Int, y: Int)
 object ScreenPos {
