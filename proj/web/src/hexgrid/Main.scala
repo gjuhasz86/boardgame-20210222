@@ -1,4 +1,5 @@
 package hexgrid
+import hexgrid.Tiles.GameTile
 import org.scalajs.dom
 import org.scalajs.dom.CanvasRenderingContext2D
 import org.scalajs.dom.html
@@ -10,6 +11,7 @@ object Main {
   def main(canvas: html.Canvas): Unit = {
     import Drawable._
     import Drawables._
+    import ScreenTranslator._
 
     val renderCtx: CanvasRenderingContext2D =
       canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
@@ -44,6 +46,11 @@ object Main {
       overlay = overlay.setMouse(ScreenPos(e.pageX, e.pageY))
       dom.window.requestAnimationFrame(updateScreen)
     }
+
+    canvas.onmouseup = (e: dom.MouseEvent) => {
+      implicit val st = dch.screenTranslator
+      gameState = gameState.place(overlay.mousePos.toTile, Tiles.Green)
+    }
   }
 
 }
@@ -53,12 +60,28 @@ case class ScreenPos(x: Int, y: Int)
 object ScreenPos {
   def apply(x: Double, y: Double): ScreenPos = new ScreenPos(x.toInt, y.toInt)
 }
+sealed abstract class Dir(val idx: Int)
+object Dirs {
+  case object UR extends Dir(0)
+  case object RR extends Dir(1)
+  case object DR extends Dir(2)
+  case object DL extends Dir(3)
+  case object LL extends Dir(4)
+  case object UL extends Dir(5)
+
+  val all: Seq[Dir] = List(UR, RR, DR, DL, LL, UL).sortBy(_.idx)
+  def byIdx(idx: Int): Dir = all.find(_.idx == idx).get
+}
 
 sealed trait Tile
 object Tiles {
-  case object Blank extends Tile
-  case object Green extends Tile
-  case object Red extends Tile
+  sealed trait GameTile extends Tile
+
+  case object Blank extends GameTile
+  case object Green extends GameTile
+  case object Red extends GameTile
+
+  case class VirtualTile(inner: GameTile) extends Tile
 }
 
 case class TileMap(tiles: Map[TilePos, Tile]) {
@@ -73,7 +96,9 @@ object TileMap {
   def empty = TileMap(Map.empty)
 }
 
-case class GameState(tileMap: TileMap)
+case class GameState(tileMap: TileMap) {
+  def place(pos: TilePos, tile: Tile): GameState = copy(tileMap = tileMap.place(pos, tile))
+}
 object GameState {
   def apply(): GameState = new GameState(TileMap(Map.empty))
 }
@@ -135,10 +160,19 @@ object Drawables {
 
   type Dch = DrawContextHolder[dom.CanvasRenderingContext2D]
 
-
   implicit def tileDrawable(implicit dch: Dch): Drawable[Tile] =
-    (self: Tile, pos: ScreenPos) =>
-      self match {
+    (self: Tile, pos: ScreenPos) => {
+
+      val innerTile: Tiles.GameTile = self match {
+        case Tiles.VirtualTile(inner) =>
+          dch.ctx.globalAlpha = 0.5
+          inner
+        case gt: GameTile =>
+          dch.ctx.globalAlpha = 1.0
+          gt
+      }
+
+      innerTile match {
         case Tiles.Blank =>
           dch.ctx.beginPath()
           dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
@@ -151,7 +185,14 @@ object Drawables {
           dch.ctx.fillStyle = "green"
           dch.ctx.fill()
           dch.ctx.stroke()
+        case Tiles.Red =>
+          dch.ctx.beginPath()
+          dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
+          dch.ctx.fillStyle = "red"
+          dch.ctx.fill()
+          dch.ctx.stroke()
       }
+    }
 
   implicit def tileMapDrawable(implicit td: Drawable[Tile], dch: Dch): Drawable[TileMap] =
     (self: TileMap, pos: ScreenPos) => {
@@ -164,8 +205,13 @@ object Drawables {
   implicit def gameStateDrawable(implicit tmd: Drawable[TileMap]): Drawable[GameState] =
     (self: GameState, pos: ScreenPos) => self.tileMap.drawTo(pos)
 
-  implicit def overlayDrawable(implicit dch: Dch): Drawable[GameOverlay] =
+  implicit def overlayDrawable(implicit td: Drawable[Tile], dch: Dch): Drawable[GameOverlay] =
     (self: GameOverlay, pos: ScreenPos) => {
+      implicit val st = dch.screenTranslator
+
+      td.draw(Tiles.VirtualTile(Tiles.Red), self.mousePos.toTile.toScreen)
+
+
       dch.ctx.beginPath()
       dch.ctx.arc(self.mousePos.x, self.mousePos.y, 10, 0, Math.PI * 2)
       dch.ctx.stroke()
