@@ -2,9 +2,11 @@ package hexgrid
 import hexgrid.Tiles.GameTile
 import org.scalajs.dom
 import org.scalajs.dom.CanvasRenderingContext2D
+import org.scalajs.dom.ext.KeyCode
 import org.scalajs.dom.html
 
 import scala.scalajs.js.annotation.JSExportTopLevel
+import scala.util.Random
 
 object Main {
   @JSExportTopLevel("main")
@@ -24,21 +26,12 @@ object Main {
       override def tileSize: Int = 50
       override def screenTranslator: ScreenTranslator = DefaultScreenTranslator(canvas.width, canvas.height, tileSize)
     }
-    var overlay = GameOverlay(ScreenPos(0, 0))
-    val tileMap =
-      TileMap.empty
-        .place(0, 0, Tiles.Green)
-        .place(0, 1, Tiles.Blank)
-        .place(0, 2, Tiles.Green)
-        .place(0, 3, Tiles.Blank)
 
-    var gameState = GameState(tileMap)
-
-    implicitly[Drawable[TileMap]]
+    var overlay = GameOverlay(ScreenPos(0, 0), GameState.random())
 
     def updateScreen(timeStamp: Double): Unit = {
       renderCtx.clearRect(0, 0, canvas.width, canvas.height)
-      gameState.drawTo(ScreenPos(0, 0))
+      overlay.gameState.drawTo(ScreenPos(0, 0))
       overlay.drawTo(ScreenPos(0, 0))
     }
 
@@ -47,9 +40,18 @@ object Main {
       dom.window.requestAnimationFrame(updateScreen)
     }
 
-    canvas.onmouseup = (e: dom.MouseEvent) => {
+    canvas.onmouseup = (_: dom.MouseEvent) => {
       implicit val st = dch.screenTranslator
-      gameState = gameState.place(overlay.mousePos.toTile, Tiles.Green)
+      overlay = overlay.changeState(_.placeNext(overlay.mousePos.toTile))
+    }
+
+    dom.document.onkeyup = (e: dom.KeyboardEvent) => {
+      val newOverlay = e.keyCode match {
+        case KeyCode.E => overlay.changeState(_.changeNextTile(x => x.rotateRight))
+        case KeyCode.Q => overlay.changeState(_.changeNextTile(x => x.rotateLeft))
+      }
+      overlay = newOverlay
+      dom.window.requestAnimationFrame(updateScreen)
     }
   }
 
@@ -60,35 +62,68 @@ case class ScreenPos(x: Int, y: Int)
 object ScreenPos {
   def apply(x: Double, y: Double): ScreenPos = new ScreenPos(x.toInt, y.toInt)
 }
-sealed abstract class Dir(val idx: Int)
+sealed abstract class Dir(val idx: Int, val xOffs: Double, val yOffs: Double) {
+  def rotate(n: Int): Dir = {
+    val count = Dirs.all.size
+    Dirs.byIdx(((n + idx) % count + count) % count)
+  }
+
+  def rotateRight: Dir = rotate(1)
+  def rotateLeft: Dir = rotate(-1)
+}
+
 object Dirs {
-  case object UR extends Dir(0)
-  case object RR extends Dir(1)
-  case object DR extends Dir(2)
-  case object DL extends Dir(3)
-  case object LL extends Dir(4)
-  case object UL extends Dir(5)
+  case object UR extends Dir(0, 0.5, -0.5)
+  case object RR extends Dir(1, 1.0, 0.0)
+  case object DR extends Dir(2, 0.5, 0.5)
+  case object DL extends Dir(3, -0.5, 0.5)
+  case object LL extends Dir(4, -1.0, 0.0)
+  case object UL extends Dir(5, -0.5, -0.5)
 
   val all: Seq[Dir] = List(UR, RR, DR, DL, LL, UL).sortBy(_.idx)
   def byIdx(idx: Int): Dir = all.find(_.idx == idx).get
 }
 
-sealed trait Tile
+sealed trait Tile {
+  def rotate(n: Int): Tile
+  def rotateRight: Tile = rotate(1)
+  def rotateLeft: Tile = rotate(-1)
+}
 object Tiles {
-  sealed trait GameTile extends Tile
+  case object Blank extends Tile {
+    override def rotate(n: Int): Tile = this
+  }
+  case class VirtualTile(inner: GameTile) extends Tile {
+    override def rotate(n: Int): Tile = copy(inner.rotate(n))
+  }
 
-  case object Blank extends GameTile
-  case object Green extends GameTile
-  case object Red extends GameTile
+  sealed trait GameTile extends Tile {
+    override def rotate(n: Int): GameTile
+    override def rotateRight: GameTile = rotate(1)
+    override def rotateLeft: GameTile = rotate(-1)
+  }
 
-  case class VirtualTile(inner: GameTile) extends Tile
+  case class Path private(dirs: Set[Dir], rot: Int) extends GameTile {
+    override def rotate(n: Int): Path = copy(rot = rot + n)
+    def rotatedDirs: Set[Dir] = dirs.map(_.rotate(rot))
+  }
+
+  import Dirs._
+
+  val E = Path(Set(UR, RR, DR), 0)
+  val Lambda = Path(Set(UL, DL, DR), 0)
+  val Y = Path(Set(UL, UR, DR), 0)
+  val Center = Path(Set(UR, DR, LL), 0)
+
+  val gameTiles = List(E, Lambda, Y, Center)
+
 }
 
-case class TileMap(tiles: Map[TilePos, Tile]) {
-  def place(r: Int, c: Int, tile: Tile): TileMap =
+case class TileMap(tiles: Map[TilePos, GameTile]) {
+  def place(r: Int, c: Int, tile: GameTile): TileMap =
     place(TilePos(r, c), tile)
 
-  def place(pos: TilePos, tile: Tile): TileMap =
+  def place(pos: TilePos, tile: GameTile): TileMap =
     copy(tiles = tiles + (pos -> tile))
 }
 
@@ -96,16 +131,31 @@ object TileMap {
   def empty = TileMap(Map.empty)
 }
 
-case class GameState(tileMap: TileMap) {
-  def place(pos: TilePos, tile: Tile): GameState = copy(tileMap = tileMap.place(pos, tile))
+case class GameState(tileMap: TileMap, tileStack: List[GameTile]) {
+  def placeNext(pos: TilePos) = tileStack match {
+    case tile :: rest => place(pos, tile).copy(tileStack = rest)
+    case _ => this
+  }
+
+  def place(pos: TilePos, tile: GameTile): GameState = copy(tileMap = tileMap.place(pos, tile))
+  def nextTile: Option[GameTile] = tileStack.headOption
+  def changeNextTile(f: GameTile => GameTile): GameState = tileStack match {
+    case tile :: rest => copy(tileStack = f(tile) :: rest)
+    case _ => this
+  }
 }
+
 object GameState {
-  def apply(): GameState = new GameState(TileMap(Map.empty))
+  def random(): GameState = {
+    val tileStack = Random.shuffle(List.fill(25)(Tiles.gameTiles).flatten)
+    new GameState(TileMap.empty, tileStack)
+  }
 }
 
 
-case class GameOverlay(mousePos: ScreenPos) {
+case class GameOverlay(mousePos: ScreenPos, gameState: GameState) {
   def setMouse(pos: ScreenPos) = copy(mousePos = pos)
+  def changeState(f: GameState => GameState) = copy(gameState = f(gameState))
 }
 
 
@@ -116,6 +166,7 @@ trait DrawContextHolder[T] {
 }
 
 trait ScreenTranslator {
+  def rowDistance: Double
   def tileToScreen(pos: TilePos): ScreenPos
   def screenToTile(pos: ScreenPos): TilePos
 }
@@ -130,16 +181,16 @@ object ScreenTranslator {
 }
 
 case class DefaultScreenTranslator(screenWidth: Int, screenHeight: Int, size: Int) extends ScreenTranslator {
-  val distanceY = Math.sqrt((size * size * 4) - size * size)
+  val rowDistance = Math.sqrt((size * size * 4) - size * size)
   val origin = ScreenPos(screenWidth / 2, screenHeight / 2)
 
   override def tileToScreen(pos: TilePos): ScreenPos = {
     val offset = if (pos.r % 2 == 0) 0 else size
-    ScreenPos(origin.x + offset + size * pos.c * 2, (origin.y + distanceY * pos.r).toInt)
+    ScreenPos(origin.x + offset + size * pos.c * 2, (origin.y + rowDistance * pos.r).toInt)
   }
 
   override def screenToTile(pos: ScreenPos): TilePos = {
-    val r = Math.round((pos.y - origin.y) / distanceY).toInt
+    val r = Math.round((pos.y - origin.y) / rowDistance).toInt
     val offset = if (r % 2 == 0) 0 else size
     val c = Math.round((pos.x - origin.x - offset) / (size.toDouble * 2)).toInt
     TilePos(r, c)
@@ -163,34 +214,37 @@ object Drawables {
   implicit def tileDrawable(implicit dch: Dch): Drawable[Tile] =
     (self: Tile, pos: ScreenPos) => {
 
-      val innerTile: Tiles.GameTile = self match {
+      val innerTile: Tile = self match {
         case Tiles.VirtualTile(inner) =>
           dch.ctx.globalAlpha = 0.5
           inner
         case gt: GameTile =>
           dch.ctx.globalAlpha = 1.0
           gt
+        case blank@Tiles.Blank =>
+          dch.ctx.globalAlpha = 1.0
+          blank
       }
 
       innerTile match {
-        case Tiles.Blank =>
+        case path@Tiles.Path(_, _) =>
           dch.ctx.beginPath()
           dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
+          dch.ctx.lineWidth = 1
+          dch.ctx.strokeStyle = "black"
           dch.ctx.fillStyle = "white"
           dch.ctx.fill()
           dch.ctx.stroke()
-        case Tiles.Green =>
-          dch.ctx.beginPath()
-          dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
-          dch.ctx.fillStyle = "green"
-          dch.ctx.fill()
-          dch.ctx.stroke()
-        case Tiles.Red =>
-          dch.ctx.beginPath()
-          dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
-          dch.ctx.fillStyle = "red"
-          dch.ctx.fill()
-          dch.ctx.stroke()
+
+          dch.ctx.strokeStyle = "red"
+          dch.ctx.lineWidth = 5
+          path.rotatedDirs.foreach { dir =>
+            dch.ctx.beginPath()
+            dch.ctx.moveTo(pos.x, pos.y)
+            dch.ctx.lineTo(pos.x + dch.tileSize * dir.xOffs, pos.y + dch.screenTranslator.rowDistance * dir.yOffs)
+            dch.ctx.stroke()
+          }
+        case _ =>
       }
     }
 
@@ -209,8 +263,8 @@ object Drawables {
     (self: GameOverlay, pos: ScreenPos) => {
       implicit val st = dch.screenTranslator
 
-      td.draw(Tiles.VirtualTile(Tiles.Red), self.mousePos.toTile.toScreen)
-
+      val overlayTile = self.gameState.nextTile.map(Tiles.VirtualTile).getOrElse(Tiles.Blank)
+      td.draw(overlayTile, self.mousePos.toTile.toScreen)
 
       dch.ctx.beginPath()
       dch.ctx.arc(self.mousePos.x, self.mousePos.y, 10, 0, Math.PI * 2)
