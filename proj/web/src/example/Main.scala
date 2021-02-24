@@ -8,8 +8,10 @@ import scala.util.Random
 
 object Main {
 
-  @JSExportTopLevel("main")
+  @JSExportTopLevel("main0")
   def main(canvas: html.Canvas): Unit = {
+
+
     implicit val ctx: CanvasRenderingContext2D =
       canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
     ctx.canvas.width = dom.window.innerWidth.toInt
@@ -29,23 +31,28 @@ object Main {
     tileMap.drawTile(1, -2, nextTile)
 
 
-    canvas.onmouseup = (e: dom.MouseEvent) =>
-      tileMap.screenToTile(e.pageX.toInt, e.pageY.toInt).foreach { case (r, c) =>
+    def placeTile(x: Int, y: Int) =
+      tileMap.screenToTile(x, y).foreach { case (r, c) =>
         println(r, c, nextTile)
-        tileMap.drawTileXy(e.pageX, e.pageY, nextTile)
+        tileMap.drawTileXy(x, y, nextTile)
         nextTile = rndTile()
         tileMap.drawTile(1, -2, nextTile)
         println(nextTile)
         println(nextTile.paths)
         println(nextTile.points)
       }
-    canvas.onmousewheel = (e: dom.WheelEvent) => {
+
+    canvas.onmouseup = (e: dom.MouseEvent) => placeTile(e.pageX.toInt, e.pageY.toInt)
+    canvas.addEventListener("contextmenu", (e: dom.MouseEvent) => e.preventDefault())
+
+    canvas.addEventListener("wheel", (e: dom.WheelEvent) => {
+      println(e.deltaMode, e.deltaX, e.deltaY, e.deltaZ)
       nextTile = nextTile.copy(rot = nextTile.rot + e.deltaY.sign.toInt)
       tileMap.drawTile(1, -2, nextTile)
       println(nextTile)
       println(nextTile.paths)
       println(nextTile.points)
-    }
+    })
   }
 
   implicit class DrawOnTileMap(val self: TileMap)(implicit ctx: dom.CanvasRenderingContext2D) {
