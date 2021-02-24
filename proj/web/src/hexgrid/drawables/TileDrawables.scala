@@ -2,46 +2,45 @@ package hexgrid.drawables
 import hexgrid.core.Tile
 import hexgrid.core.Tiles
 import hexgrid.core.Tiles.GameTile
-import hexgrid.gui.DrawContextHolder
+import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.ScreenPos
 import org.scalajs.dom
 
 object TileDrawables {
-  type Dch = DrawContextHolder[dom.CanvasRenderingContext2D]
 
-  implicit def tileDrawable(implicit dch: Dch): Drawable[Tile] =
+  implicit def tileDrawable(implicit dc: DrawContext): Drawable[Tile] =
     (self: Tile, pos: ScreenPos) => {
 
       val innerTile: Tile = self match {
         case Tiles.VirtualTile(inner) =>
-          dch.ctx.globalAlpha = 0.5
+          dc.ctx.globalAlpha = 0.5
           inner
         case gt: GameTile =>
-          dch.ctx.globalAlpha = 1.0
+          dc.ctx.globalAlpha = 1.0
           gt
         case blank@Tiles.Blank =>
-          dch.ctx.globalAlpha = 1.0
+          dc.ctx.globalAlpha = 1.0
           blank
       }
 
       innerTile match {
         case path@Tiles.Path(_, _) =>
-          dch.ctx.beginPath()
-          dch.ctx.arc(pos.x, pos.y, dch.tileSize, 0, Math.PI * 2)
-          dch.ctx.lineWidth = 1
-          dch.ctx.strokeStyle = "black"
-          dch.ctx.fillStyle = "white"
-          dch.ctx.fill()
-          dch.ctx.stroke()
+          dc.ctx.beginPath()
+          dc.ctx.arc(pos.x, pos.y, dc.tileSize, 0, Math.PI * 2)
+          dc.ctx.lineWidth = 1
+          dc.ctx.strokeStyle = "black"
+          dc.ctx.fillStyle = "white"
+          dc.ctx.fill()
+          dc.ctx.stroke()
 
-          dch.ctx.strokeStyle = "red"
-          dch.ctx.lineWidth = 5
+          dc.ctx.strokeStyle = "red"
+          dc.ctx.lineWidth = 5
           path.rotatedDirs.foreach { dir =>
-            dch.ctx.beginPath()
-            dch.ctx.moveTo(pos.x, pos.y)
-            dch.ctx.lineTo(pos.x + dch.tileSize * dir.xOffs, pos.y + dch.screenTranslator.rowDistance * dir.yOffs)
-            dch.ctx.stroke()
+            dc.ctx.beginPath()
+            dc.ctx.moveTo(pos.x, pos.y)
+            dc.ctx.lineTo(pos.x + dc.tileSize * dir.xOffs, pos.y + dc.screenTranslator.rowDistance * dir.yOffs)
+            dc.ctx.stroke()
           }
         case _ =>
       }
