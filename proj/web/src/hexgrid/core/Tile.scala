@@ -29,7 +29,7 @@ object Tiles {
 
   val E = Path(Set(UR, RR, DR), 0)
   val Lambda = Path(Set(UL, DL, DR), 0)
-  val Y = Path(Set(UL, UR, DR), 0)
+  val Y = Path(Set(UL, UR, DL), 0)
   val Center = Path(Set(UR, DR, LL), 0)
 
   val gameTiles = List(E, Lambda, Y, Center)
