@@ -4,8 +4,6 @@ import hexgrid.core.Tiles.GameTile
 
 import scala.util.Random
 
-case class Player(id: Int)
-case class Monster(owner: Player)
 case class GameState(
   tileMap: TileMap[GameTile],
   tileStack: List[GameTile],

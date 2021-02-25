@@ -142,9 +142,9 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
     val canJoin = state.nextTile match {
       case Some(tile) =>
         val neighbors = Dirs.all.flatMap(dir => state.tileMap.tiles.get(pos.neighbor(dir)).map(dir -> _))
-        println(Dirs.all.map(dir => dir -> pos.neighbor(dir)))
-        println(neighbors.nonEmpty, neighbors.map { case (d, t) => (d, t, tile.canPlaceNextTo(t, d)) })
-        neighbors.nonEmpty && neighbors.forall { case (d, t) => tile.canPlaceNextTo(t, d) }
+        neighbors.nonEmpty &&
+          neighbors.forall { case (d, t) => tile.canPlaceNextTo(t, d) } &&
+          neighbors.exists { case (d, t) => tile.isJoined(t, d) }
       case None => false
     }
 

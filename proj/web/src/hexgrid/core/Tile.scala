@@ -9,6 +9,9 @@ sealed trait Tile {
 
   def canPlaceNextTo(that: Tile, dir: Dir): Boolean =
     this.rotatedDirs.contains(dir) == that.rotatedDirs.contains(dir.opposite)
+
+  def isJoined(that: Tile, dir: Dir): Boolean =
+    this.rotatedDirs.contains(dir) && that.rotatedDirs.contains(dir.opposite)
 }
 
 //noinspection TypeAnnotation
