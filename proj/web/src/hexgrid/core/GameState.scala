@@ -4,13 +4,27 @@ import hexgrid.core.Tiles.GameTile
 
 import scala.util.Random
 
-case class GameState(tileMap: TileMap, tileStack: List[GameTile]) {
-  def placeNext(pos: TilePos) = tileStack match {
-    case tile :: rest => place(pos, tile).copy(tileStack = rest)
-    case _ => this
-  }
+case class Player(id: Int)
+case class Monster(owner: Player)
+case class GameState(
+  tileMap: TileMap[GameTile],
+  tileStack: List[GameTile],
+  monsters: TileMap[Monster],
+  playerTurns: List[Player]
+) {
 
-  def place(pos: TilePos, tile: GameTile): GameState = copy(tileMap = tileMap.place(pos, tile))
+  def placeNext(pos: TilePos): GameState =
+    tileStack match {
+      case tile :: rest => place(pos, tile).copy(tileStack = rest)
+      case _ => this
+    }
+
+  def place(pos: TilePos, tile: GameTile): GameState =
+    copy(tileMap = tileMap.place(pos, tile))
+
+  def moveMonster(from: TilePos, to: TilePos): GameState =
+    copy(monsters = monsters.move(from, to))
+
   def nextTile: Option[GameTile] = tileStack.headOption
   def changeNextTile(f: GameTile => GameTile): GameState = tileStack match {
     case tile :: rest => copy(tileStack = f(tile) :: rest)
@@ -19,8 +33,18 @@ case class GameState(tileMap: TileMap, tileStack: List[GameTile]) {
 }
 
 object GameState {
-  def random(): GameState = {
-    val tileStack = Random.shuffle(List.fill(25)(Tiles.gameTiles).flatten)
-    new GameState(TileMap.empty, tileStack)
+  def default(): GameState = {
+    val tileStack = Random.shuffle(List.fill(25)(Tiles.regularTiles).flatten)
+    val tileMap =
+      TileMap.empty[GameTile]
+        .place(0, 0, Tiles.I)
+        .place(0, 1, Tiles.Star)
+        .place(0, -1, Tiles.Star)
+    val monsters =
+      TileMap.empty[Monster]
+        .place(0, 1, Monster(Player(0)))
+        .place(0, -1, Monster(Player(1)))
+
+    new GameState(tileMap, tileStack, monsters, List(0, 1).map(Player.apply))
   }
 }

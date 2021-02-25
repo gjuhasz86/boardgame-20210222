@@ -6,6 +6,7 @@ sealed trait Tile {
   def rotateLeft: Tile = rotate(-1)
 }
 
+//noinspection TypeAnnotation
 object Tiles {
   case object Blank extends Tile {
     override def rotate(n: Int): Tile = this
@@ -32,6 +33,8 @@ object Tiles {
   val Y = Path(Set(UL, UR, DL), 0)
   val Center = Path(Set(UR, DR, LL), 0)
 
-  val gameTiles = List(E, Lambda, Y, Center)
+  val I = Path(Set(LL, RR), 0)
+  val Star = Path(Set(UR, RR, DR, DL, LL, UL), 0)
+  val regularTiles = List(E, Lambda, Y, Center)
 
 }

@@ -1,15 +1,18 @@
 package hexgrid.core
 
-import hexgrid.core.Tiles.GameTile
-
-case class TileMap(tiles: Map[TilePos, GameTile]) {
-  def place(r: Int, c: Int, tile: GameTile): TileMap =
+case class TileMap[+A](tiles: Map[TilePos, A]) {
+  def place[B >: A](r: Int, c: Int, tile: B): TileMap[B] =
     place(TilePos(r, c), tile)
 
-  def place(pos: TilePos, tile: GameTile): TileMap =
+  def place[B >: A](pos: TilePos, tile: B): TileMap[B] =
     copy(tiles = tiles + (pos -> tile))
+
+  def move(from: TilePos, to: TilePos): TileMap[A] = {
+    val newMap = tiles.get(from).map(t => Map(to -> t)).getOrElse(Map.empty)
+    copy(tiles = (tiles - from) ++ newMap)
+  }
 }
 
 object TileMap {
-  def empty = TileMap(Map.empty)
+  def empty[T]: TileMap[T] = TileMap(Map.empty)
 }

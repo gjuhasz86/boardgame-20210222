@@ -18,8 +18,8 @@ object ScreenTranslator {
 }
 
 case class DefaultScreenTranslator(screenWidth: Int, screenHeight: Int, size: Int) extends ScreenTranslator {
-  val rowDistance = Math.sqrt((size * size * 4) - size * size)
-  val origin = ScreenPos(screenWidth / 2, screenHeight / 2)
+  val rowDistance: Double = Math.sqrt((size * size * 4) - size * size)
+  val origin: ScreenPos = ScreenPos(screenWidth / 2, screenHeight / 2)
 
   override def tileToScreen(pos: TilePos): ScreenPos = {
     val offset = if (pos.r % 2 == 0) 0 else size
