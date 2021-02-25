@@ -7,4 +7,5 @@ trait DrawContext {
   def screenTranslator: ScreenTranslator
   def cursorPos: ScreenPos
   def tileStackPos: ScreenPos
+  def hintPos: ScreenPos
 }

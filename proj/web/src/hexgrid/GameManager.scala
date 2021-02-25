@@ -27,6 +27,10 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
     (action, phase) match {
       case (Click, Idle) if dc.tileStackPos.distanceTo(dc.cursorPos) < dc.tileSize =>
         DrawTile
+      case (Click, Idle) if state.monsters.tiles.get(pos).isDefined =>
+        SelectMonster(pos)
+      case (Key(KeyCode.D), Idle) =>
+        DrawTile
       case (Key(KeyCode.M), Idle) =>
         Move
       case (Click, MoveMonster(None, _)) =>
@@ -89,7 +93,7 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
       case Cancel if isPlacingTile =>
         phase = PlacingNextTile(None)
       case Cancel =>
-        Idle
+        phase = Idle
       case Noop =>
     }
 
@@ -97,7 +101,7 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
     (action, phase) match {
       case (Move, PlacingNextTile(_)) => false
       case (Move, _) => true
-      case (SelectMonster(pos), MoveMonster(_, _)) => state.monsters.tiles.get(pos).isDefined
+      case (SelectMonster(pos), Idle | MoveMonster(_, _)) => state.monsters.tiles.get(pos).isDefined
       case (SelectMonster(_), _) => false
       case (SelectMonsterTarget(to), MoveMonster(Some(from), _)) =>
         state.tileMap.tiles.get(from).isDefined && from != to

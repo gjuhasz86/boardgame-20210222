@@ -34,6 +34,7 @@ object Main {
       override val screenTranslator: ScreenTranslator = DefaultScreenTranslator(canvas.width, canvas.height, tileSize)
       override def cursorPos: ScreenPos = mousePos
       override def tileStackPos: ScreenPos = ScreenPos(tileSize + 20, tileSize + 20)
+      override def hintPos: ScreenPos = ScreenPos(tileSize * 2 + 40, 20)
     }
 
     val gameManager = GameManager(dc)
@@ -50,6 +51,7 @@ object Main {
 
     canvas.onmouseup = (_: dom.MouseEvent) => {
       gameManager.tryPerform(GuiAction.Click)
+      dom.window.requestAnimationFrame(updateScreen)
     }
 
     dom.document.onkeyup = (e: dom.KeyboardEvent) => {

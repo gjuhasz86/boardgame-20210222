@@ -1,6 +1,7 @@
 package hexgrid.drawables
 
 import hexgrid.GameManager
+import hexgrid.GamePhase
 import hexgrid.GamePhase.PlacingNextTile
 import hexgrid.core.GameState
 import hexgrid.core.Tile
@@ -20,6 +21,7 @@ object GameManagerDrawable {
     override def draw(self: GameManager, pos: ScreenPos): Unit = {
       drawGameState(self, pos)
       drawTileOverlay(self, pos)
+      drawHints(self)
       drawTileStack(self, pos)
       drawCursor()
     }
@@ -55,6 +57,35 @@ object GameManagerDrawable {
           td.draw(overlayTile, dc.cursorPos.toTile.toScreen)
         case _ =>
       }
+    }
+
+
+    private def drawHints(self: GameManager): Unit = {
+      import GamePhase._
+
+      val phaseText = self.phase match {
+        case Idle => "[IDLE] | CLICK on a monster to move | CLICK on the tile stack to draw a tile"
+        case MoveMonster(None, _) => "[MOVE] | CLICK on a monster to move | BACKSPACE to cancel"
+        case MoveMonster(Some(_), None) => "[MOVE] | CLICK on a tile to select a target | BACKSPACE to cancel"
+        case MoveMonster(Some(_), Some(_)) => "[MOVE] | ENTER to confirm monster placement | BACKSPACE to cancel"
+        case PlacingNextTile(None) => "[TILE] | Click on an empty space to place the tile"
+        case PlacingNextTile(Some(_)) => "[TILE] | ENTER to confirm tile placement | BACKSPACE to cancel"
+      }
+
+      dc.ctx.globalAlpha = 1.0
+      dc.ctx.lineWidth = 1
+      dc.ctx.strokeStyle = "black"
+      dc.ctx.fillStyle = "white"
+      dc.ctx.beginPath()
+      dc.ctx.rect(dc.hintPos.x, dc.hintPos.y, 450, 30)
+      dc.ctx.fill()
+      dc.ctx.stroke()
+
+
+      dc.ctx.fillStyle = "black"
+      dc.ctx.font = "14px Georgia"
+      dc.ctx.textBaseline = "middle"
+      dc.ctx.fillText(phaseText, dc.hintPos.x + 5, dc.hintPos.y + 15)
     }
 
     private def drawCursor(): Unit = {
