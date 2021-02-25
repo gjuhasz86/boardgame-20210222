@@ -4,4 +4,6 @@ sealed trait GuiAction
 object GuiAction {
   case object Click extends GuiAction
   case class Key(code: Int) extends GuiAction
+  case object WheelUp extends GuiAction
+  case object WheelDown extends GuiAction
 }

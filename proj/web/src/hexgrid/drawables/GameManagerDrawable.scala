@@ -20,7 +20,6 @@ import hexgrid.gui.Drawable._
 import hexgrid.gui.ScreenPos
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
-import org.scalajs.dom.raw.TextMetrics
 
 object GameManagerDrawable {
   implicit def gameManagerDrawable[
@@ -44,7 +43,7 @@ object GameManagerDrawable {
         drawMonsterOverlay(self, pos)
         drawHints(self)
         drawTileStack(self, pos)
-        drawCursor(self)
+        //        drawCursor(self)
       }
 
       private def drawGameState(self: GameManager, pos: ScreenPos): Unit = {

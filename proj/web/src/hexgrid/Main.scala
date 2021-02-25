@@ -61,6 +61,15 @@ object Main {
       gameManager.tryPerform(GuiAction.Key(e.keyCode))
       dom.window.requestAnimationFrame(updateScreen)
     }
+
+    canvas.addEventListener("wheel", (e: dom.WheelEvent) => {
+      if (e.deltaY.sign > 0) {
+        gameManager.tryPerform(GuiAction.WheelDown)
+      } else if (e.deltaY.sign < 0) {
+        gameManager.tryPerform(GuiAction.WheelUp)
+      }
+      dom.window.requestAnimationFrame(updateScreen)
+    })
   }
 
 }

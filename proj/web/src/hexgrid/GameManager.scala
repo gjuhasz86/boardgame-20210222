@@ -47,6 +47,10 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
         RotateTileRight
       case (Key(KeyCode.Q), PlacingNextTile(_)) =>
         RotateTileLeft
+      case (WheelDown, PlacingNextTile(_)) =>
+        RotateTileRight
+      case (WheelUp, PlacingNextTile(_)) =>
+        RotateTileLeft
       case (Key(KeyCode.Backspace), _) =>
         Cancel
       case (Key(KeyCode.Enter), _) =>
