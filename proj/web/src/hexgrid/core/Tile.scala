@@ -11,6 +11,10 @@ object Tiles {
   case object Blank extends Tile {
     override def rotate(n: Int): Tile = this
   }
+  case class HighLightedTile(inner: Tile) extends Tile {
+    override def rotate(n: Int): Tile = copy(inner.rotate(n))
+  }
+
   case class VirtualTile(inner: GameTile) extends Tile {
     override def rotate(n: Int): Tile = copy(inner.rotate(n))
   }

@@ -123,6 +123,11 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
     case PlacingNextTile(_) => true
     case _ => false
   }
+
+  def hasPlacedTile: Boolean = phase match {
+    case PlacingNextTile(Some(_)) => true
+    case _ => false
+  }
 }
 
 object GameManager {

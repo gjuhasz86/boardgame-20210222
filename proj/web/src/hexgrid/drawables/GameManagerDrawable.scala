@@ -1,6 +1,7 @@
 package hexgrid.drawables
 
 import hexgrid.GameManager
+import hexgrid.GamePhase.PlacingNextTile
 import hexgrid.core.GameState
 import hexgrid.core.Tile
 import hexgrid.core.Tiles
@@ -18,9 +19,7 @@ object GameManagerDrawable {
 
     override def draw(self: GameManager, pos: ScreenPos): Unit = {
       drawGameState(self, pos)
-      if (self.isPlacingTile) {
-        drawTileOverlay(self, pos)
-      }
+      drawTileOverlay(self, pos)
       drawTileStack(self, pos)
       drawCursor()
     }
@@ -34,16 +33,28 @@ object GameManagerDrawable {
         Tiles.Blank.drawTo(dc.tileStackPos + ScreenPos(0, 3 * i))
       }
 
-      if (self.isPlacingTile) {
-        self.state.nextTile.getOrElse(Tiles.Blank).drawTo(dc.tileStackPos)
-      } else {
-        Tiles.Blank.drawTo(dc.tileStackPos)
-      }
+      val mouseOver = dc.cursorPos.distanceTo(dc.tileStackPos) < dc.tileSize
+
+      val topTile =
+        if (self.isPlacingTile)
+          self.state.nextTile.getOrElse(Tiles.Blank)
+        else if (mouseOver)
+          Tiles.HighLightedTile(Tiles.Blank)
+        else
+          Tiles.Blank
+
+      topTile.drawTo(dc.tileStackPos)
     }
 
     private def drawTileOverlay(self: GameManager, pos: ScreenPos): Unit = {
-      val overlayTile = self.state.nextTile.map(Tiles.VirtualTile).getOrElse(Tiles.Blank)
-      td.draw(overlayTile, dc.cursorPos.toTile.toScreen)
+      lazy val overlayTile = self.state.nextTile.map(Tiles.VirtualTile).getOrElse(Tiles.Blank)
+      self.phase match {
+        case PlacingNextTile(Some(pos)) =>
+          td.draw(overlayTile, pos.toScreen)
+        case PlacingNextTile(None) =>
+          td.draw(overlayTile, dc.cursorPos.toTile.toScreen)
+        case _ =>
+      }
     }
 
     private def drawCursor(): Unit = {
