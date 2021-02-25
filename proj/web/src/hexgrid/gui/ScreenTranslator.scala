@@ -22,13 +22,13 @@ case class DefaultScreenTranslator(screenWidth: Int, screenHeight: Int, size: In
   val origin: ScreenPos = ScreenPos(screenWidth / 2, screenHeight / 2)
 
   override def tileToScreen(pos: TilePos): ScreenPos = {
-    val offset = if (pos.r % 2 == 0) 0 else size
+    val offset = size * -1 * pos.r
     ScreenPos(origin.x + offset + size * pos.c * 2, (origin.y + rowDistance * pos.r).toInt)
   }
 
   override def screenToTile(pos: ScreenPos): TilePos = {
     val r = Math.round((pos.y - origin.y) / rowDistance).toInt
-    val offset = if (r % 2 == 0) 0 else size
+    val offset = size * -1 * r
     val c = Math.round((pos.x - origin.x - offset) / (size.toDouble * 2)).toInt
     TilePos(r, c)
   }

@@ -1,22 +1,21 @@
 package hexgrid.core
 
 sealed trait Tile {
+  def rotatedDirs: Set[Dir]
+
   def rotate(n: Int): Tile
   def rotateRight: Tile = rotate(1)
   def rotateLeft: Tile = rotate(-1)
+
+  def canPlaceNextTo(that: Tile, dir: Dir): Boolean =
+    this.rotatedDirs.contains(dir) == that.rotatedDirs.contains(dir.opposite)
 }
 
 //noinspection TypeAnnotation
 object Tiles {
   case object Blank extends Tile {
     override def rotate(n: Int): Tile = this
-  }
-  case class HighLightedTile(inner: Tile) extends Tile {
-    override def rotate(n: Int): Tile = copy(inner.rotate(n))
-  }
-
-  case class VirtualTile(inner: GameTile) extends Tile {
-    override def rotate(n: Int): Tile = copy(inner.rotate(n))
+    override def rotatedDirs: Set[Dir] = Set()
   }
 
   sealed trait GameTile extends Tile {
@@ -27,7 +26,7 @@ object Tiles {
 
   case class Path private(dirs: Set[Dir], rot: Int) extends GameTile {
     override def rotate(n: Int): Path = copy(rot = rot + n)
-    def rotatedDirs: Set[Dir] = dirs.map(_.rotate(rot))
+    override def rotatedDirs: Set[Dir] = dirs.map(_.rotate(rot))
   }
 
   import Dirs._

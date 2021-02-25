@@ -4,25 +4,34 @@ import hexgrid.GameManager
 import hexgrid.GamePhase
 import hexgrid.GamePhase.MoveMonster
 import hexgrid.GamePhase.PlacingNextTile
+import hexgrid.GuiAction.Click
 import hexgrid.core.GameState
 import hexgrid.core.Monster
 import hexgrid.core.Tile
 import hexgrid.core.Tiles
 import hexgrid.gui.CanDecorate
 import hexgrid.gui.CanDecorate._
+import hexgrid.gui.Decorators.Highlighted
+import hexgrid.gui.Decorators.Invalid
+import hexgrid.gui.Decorators.Overlay
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.Drawable._
 import hexgrid.gui.ScreenPos
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
+import org.scalajs.dom.raw.TextMetrics
 
 object GameManagerDrawable {
-  implicit def gameManagerDrawable[DM <: Drawable[Monster]](
+  implicit def gameManagerDrawable[
+    DM <: Drawable[Monster],
+    DT <: Drawable[Tile],
+  ](
     implicit gsd: Drawable[GameState],
-    td: Drawable[Tile],
+    td: DT,
     md: DM,
     mdd: CanDecorate[DM],
+    tdd: CanDecorate[DT],
     dc: DrawContext
   ): Drawable[GameManager] =
     new Drawable[GameManager] {
@@ -35,7 +44,7 @@ object GameManagerDrawable {
         drawMonsterOverlay(self, pos)
         drawHints(self)
         drawTileStack(self, pos)
-        drawCursor()
+        drawCursor(self)
       }
 
       private def drawGameState(self: GameManager, pos: ScreenPos): Unit = {
@@ -50,23 +59,27 @@ object GameManagerDrawable {
         val mouseOver = dc.cursorPos.distanceTo(dc.tileStackPos) < dc.tileSize
 
         val topTile =
-          if (self.isPlacingTile)
-            self.state.nextTile.getOrElse(Tiles.Blank)
-          else if (mouseOver)
-            Tiles.HighLightedTile(Tiles.Blank)
-          else
-            Tiles.Blank
+          self.state.nextTile
+            .filter(_ => self.isPlacingTile)
+            .getOrElse(Tiles.Blank)
 
-        topTile.drawTo(dc.tileStackPos)
+        if (mouseOver) {
+          topTile.make(Highlighted).drawTo(dc.tileStackPos)
+        } else {
+          topTile.drawTo(dc.tileStackPos)
+        }
       }
 
       private def drawTileOverlay(self: GameManager, pos: ScreenPos): Unit = {
-        lazy val overlayTile = self.state.nextTile.map(Tiles.VirtualTile).getOrElse(Tiles.Blank)
+        lazy val tile = self.state.nextTile.getOrElse(Tiles.Blank)
+        val valid = self.isValid(self.toGameAction(Click))
         self.phase match {
           case PlacingNextTile(Some(pos)) =>
-            overlayTile.drawTo(pos.toScreen)
-          case PlacingNextTile(None) =>
-            overlayTile.drawTo(dc.cursorPos.toTile.toScreen)
+            tile.make(Overlay).drawTo(pos.toScreen)
+          case PlacingNextTile(None) if valid =>
+            tile.make(Overlay).drawTo(dc.cursorPos.toTile.toScreen)
+          case PlacingNextTile(None) if !valid =>
+            tile.make(Overlay, Invalid).drawTo(dc.cursorPos.toTile.toScreen)
           case _ =>
         }
       }
@@ -74,13 +87,13 @@ object GameManagerDrawable {
       private def drawMonsterOverlay(self: GameManager, offset: ScreenPos): Unit = {
         self.phase match {
           case MoveMonster(Some(pos), _) =>
-            self.state.monsters.tiles(pos).highlight.drawTo(pos.toScreen)
+            self.state.monsters.tiles(pos).make(Highlighted).drawTo(pos.toScreen)
           case _ =>
         }
 
         self.phase match {
           case MoveMonster(Some(from), Some(to)) =>
-            self.state.monsters.tiles(from).overlay.drawTo(to.toScreen)
+            self.state.monsters.tiles(from).make(Overlay).drawTo(to.toScreen)
           case _ =>
         }
       }
@@ -114,10 +127,20 @@ object GameManagerDrawable {
         dc.ctx.fillText(phaseText, dc.hintPos.x + 5, dc.hintPos.y + 15)
       }
 
-      private def drawCursor(): Unit = {
-        dc.ctx.beginPath()
-        dc.ctx.arc(dc.cursorPos.x, dc.cursorPos.y, 10, 0, Math.PI * 2)
-        dc.ctx.stroke()
+      private def drawCursor(self: GameManager): Unit = {
+        if (!self.isPlacingTile) {
+          Tiles.Blank.make(Overlay, Highlighted).drawTo(dc.cursorPos.toTile.toScreen)
+        }
+        dc.ctx.fillStyle = "black"
+        dc.ctx.textBaseline = "middle"
+        dc.ctx.font = "14px Georgia"
+
+        val tp = dc.cursorPos.toTile
+        val text = s"(${tp.r},${tp.c})"
+        val width = dc.ctx.measureText(text).width
+
+        dc.ctx.clearRect(dc.cursorPos.x + 10, dc.cursorPos.y + 20, width + 10, 20)
+        dc.ctx.fillText(text, dc.cursorPos.x + 15, dc.cursorPos.y + 30)
       }
     }
 }

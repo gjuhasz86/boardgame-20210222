@@ -1,6 +1,10 @@
 package hexgrid
 
+import hexgrid.core.Dir
+import hexgrid.core.Dirs
 import hexgrid.core.GameState
+import hexgrid.core.TilePos
+import hexgrid.core.Tiles
 import hexgrid.gui.DrawContext
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
@@ -70,14 +74,17 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
       case SelectMonster(pos) =>
         phase = MoveMonster(Some(pos), None)
       case SelectMonsterTarget(pos) =>
-        phase = phase match {
-          case MoveMonster(from, _) => MoveMonster(from, Some(pos))
-          case _ => phase
+        phase match {
+          case MoveMonster(from, _) =>
+            phase = MoveMonster(from, Some(pos))
+            perform(Confirm)
+          case _ =>
         }
       case DrawTile =>
         phase = PlacingNextTile(None)
       case SelectTileTarget(pos) =>
         phase = PlacingNextTile(Some(pos))
+        perform(Confirm)
       case RotateTileLeft =>
         state = state.changeNextTile(_.rotateLeft)
       case RotateTileRight =>
@@ -110,7 +117,7 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
       case (SelectMonsterTarget(_), _) => false
       case (DrawTile, PlacingNextTile(_)) => false
       case (DrawTile, _) => true
-      case (SelectTileTarget(pos), PlacingNextTile(_)) => state.tileMap.tiles.get(pos).isEmpty
+      case (SelectTileTarget(pos), PlacingNextTile(_)) => canPlaceTile(pos)
       case (SelectTileTarget(_), _) => false
       case (RotateTileLeft, PlacingNextTile(_)) => true
       case (RotateTileLeft, _) => false
@@ -123,6 +130,21 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
       case (Cancel, _) => true
       case (Noop, _) => false
     }
+  }
+
+
+  def canPlaceTile(pos: TilePos): Boolean = {
+    val isPosEmpty = state.tileMap.tiles.get(pos).isEmpty
+    val canJoin = state.nextTile match {
+      case Some(tile) =>
+        val neighbors = Dirs.all.flatMap(dir => state.tileMap.tiles.get(pos.neighbor(dir)).map(dir -> _))
+        println(Dirs.all.map(dir => dir -> pos.neighbor(dir)))
+        println(neighbors.nonEmpty, neighbors.map { case (d, t) => (d, t, tile.canPlaceNextTo(t, d)) })
+        neighbors.nonEmpty && neighbors.forall { case (d, t) => tile.canPlaceNextTo(t, d) }
+      case None => false
+    }
+
+    isPosEmpty && canJoin
   }
 
   def isPlacingTile: Boolean = phase match {

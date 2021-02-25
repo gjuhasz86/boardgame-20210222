@@ -34,6 +34,8 @@ case class GameState(
 
 object GameState {
   def default(): GameState = {
+    val p1 = Player(1)
+    val p2 = Player(2)
     val tileStack = Random.shuffle(List.fill(25)(Tiles.regularTiles).flatten)
     val tileMap =
       TileMap.empty[GameTile]
@@ -42,9 +44,9 @@ object GameState {
         .place(0, -1, Tiles.Star)
     val monsters =
       TileMap.empty[Monster]
-        .place(0, 1, Monster(Player(0)))
-        .place(0, -1, Monster(Player(1)))
+        .place(0, 1, Monster(p1))
+        .place(0, -1, Monster(p2))
 
-    new GameState(tileMap, tileStack, monsters, List(0, 1).map(Player.apply))
+    new GameState(tileMap, tileStack, monsters, List(p1, p2))
   }
 }

@@ -1,17 +1,23 @@
 package hexgrid.drawables
 import hexgrid.core.Monster
 import hexgrid.gui.CanDecorate
+import hexgrid.gui.Decorator
+import hexgrid.gui.Decorators.Highlighted
+import hexgrid.gui.Decorators.Overlay
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.ScreenPos
 
 
-case class MonsterDrawable(highlight: Boolean, overlay: Boolean)(implicit dc: DrawContext) extends Drawable[Monster] {
+case class MonsterDrawable(decorators: Set[Decorator])(implicit dc: DrawContext) extends Drawable[Monster] {
+  private val bkgColor = if (decorators.contains(Highlighted)) "yellow" else "white"
+  private val alpha = if (decorators.contains(Overlay)) 0.5 else 1.0
+
   override def draw(self: Monster, pos: ScreenPos): Unit = {
     dc.ctx.lineWidth = 1
     dc.ctx.strokeStyle = "black"
-    dc.ctx.globalAlpha = if (overlay) 0.5 else 1.0
-    dc.ctx.fillStyle = if (highlight) "yellow" else "white"
+    dc.ctx.globalAlpha = alpha
+    dc.ctx.fillStyle = bkgColor
     dc.ctx.textBaseline = "middle"
     dc.ctx.textAlign = "center"
     dc.ctx.font = "14px Georgia"
@@ -23,18 +29,15 @@ case class MonsterDrawable(highlight: Boolean, overlay: Boolean)(implicit dc: Dr
     dc.ctx.fillText(self.owner.id.toString, pos.x, pos.y)
   }
 
-  def withHighlight: MonsterDrawable = this.copy(highlight = true, overlay = overlay)
-  def withOverlay: MonsterDrawable = this.copy(highlight, overlay = true)
+  def decorate(d: Decorator): MonsterDrawable = this.copy(decorators = decorators + d)
 }
 
 object MonsterDrawable {
 
   implicit def monsterDrawable(implicit dc: DrawContext): MonsterDrawable =
-    new MonsterDrawable(false, false)(dc)
+    new MonsterDrawable(Set.empty)(dc)
 
-  implicit def canHighlightMonster(implicit dc: DrawContext): CanDecorate[MonsterDrawable] = new CanDecorate[MonsterDrawable] {
-    override def highlight(a: MonsterDrawable): MonsterDrawable = a.withHighlight
-    override def overlay(a: MonsterDrawable): MonsterDrawable = a.withOverlay
-  }
+  implicit def canHighlightMonster(implicit dc: DrawContext): CanDecorate[MonsterDrawable] =
+    (a: MonsterDrawable, d: Decorator) => a.decorate(d)
 
 }
