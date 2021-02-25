@@ -59,7 +59,6 @@ object GameManagerDrawable {
       }
     }
 
-
     private def drawHints(self: GameManager): Unit = {
       import GamePhase._
 
@@ -85,6 +84,7 @@ object GameManagerDrawable {
       dc.ctx.fillStyle = "black"
       dc.ctx.font = "14px Georgia"
       dc.ctx.textBaseline = "middle"
+      dc.ctx.textAlign = "left"
       dc.ctx.fillText(phaseText, dc.hintPos.x + 5, dc.hintPos.y + 15)
     }
 

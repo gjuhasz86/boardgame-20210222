@@ -12,10 +12,14 @@ object MonsterDrawable {
       dc.ctx.lineWidth = 1
       dc.ctx.strokeStyle = "black"
       dc.ctx.fillStyle = "white"
+      dc.ctx.textBaseline = "middle"
+      dc.ctx.textAlign = "center"
+      dc.ctx.font = "14px Georgia"
       dc.ctx.beginPath()
       dc.ctx.arc(pos.x, pos.y, dc.tileSize / 3, 0, Math.PI * 2)
       dc.ctx.fill()
       dc.ctx.stroke()
-      dc.ctx.strokeText(self.owner.id.toString, pos.x, pos.y)
+      dc.ctx.fillStyle = "black"
+      dc.ctx.fillText(self.owner.id.toString, pos.x, pos.y)
     }
 }

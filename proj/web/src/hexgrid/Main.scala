@@ -30,7 +30,7 @@ object Main {
 
     implicit val dc: DrawContext = new DrawContext {
       override val ctx: CanvasRenderingContext2D = renderCtx
-      override val tileSize: Int = 50
+      override val tileSize: Int = 30
       override val screenTranslator: ScreenTranslator = DefaultScreenTranslator(canvas.width, canvas.height, tileSize)
       override def cursorPos: ScreenPos = mousePos
       override def tileStackPos: ScreenPos = ScreenPos(tileSize + 20, tileSize + 20)
@@ -43,6 +43,8 @@ object Main {
       renderCtx.clearRect(0, 0, canvas.width, canvas.height)
       gameManager.drawTo(ScreenPos(0, 0))
     }
+
+    dom.window.requestAnimationFrame(updateScreen)
 
     canvas.onmousemove = (e: dom.MouseEvent) => {
       mousePos = ScreenPos(e.pageX, e.pageY)
