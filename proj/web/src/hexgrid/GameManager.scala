@@ -47,6 +47,8 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
         Cancel
       case (Key(KeyCode.Enter), _) =>
         Confirm
+      case (Key(KeyCode.Space), _) =>
+        Confirm
       case _ =>
         Noop
 

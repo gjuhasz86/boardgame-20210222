@@ -1,7 +1,7 @@
 package hexgrid.gui
 
-trait Drawable[-T] {
-  def draw(self: T, pos: ScreenPos): Unit
+trait Drawable[-A] {
+  def draw(a: A, pos: ScreenPos): Unit
 }
 object Drawable {
   implicit class DrawOnDrawable[T](self: T)(implicit d: Drawable[T]) {

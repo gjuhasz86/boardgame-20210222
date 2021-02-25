@@ -41,6 +41,7 @@ object Main {
 
     def updateScreen(timeStamp: Double): Unit = {
       renderCtx.clearRect(0, 0, canvas.width, canvas.height)
+      implicitly[Drawable[GameManager]]
       gameManager.drawTo(ScreenPos(0, 0))
     }
 
