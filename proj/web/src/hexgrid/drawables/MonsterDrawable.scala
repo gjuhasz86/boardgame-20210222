@@ -8,12 +8,11 @@ import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.ScreenPos
 
-
 case class MonsterDrawable(decorators: Set[Decorator])(implicit dc: DrawContext) extends Drawable[Monster] {
-  private val bkgColor = if (decorators.contains(Highlighted)) "yellow" else "white"
   private val alpha = if (decorators.contains(Overlay)) 0.5 else 1.0
 
   override def draw(self: Monster, pos: ScreenPos): Unit = {
+    val bkgColor = if (decorators.contains(Highlighted)) "yellow" else self.owner.color
     dc.ctx.lineWidth = 1
     dc.ctx.strokeStyle = "black"
     dc.ctx.globalAlpha = alpha
@@ -26,7 +25,7 @@ case class MonsterDrawable(decorators: Set[Decorator])(implicit dc: DrawContext)
     dc.ctx.fill()
     dc.ctx.stroke()
     dc.ctx.fillStyle = "black"
-    dc.ctx.fillText(self.owner.id.toString, pos.x, pos.y)
+    dc.ctx.fillText(self.level.toString, pos.x, pos.y)
   }
 
   def decorate(d: Decorator): MonsterDrawable = this.copy(decorators = decorators + d)

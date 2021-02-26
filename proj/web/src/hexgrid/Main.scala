@@ -4,6 +4,7 @@ import hexgrid.drawables.GameManagerDrawable._
 import hexgrid.drawables.TileDrawable._
 import hexgrid.drawables.TileMapDrawable._
 import hexgrid.drawables.MonsterDrawable._
+import hexgrid.drawables.BlobDrawable._
 import hexgrid.gui.DefaultScreenTranslator
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable

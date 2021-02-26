@@ -11,6 +11,12 @@ case class TileMap[+A](tiles: Map[TilePos, A]) {
     val newMap = tiles.get(from).map(t => Map(to -> t)).getOrElse(Map.empty)
     copy(tiles = (tiles - from) ++ newMap)
   }
+
+  def change[B >: A](pos: TilePos)(f: A => B): TileMap[B] =
+    tiles.get(pos) match {
+      case Some(a) => place(pos, f(a))
+      case None => this
+    }
 }
 
 object TileMap {

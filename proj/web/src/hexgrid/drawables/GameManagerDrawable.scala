@@ -112,7 +112,7 @@ object GameManagerDrawable {
         dc.ctx.globalAlpha = 1.0
         dc.ctx.lineWidth = 1
         dc.ctx.strokeStyle = "black"
-        dc.ctx.fillStyle = "white"
+        dc.ctx.fillStyle = self.state.nextPlayer.color
         dc.ctx.beginPath()
         dc.ctx.rect(dc.hintPos.x, dc.hintPos.y, 450, 30)
         dc.ctx.fill()

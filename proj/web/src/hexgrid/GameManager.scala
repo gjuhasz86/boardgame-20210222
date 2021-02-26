@@ -1,10 +1,9 @@
 package hexgrid
 
-import hexgrid.core.Dir
+import hexgrid.core.Cards
 import hexgrid.core.Dirs
 import hexgrid.core.GameState
 import hexgrid.core.TilePos
-import hexgrid.core.Tiles
 import hexgrid.gui.DrawContext
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
@@ -97,9 +96,17 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
         phase match {
           case PlacingNextTile(Some(pos)) =>
             state = state.placeNext(pos)
+            if (state.nextCard == Some(Cards.PlaceBlob)) {
+              state = state.placeBlob(pos)
+            }
+            state = state.drawCard.endTurn
             phase = Idle
           case MoveMonster(Some(from), Some(to)) =>
             state = state.moveMonster(from, to)
+            if (state.blobs.contains(to)) {
+              state = state.takeBlob(to).changeMonster(to)(_.incPower.levelUp)
+            }
+            state = state.endTurn
             phase = Idle
           case _ =>
         }
@@ -114,13 +121,14 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
     (action, phase) match {
       case (Move, PlacingNextTile(_)) => false
       case (Move, _) => true
-      case (SelectMonster(pos), Idle | MoveMonster(_, _)) => state.monsters.tiles.get(pos).isDefined
+      case (SelectMonster(pos), Idle | MoveMonster(_, _)) =>
+        state.monsters.tiles.get(pos).exists(_.owner == state.nextPlayer)
       case (SelectMonster(_), _) => false
       case (SelectMonsterTarget(to), MoveMonster(Some(from), _)) =>
         state.tileMap.tiles.get(from).isDefined && from != to
       case (SelectMonsterTarget(_), _) => false
       case (DrawTile, PlacingNextTile(_)) => false
-      case (DrawTile, _) => true
+      case (DrawTile, _) => state.nextTile.isDefined
       case (SelectTileTarget(pos), PlacingNextTile(_)) => canPlaceTile(pos)
       case (SelectTileTarget(_), _) => false
       case (RotateTileLeft, PlacingNextTile(_)) => true
@@ -147,8 +155,12 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
           neighbors.exists { case (d, t) => tile.isJoined(t, d) }
       case None => false
     }
+    val hasNearMonster =
+      state.monsters.tiles.exists { case (mpos, m) =>
+        mpos.distanceTo(pos) <= 3 && m.owner == state.nextPlayer
+      }
 
-    isPosEmpty && canJoin
+    isPosEmpty && canJoin && hasNearMonster
   }
 
   def isPlacingTile: Boolean = phase match {

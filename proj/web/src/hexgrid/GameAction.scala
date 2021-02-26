@@ -12,6 +12,8 @@ object GameAction {
   case class SelectTileTarget(pos: TilePos) extends GameAction
   case object RotateTileLeft extends GameAction
   case object RotateTileRight extends GameAction
+  //  case object DrawCard extends GameAction
+  //  case class PlaceBlob(pos: TilePos) extends GameAction
   case object Noop extends GameAction
 }
 
