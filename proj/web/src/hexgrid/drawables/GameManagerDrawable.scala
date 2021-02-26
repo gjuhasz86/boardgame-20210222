@@ -63,7 +63,12 @@ object GameManagerDrawable {
           topTile.make(Highlighted).drawTo(dc.tileStackPos)
         } else {
           topTile.drawTo(dc.tileStackPos)
+          dc.ctx.fillStyle = "black"
+          dc.ctx.textBaseline = "middle"
+          dc.ctx.textAlign = "center"
+          dc.ctx.fillText(self.state.tileStack.size.toString, dc.tileStackPos.x, dc.tileStackPos.y)
         }
+
       }
 
       private def drawTileGapOverlay(self: GameManager, mapOffset: ScreenPos): Unit = {
