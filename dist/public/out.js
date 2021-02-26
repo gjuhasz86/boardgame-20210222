@@ -8092,27 +8092,6 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameM
   var x$3$2 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.hintPos__Lhexgrid_gui_ScreenPos().y__I() + 15) | 0);
   qual$1.fillText(x$1, x$2$2, x$3$2)
 });
-var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawCursor__Lhexgrid_GameManager__V = (function($thiz, self) {
-  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
-  if ((!self.isPlacingTile__Z())) {
-    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($m_Lhexgrid_core_Tiles$Blank$(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Highlighted$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos())
-  };
-  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
-  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textBaseline = "middle";
-  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().font = "14px Georgia";
-  var mo = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator().mapOffset__Lhexgrid_gui_ScreenPos();
-  var cp = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos();
-  var tp = $m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos();
-  var sp = $m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos();
-  var text = (((((((((((((((("[" + cp.x__I()) + ",") + cp.y__I()) + "] [") + mo.x__I()) + ",") + mo.y__I()) + "] => (") + tp.r__I()) + ",") + tp.c__I()) + ") => [") + sp.x__I()) + ",") + sp.y__I()) + "]");
-  var width = $uD($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().measureText(text).width);
-  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().clearRect((($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().x__I() + 10) | 0), (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().y__I() + 20) | 0), (width + 10), 20.0);
-  var qual$1 = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
-  var x$1 = text;
-  var x$2 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().x__I() + 15) | 0);
-  var x$3 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().y__I() + 30) | 0);
-  qual$1.fillText(x$1, x$2, x$3)
-});
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$1__Lhexgrid_gui_ScreenTranslator__I__V = (function($thiz, st$1, i) {
   $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_core_Tiles$Blank$(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st$1)).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(new $c_Lhexgrid_gui_ScreenPos(0, $imul(3, i))))
 });
@@ -8156,8 +8135,7 @@ $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype.draw__Lhexgrid_GameM
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameManager__V(this, self);
-  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
-  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawCursor__Lhexgrid_GameManager__V(this, self)
+  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos)
 });
 $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype.draw__O__Lhexgrid_gui_ScreenPos__V = (function(a, pos) {
   this.draw__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V($as_Lhexgrid_GameManager(a), pos)
