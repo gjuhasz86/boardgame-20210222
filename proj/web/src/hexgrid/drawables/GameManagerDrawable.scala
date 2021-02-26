@@ -36,7 +36,7 @@ object GameManagerDrawable {
         drawMonsterOverlay(self, pos)
         drawHints(self)
         drawTileStack(self, pos)
-        drawCursor(self)
+        //        drawCursor(self)
       }
 
       private def drawGameState(self: GameManager, pos: ScreenPos): Unit = {
