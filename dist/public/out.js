@@ -1084,9 +1084,6 @@ function $asArrayOf_Lhexgrid_GameAction(obj, depth) {
 var $p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext = (function($thiz) {
   return $thiz.Lhexgrid_GameManager__f_dc
 });
-var $p_Lhexgrid_GameManager__st__Lhexgrid_gui_ScreenTranslator = (function($thiz) {
-  return $thiz.Lhexgrid_GameManager__f_st
-});
 var $p_Lhexgrid_GameManager__$anonfun$perform$1__Lhexgrid_core_Tiles$GameTile__Lhexgrid_core_Tiles$GameTile = (function($thiz, x$1) {
   return x$1.rotateLeft__Lhexgrid_core_Tiles$GameTile()
 });
@@ -1149,16 +1146,22 @@ var $p_Lhexgrid_GameManager__$anonfun$canPlaceTile$5__Lhexgrid_core_TilePos__T2_
   }
 });
 /** @constructor */
-function $c_Lhexgrid_GameManager(state, phase, drawContext) {
+function $c_Lhexgrid_GameManager(state, phase, guiPending, mapOffset0, drawContext, st) {
   this.Lhexgrid_GameManager__f_state = null;
   this.Lhexgrid_GameManager__f_phase = null;
+  this.Lhexgrid_GameManager__f_guiPending = null;
+  this.Lhexgrid_GameManager__f_mapOffset0 = null;
+  this.Lhexgrid_GameManager__f_hexgrid$GameManager$$st = null;
   this.Lhexgrid_GameManager__f_dc = null;
-  this.Lhexgrid_GameManager__f_st = null;
+  this.Lhexgrid_GameManager__f_screenTranslator = null;
   this.Lhexgrid_GameManager__f_state = state;
   this.Lhexgrid_GameManager__f_phase = phase;
+  this.Lhexgrid_GameManager__f_guiPending = guiPending;
+  this.Lhexgrid_GameManager__f_mapOffset0 = mapOffset0;
+  this.Lhexgrid_GameManager__f_hexgrid$GameManager$$st = st;
   $ct_O__(this);
   this.Lhexgrid_GameManager__f_dc = drawContext;
-  this.Lhexgrid_GameManager__f_st = drawContext.screenTranslator__Lhexgrid_gui_ScreenTranslator()
+  this.Lhexgrid_GameManager__f_screenTranslator = new $c_Lhexgrid_GameManager$$anon$1(this)
 }
 $c_Lhexgrid_GameManager.prototype = new $h_O();
 $c_Lhexgrid_GameManager.prototype.constructor = $c_Lhexgrid_GameManager;
@@ -1179,14 +1182,73 @@ $c_Lhexgrid_GameManager.prototype.phase__Lhexgrid_GamePhase = (function() {
 $c_Lhexgrid_GameManager.prototype.phase_$eq__Lhexgrid_GamePhase__V = (function(x$1) {
   this.Lhexgrid_GameManager__f_phase = x$1
 });
+$c_Lhexgrid_GameManager.prototype.guiPending__Lhexgrid_GuiPending = (function() {
+  return this.Lhexgrid_GameManager__f_guiPending
+});
+$c_Lhexgrid_GameManager.prototype.guiPending_$eq__Lhexgrid_GuiPending__V = (function(x$1) {
+  this.Lhexgrid_GameManager__f_guiPending = x$1
+});
+$c_Lhexgrid_GameManager.prototype.mapOffset0__Lhexgrid_gui_ScreenPos = (function() {
+  return this.Lhexgrid_GameManager__f_mapOffset0
+});
+$c_Lhexgrid_GameManager.prototype.mapOffset0_$eq__Lhexgrid_gui_ScreenPos__V = (function(x$1) {
+  this.Lhexgrid_GameManager__f_mapOffset0 = x$1
+});
+$c_Lhexgrid_GameManager.prototype.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator = (function() {
+  return this.Lhexgrid_GameManager__f_screenTranslator
+});
+$c_Lhexgrid_GameManager.prototype.hexgrid$GameManager$$mapOffsetAccessor__Lhexgrid_gui_ScreenPos = (function() {
+  return this.mapOffset__Lhexgrid_gui_ScreenPos()
+});
+$c_Lhexgrid_GameManager.prototype.mapOffset__Lhexgrid_gui_ScreenPos = (function() {
+  var x1 = this.guiPending__Lhexgrid_GuiPending();
+  if ((x1 instanceof $c_Lhexgrid_GuiPending$MapMove)) {
+    var x2 = $as_Lhexgrid_GuiPending$MapMove(x1);
+    var pos = x2.offset__Lhexgrid_gui_ScreenPos();
+    return this.mapOffset0__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos($p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext(this).cursorPos__Lhexgrid_gui_ScreenPos()).$minus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(pos)
+  } else {
+    return this.mapOffset0__Lhexgrid_gui_ScreenPos()
+  }
+});
 $c_Lhexgrid_GameManager.prototype.tryPerform__Lhexgrid_GuiAction__Z = (function(action) {
   $m_s_Predef$().println__O__V(action);
   var gameAction = this.toGameAction__Lhexgrid_GuiAction__Lhexgrid_GameAction(action);
   $m_s_Predef$().println__O__V(gameAction);
+  this.changeGui__Lhexgrid_GuiAction__V(action);
   return this.tryPerform__Lhexgrid_GameAction__Z(gameAction)
 });
+$c_Lhexgrid_GameManager.prototype.changeGui__Lhexgrid_GuiAction__V = (function(action) {
+  var x1 = $ct_T2__O__O__(new $c_T2(), action, this.guiPending__Lhexgrid_GuiPending());
+  matchEnd10: {
+    var $$x1;
+    if ((x1 !== null)) {
+      var p2 = $as_Lhexgrid_GuiAction(x1._1__O());
+      var x = $m_Lhexgrid_GuiAction$RightClickDown$();
+      var x$2 = p2;
+      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+        var $$x1 = new $c_Lhexgrid_GuiPending$MapMove($p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext(this).cursorPos__Lhexgrid_gui_ScreenPos());
+        break matchEnd10
+      }
+    };
+    if ((x1 !== null)) {
+      var p4 = $as_Lhexgrid_GuiAction(x1._1__O());
+      var p5 = $as_Lhexgrid_GuiPending(x1._2__O());
+      var x$3 = $m_Lhexgrid_GuiAction$RightClickUp$();
+      var x$4 = p4;
+      if ((((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4)) && (p5 instanceof $c_Lhexgrid_GuiPending$MapMove))) {
+        var x6 = $as_Lhexgrid_GuiPending$MapMove(p5);
+        var pos = x6.offset__Lhexgrid_gui_ScreenPos();
+        this.mapOffset0_$eq__Lhexgrid_gui_ScreenPos__V(this.mapOffset0__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos($p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext(this).cursorPos__Lhexgrid_gui_ScreenPos().$minus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(pos)));
+        var $$x1 = $m_Lhexgrid_GuiPending$NoPending$();
+        break matchEnd10
+      }
+    };
+    var $$x1 = this.guiPending__Lhexgrid_GuiPending()
+  };
+  this.guiPending_$eq__Lhexgrid_GuiPending__V($$x1)
+});
 $c_Lhexgrid_GameManager.prototype.toGameAction__Lhexgrid_GuiAction__Lhexgrid_GameAction = (function(action) {
-  var pos = $m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext(this).cursorPos__Lhexgrid_gui_ScreenPos(), $p_Lhexgrid_GameManager__st__Lhexgrid_gui_ScreenTranslator(this)).toTile__Lhexgrid_core_TilePos();
+  var pos = $m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($p_Lhexgrid_GameManager__dc__Lhexgrid_gui_DrawContext(this).cursorPos__Lhexgrid_gui_ScreenPos(), this.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator()).toTile__Lhexgrid_core_TilePos();
   var x1 = $ct_T2__O__O__(new $c_T2(), action, this.phase__Lhexgrid_GamePhase());
   if ((x1 !== null)) {
     var p2 = $as_Lhexgrid_GuiAction(x1._1__O());
@@ -1448,7 +1510,7 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
     if (((x$10 === null) ? (x$11 === null) : x$10.equals__O__Z(x$11))) {
       var x1$3 = this.phase__Lhexgrid_GamePhase();
       matchEnd11: {
-        var x$14;
+        var x$16;
         if ((x1$3 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
           var x2$3 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1$3);
           var p3 = x2$3.pos__s_Option();
@@ -1463,7 +1525,7 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
             };
             this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().drawCard__Lhexgrid_core_GameState().endTurn__Lhexgrid_core_GameState());
             this.phase_$eq__Lhexgrid_GamePhase__V($m_Lhexgrid_GamePhase$Idle$());
-            var x$14 = (void 0);
+            var x$16 = (void 0);
             break matchEnd11
           }
         };
@@ -1487,19 +1549,35 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
                 })(this))))
               };
               this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().endTurn__Lhexgrid_core_GameState());
-              this.phase_$eq__Lhexgrid_GamePhase__V($m_Lhexgrid_GamePhase$Idle$());
-              var x$14 = (void 0);
+              var x1$4 = this.state__Lhexgrid_core_GameState().playerTurns__sci_List();
+              matchEnd6: {
+                var $$x1;
+                if ((x1$4 instanceof $c_sci_$colon$colon)) {
+                  var x2$4 = $as_sci_$colon$colon(x1$4);
+                  var p = $as_Lhexgrid_core_Player(x2$4.head__O());
+                  var p3$2 = x2$4.next$access$1__sci_List();
+                  var x$14 = $m_sci_Nil$();
+                  var x$15 = p3$2;
+                  if (((x$14 === null) ? (x$15 === null) : x$14.equals__O__Z(x$15))) {
+                    var $$x1 = new $c_Lhexgrid_GamePhase$GameOver(p);
+                    break matchEnd6
+                  }
+                };
+                var $$x1 = $m_Lhexgrid_GamePhase$Idle$()
+              };
+              this.phase_$eq__Lhexgrid_GamePhase__V($$x1);
+              var x$16 = (void 0);
               break matchEnd11
             }
           }
         };
-        var x$14 = (void 0)
+        var x$16 = (void 0)
       };
       break matchEnd15
     };
-    var x$15 = $m_Lhexgrid_GameAction$Cancel$();
-    var x$16 = x1;
-    if (((x$15 === null) ? (x$16 === null) : x$15.equals__O__Z(x$16))) {
+    var x$17 = $m_Lhexgrid_GameAction$Cancel$();
+    var x$18 = x1;
+    if (((x$17 === null) ? (x$18 === null) : x$17.equals__O__Z(x$18))) {
       rc14 = true;
       x10 = x1;
       if (this.isPlacingTile__Z()) {
@@ -1511,9 +1589,9 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
       this.phase_$eq__Lhexgrid_GamePhase__V($m_Lhexgrid_GamePhase$Idle$());
       break matchEnd15
     };
-    var x$17 = $m_Lhexgrid_GameAction$Noop$();
-    var x$18 = x1;
-    if (((x$17 === null) ? (x$18 === null) : x$17.equals__O__Z(x$18))) {
+    var x$19 = $m_Lhexgrid_GameAction$Noop$();
+    var x$20 = x1;
+    if (((x$19 === null) ? (x$20 === null) : x$19.equals__O__Z(x$20))) {
       break matchEnd15
     };
     throw new $c_s_MatchError(x1)
@@ -1718,9 +1796,15 @@ $c_Lhexgrid_GameManager.prototype.isValid__Lhexgrid_GameAction__Z = (function(ac
     }
   };
   if ((x1 !== null)) {
-    var p79 = $as_Lhexgrid_GameAction(x1._1__O());
+    var p80 = $as_Lhexgrid_GamePhase(x1._2__O());
+    if ((p80 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
+      return false
+    }
+  };
+  if ((x1 !== null)) {
+    var p83 = $as_Lhexgrid_GameAction(x1._1__O());
     var x$33 = $m_Lhexgrid_GameAction$Noop$();
-    var x$34 = p79;
+    var x$34 = p83;
     if (((x$33 === null) ? (x$34 === null) : x$33.equals__O__Z(x$34))) {
       return false
     }
@@ -1800,8 +1884,8 @@ function $h_Lhexgrid_GameManager$() {
   /*<skip>*/
 }
 $h_Lhexgrid_GameManager$.prototype = $c_Lhexgrid_GameManager$.prototype;
-$c_Lhexgrid_GameManager$.prototype.apply__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager = (function(drawContext) {
-  return new $c_Lhexgrid_GameManager($m_Lhexgrid_core_GameState$().default__Lhexgrid_core_GameState(), $m_Lhexgrid_GamePhase$Idle$(), drawContext)
+$c_Lhexgrid_GameManager$.prototype.apply__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_GameManager = (function(drawContext, st) {
+  return new $c_Lhexgrid_GameManager($m_Lhexgrid_core_GameState$().default__Lhexgrid_core_GameState(), $m_Lhexgrid_GamePhase$Idle$(), $m_Lhexgrid_GuiPending$NoPending$(), new $c_Lhexgrid_gui_ScreenPos(0, 0), drawContext, st)
 });
 var $d_Lhexgrid_GameManager$ = new $TypeData().initClass({
   Lhexgrid_GameManager$: 0
@@ -1841,10 +1925,21 @@ function $isArrayOf_Lhexgrid_GuiAction(obj, depth) {
 function $asArrayOf_Lhexgrid_GuiAction(obj, depth) {
   return (($isArrayOf_Lhexgrid_GuiAction(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lhexgrid.GuiAction;", depth))
 }
-var $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function($thiz, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
+function $is_Lhexgrid_GuiPending(obj) {
+  return (!(!((obj && obj.$classData) && obj.$classData.ancestors.Lhexgrid_GuiPending)))
+}
+function $as_Lhexgrid_GuiPending(obj) {
+  return (($is_Lhexgrid_GuiPending(obj) || (obj === null)) ? obj : $throwClassCastException(obj, "hexgrid.GuiPending"))
+}
+function $isArrayOf_Lhexgrid_GuiPending(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lhexgrid_GuiPending)))
+}
+function $asArrayOf_Lhexgrid_GuiPending(obj, depth) {
+  return (($isArrayOf_Lhexgrid_GuiPending(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lhexgrid.GuiPending;", depth))
+}
+var $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function($thiz, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
   renderCtx$1.clearRect(0.0, 0.0, $uI(canvas$1.width), $uI(canvas$1.height));
-  $m_s_Predef$().implicitly__O__O($m_Lhexgrid_drawables_GameManagerDrawable$().gameManagerDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_GameStateDrawable$().gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_BlobDrawable$().blobDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_BlobDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable(dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable(dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate(dc$1), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate(), dc$1));
-  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(gameManager$1, $m_Lhexgrid_drawables_GameManagerDrawable$().gameManagerDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_GameStateDrawable$().gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_BlobDrawable$().blobDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_BlobDrawable(dc$1), dc$1), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable(dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable(dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate(dc$1), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate(), dc$1)).drawTo__Lhexgrid_gui_ScreenPos__V(new $c_Lhexgrid_gui_ScreenPos(0, 0))
+  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(gameManager$1, $m_Lhexgrid_drawables_GameManagerDrawable$().gameManagerDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable(dc$1)).drawTo__Lhexgrid_gui_ScreenPos__V(new $c_Lhexgrid_gui_ScreenPos(0, 0))
 });
 /** @constructor */
 function $c_Lhexgrid_Main$() {
@@ -1863,82 +1958,121 @@ $c_Lhexgrid_Main$.prototype.main__Lorg_scalajs_dom_raw_HTMLCanvasElement__V = (f
   renderCtx.canvas.width = $doubleToInt($uD($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().innerWidth));
   renderCtx.canvas.height = $doubleToInt($uD($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().innerHeight));
   var mousePos = $s_sr_ObjectRef__create__O__sr_ObjectRef(new $c_Lhexgrid_gui_ScreenPos(0, 0));
-  var dc = new $c_Lhexgrid_Main$$anon$1(renderCtx, canvas, mousePos);
-  var gameManager = $m_Lhexgrid_GameManager$().apply__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager(dc);
-  $m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, dc$1, gameManager$1) {
+  var dc = new $c_Lhexgrid_Main$$anon$1(renderCtx, mousePos);
+  var screenTranslator = new $c_Lhexgrid_gui_DefaultScreenTranslator($uI(canvas.width), $uI(canvas.height), dc.tileSize__I());
+  var gameManager = $m_Lhexgrid_GameManager$().apply__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_GameManager(dc, screenTranslator);
+  $m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = $uD(arg1$2);
-      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(arg1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(renderCtx, canvas, dc, gameManager));
-  canvas.onmousemove = (function(mousePos$1, renderCtx$1, canvas$1, dc$1, gameManager$1) {
+  })(renderCtx, canvas, gameManager, dc));
+  canvas.addEventListener("contextmenu", (function(arg1$2) {
+    var arg1 = arg1$2;
+    $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$3__Lorg_scalajs_dom_raw_MouseEvent__V(arg1)
+  }));
+  canvas.onmousemove = (function(mousePos$1, renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = arg1$2;
-      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$3__Lorg_scalajs_dom_raw_MouseEvent__sr_ObjectRef__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__I(arg1, mousePos$1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$5__Lorg_scalajs_dom_raw_MouseEvent__sr_ObjectRef__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__I(arg1, mousePos$1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(mousePos, renderCtx, canvas, dc, gameManager);
+  })(mousePos, renderCtx, canvas, gameManager, dc);
   canvas.onmouseup = (function(gameManager$1, renderCtx$1, canvas$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = arg1$2;
-      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$6__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
+      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$8__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
+    })
+  })(gameManager, renderCtx, canvas, dc);
+  canvas.onmousedown = (function(gameManager$1, renderCtx$1, canvas$1, dc$1) {
+    return (function(arg1$2) {
+      var arg1 = arg1$2;
+      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$11__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__O(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
     })
   })(gameManager, renderCtx, canvas, dc);
   $m_Lorg_scalajs_dom_package$().document__Lorg_scalajs_dom_raw_HTMLDocument().onkeyup = (function(gameManager$1, renderCtx$1, canvas$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = arg1$2;
-      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$9__Lorg_scalajs_dom_raw_KeyboardEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
+      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$14__Lorg_scalajs_dom_raw_KeyboardEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
     })
   })(gameManager, renderCtx, canvas, dc);
   canvas.addEventListener("wheel", (function(gameManager$1, renderCtx$1, canvas$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = arg1$2;
-      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$12__Lorg_scalajs_dom_raw_WheelEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
+      return $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$17__Lorg_scalajs_dom_raw_WheelEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I(arg1, gameManager$1, renderCtx$1, canvas$1, dc$1)
     })
   })(gameManager, renderCtx, canvas, dc))
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function(timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
-  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(this, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1)
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$4__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function(timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
-  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(this, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1)
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$3__Lorg_scalajs_dom_raw_MouseEvent__V = (function(e) {
+  e.preventDefault()
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$3__Lorg_scalajs_dom_raw_MouseEvent__sr_ObjectRef__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__I = (function(e, mousePos$1, renderCtx$1, canvas$1, dc$1, gameManager$1) {
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$6__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
+});
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$5__Lorg_scalajs_dom_raw_MouseEvent__sr_ObjectRef__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__I = (function(e, mousePos$1, renderCtx$1, canvas$1, gameManager$1, dc$1) {
   mousePos$1.sr_ObjectRef__f_elem = $m_Lhexgrid_gui_ScreenPos$().apply__D__D__Lhexgrid_gui_ScreenPos($uD(e.pageX), $uD(e.pageY));
-  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, dc$1, gameManager$1) {
+  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = $uD(arg1$2);
-      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$4__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(arg1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$6__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(renderCtx$1, canvas$1, dc$1, gameManager$1)))
+  })(renderCtx$1, canvas$1, gameManager$1, dc$1)))
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$7__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function(timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
-  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(this, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1)
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$9__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$6__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(x$1, gameManager$1, renderCtx$1, canvas$1, dc$1) {
-  gameManager$1.tryPerform__Lhexgrid_GuiAction__Z($m_Lhexgrid_GuiAction$Click$());
-  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, dc$1, gameManager$1) {
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$8__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
+  $m_s_Predef$().println__O__V($uI(e.button));
+  var x1 = $uI(e.button);
+  switch (x1) {
+    case 0: {
+      gameManager$1.tryPerform__Lhexgrid_GuiAction__Z($m_Lhexgrid_GuiAction$Click$());
+      break
+    }
+    case 2: {
+      gameManager$1.tryPerform__Lhexgrid_GuiAction__Z($m_Lhexgrid_GuiAction$RightClickUp$());
+      break
+    }
+    default: {
+      throw new $c_s_MatchError(x1)
+    }
+  };
+  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = $uD(arg1$2);
-      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$7__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(arg1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$9__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(renderCtx$1, canvas$1, dc$1, gameManager$1)))
+  })(renderCtx$1, canvas$1, gameManager$1, dc$1)))
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$10__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function(timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
-  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(this, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1)
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$12__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$9__Lorg_scalajs_dom_raw_KeyboardEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$11__Lorg_scalajs_dom_raw_MouseEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__O = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
+  return (($uI(e.button) === 2) ? (gameManager$1.tryPerform__Lhexgrid_GuiAction__Z($m_Lhexgrid_GuiAction$RightClickDown$()), $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
+    return (function(arg1$2) {
+      var arg1 = $uD(arg1$2);
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$12__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
+    })
+  })(renderCtx$1, canvas$1, gameManager$1, dc$1)))) : (void 0))
+});
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$15__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
+});
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$14__Lorg_scalajs_dom_raw_KeyboardEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
   gameManager$1.tryPerform__Lhexgrid_GuiAction__Z(new $c_Lhexgrid_GuiAction$Key($uI(e.keyCode)));
-  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, dc$1, gameManager$1) {
+  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = $uD(arg1$2);
-      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$10__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(arg1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$15__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(renderCtx$1, canvas$1, dc$1, gameManager$1)))
+  })(renderCtx$1, canvas$1, gameManager$1, dc$1)))
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$13__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V = (function(timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1) {
-  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(this, timeStamp, renderCtx$1, canvas$1, dc$1, gameManager$1)
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$18__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V = (function(timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1) {
+  $p_Lhexgrid_Main$__updateScreen$1__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(this, timeStamp, renderCtx$1, canvas$1, gameManager$1, dc$1)
 });
-$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$12__Lorg_scalajs_dom_raw_WheelEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
+$c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$17__Lorg_scalajs_dom_raw_WheelEvent__Lhexgrid_GameManager__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__I = (function(e, gameManager$1, renderCtx$1, canvas$1, dc$1) {
   if (($uD(new $c_sr_RichDouble($m_s_Predef$().doubleWrapper__D__D($uD(e.deltaY))).sign__O()) > 0)) {
     gameManager$1.tryPerform__Lhexgrid_GuiAction__Z($m_Lhexgrid_GuiAction$WheelDown$())
   } else if (($uD(new $c_sr_RichDouble($m_s_Predef$().doubleWrapper__D__D($uD(e.deltaY))).sign__O()) < 0)) {
@@ -1946,12 +2080,12 @@ $c_Lhexgrid_Main$.prototype.hexgrid$Main$$$anonfun$main$12__Lorg_scalajs_dom_raw
   } else {
     (void 0)
   };
-  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, dc$1, gameManager$1) {
+  return $uI($m_Lorg_scalajs_dom_package$().window__Lorg_scalajs_dom_raw_Window().requestAnimationFrame((function(renderCtx$1, canvas$1, gameManager$1, dc$1) {
     return (function(arg1$2) {
       var arg1 = $uD(arg1$2);
-      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$13__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_gui_DrawContext__Lhexgrid_GameManager__V(arg1, renderCtx$1, canvas$1, dc$1, gameManager$1)
+      $m_Lhexgrid_Main$().hexgrid$Main$$$anonfun$main$18__D__Lorg_scalajs_dom_raw_CanvasRenderingContext2D__Lorg_scalajs_dom_raw_HTMLCanvasElement__Lhexgrid_GameManager__Lhexgrid_gui_DrawContext__V(arg1, renderCtx$1, canvas$1, gameManager$1, dc$1)
     })
-  })(renderCtx$1, canvas$1, dc$1, gameManager$1)))
+  })(renderCtx$1, canvas$1, gameManager$1, dc$1)))
 });
 var $d_Lhexgrid_Main$ = new $TypeData().initClass({
   Lhexgrid_Main$: 0
@@ -2195,8 +2329,8 @@ function $h_Lhexgrid_drawables_GameManagerDrawable$() {
   /*<skip>*/
 }
 $h_Lhexgrid_drawables_GameManagerDrawable$.prototype = $c_Lhexgrid_drawables_GameManagerDrawable$.prototype;
-$c_Lhexgrid_drawables_GameManagerDrawable$.prototype.gameManagerDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable = (function(gsd, td, md, mdd, tdd, dc) {
-  return new $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1(dc, gsd, td, tdd, md, mdd)
+$c_Lhexgrid_drawables_GameManagerDrawable$.prototype.gameManagerDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable = (function(dc) {
+  return new $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1(dc)
 });
 var $d_Lhexgrid_drawables_GameManagerDrawable$ = new $TypeData().initClass({
   Lhexgrid_drawables_GameManagerDrawable$: 0
@@ -2224,8 +2358,8 @@ function $h_Lhexgrid_drawables_GameStateDrawable$() {
   /*<skip>*/
 }
 $h_Lhexgrid_drawables_GameStateDrawable$.prototype = $c_Lhexgrid_drawables_GameStateDrawable$.prototype;
-$c_Lhexgrid_drawables_GameStateDrawable$.prototype.gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable = (function(tmd, md, bd, dc) {
-  return new $c_Lhexgrid_drawables_GameStateDrawable$$anon$1(tmd, md, dc, bd)
+$c_Lhexgrid_drawables_GameStateDrawable$.prototype.gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable = (function(tmd, md, bd, dc, st) {
+  return new $c_Lhexgrid_drawables_GameStateDrawable$$anon$1(tmd, md, bd, st)
 });
 var $d_Lhexgrid_drawables_GameStateDrawable$ = new $TypeData().initClass({
   Lhexgrid_drawables_GameStateDrawable$: 0
@@ -2253,8 +2387,8 @@ function $h_Lhexgrid_drawables_TileMapDrawable$() {
   /*<skip>*/
 }
 $h_Lhexgrid_drawables_TileMapDrawable$.prototype = $c_Lhexgrid_drawables_TileMapDrawable$.prototype;
-$c_Lhexgrid_drawables_TileMapDrawable$.prototype.tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_Drawable = (function(td, dc) {
-  return new $c_Lhexgrid_drawables_TileMapDrawable$$anon$1(dc, td)
+$c_Lhexgrid_drawables_TileMapDrawable$.prototype.tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable = (function(td, dc, st) {
+  return new $c_Lhexgrid_drawables_TileMapDrawable$$anon$1(td, st)
 });
 var $d_Lhexgrid_drawables_TileMapDrawable$ = new $TypeData().initClass({
   Lhexgrid_drawables_TileMapDrawable$: 0
@@ -4486,6 +4620,14 @@ function $m_sc_IterableOnce$() {
   };
   return $n_sc_IterableOnce$
 }
+var $p_sc_IterableOnceOps__$anonfun$maxBy$1__F1__sr_BooleanRef__s_math_Ordering__sr_ObjectRef__sr_ObjectRef__O__V = (function($thiz, f$1, first$1, cmp$1, maxF$1, maxElem$1, elem) {
+  var fx = f$1.apply__O__O(elem);
+  if ((first$1.sr_BooleanRef__f_elem || cmp$1.gt__O__O__Z(fx, maxF$1.sr_ObjectRef__f_elem))) {
+    maxElem$1.sr_ObjectRef__f_elem = elem;
+    maxF$1.sr_ObjectRef__f_elem = fx;
+    first$1.sr_BooleanRef__f_elem = false
+  }
+});
 function $f_sc_IterableOnceOps__foreach__F1__V($thiz, f) {
   var it = $as_sc_IterableOnce($thiz).iterator__sc_Iterator();
   while (it.hasNext__Z()) {
@@ -4568,6 +4710,21 @@ function $f_sc_IterableOnceOps__copyToArray__O__I__I__I($thiz, xs, start, len) {
   };
   return ((i - start) | 0)
 }
+function $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O($thiz, f, cmp) {
+  if ($thiz.isEmpty__Z()) {
+    throw $ct_jl_UnsupportedOperationException__T__(new $c_jl_UnsupportedOperationException(), "empty.maxBy")
+  };
+  var maxF = $s_sr_ObjectRef__create__O__sr_ObjectRef(null);
+  var maxElem = $s_sr_ObjectRef__create__O__sr_ObjectRef(null);
+  var first = $s_sr_BooleanRef__create__Z__sr_BooleanRef(true);
+  $thiz.foreach__F1__V(new $c_sjsr_AnonFunction1((function(this\u00f8, f, first, cmp, maxF, maxElem) {
+    return (function(elem$2) {
+      var elem = elem$2;
+      $p_sc_IterableOnceOps__$anonfun$maxBy$1__F1__sr_BooleanRef__s_math_Ordering__sr_ObjectRef__sr_ObjectRef__O__V(this\u00f8, f, first, cmp, maxF, maxElem, elem)
+    })
+  })($thiz, f, first, cmp, maxF, maxElem)));
+  return maxElem.sr_ObjectRef__f_elem
+}
 function $f_sc_IterableOnceOps__mkString__T__T__T__T($thiz, start, sep, end) {
   return ($thiz.isEmpty__Z() ? (("" + start) + end) : $thiz.addString__scm_StringBuilder__T__T__T__scm_StringBuilder($ct_scm_StringBuilder__(new $c_scm_StringBuilder()), start, sep, end).result__T())
 }
@@ -4593,6 +4750,9 @@ function $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_Strin
   };
   return b
 }
+function $f_sc_IterableOnceOps__toSet__sci_Set($thiz) {
+  return $m_sci_Set$().from__sc_IterableOnce__sci_Set($as_sc_IterableOnce($thiz))
+}
 function $f_sc_IterableOnceOps__toArray__s_reflect_ClassTag__O($thiz, evidence$2) {
   if (($as_sc_IterableOnce($thiz).knownSize__I() >= 0)) {
     var destination = evidence$2.newArray__I__O($as_sc_IterableOnce($thiz).knownSize__I());
@@ -4613,6 +4773,18 @@ function $f_sc_IterableOnceOps__reversed__sc_Iterable($thiz) {
 }
 function $f_sc_IterableOnceOps__$init$__V($thiz) {
   /*<skip>*/
+}
+function $is_sc_IterableOnceOps(obj) {
+  return (!(!((obj && obj.$classData) && obj.$classData.ancestors.sc_IterableOnceOps)))
+}
+function $as_sc_IterableOnceOps(obj) {
+  return (($is_sc_IterableOnceOps(obj) || (obj === null)) ? obj : $throwClassCastException(obj, "scala.collection.IterableOnceOps"))
+}
+function $isArrayOf_sc_IterableOnceOps(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.sc_IterableOnceOps)))
+}
+function $asArrayOf_sc_IterableOnceOps(obj, depth) {
+  return (($isArrayOf_sc_IterableOnceOps(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.collection.IterableOnceOps;", depth))
 }
 /** @constructor */
 function $c_sc_Iterator$ConcatIteratorCell(head, tail) {
@@ -5757,6 +5929,17 @@ $c_scm_HashMap$Node.prototype.findNode__O__I__scm_HashMap$Node = (function(k, h)
     } else {
       _$this = _$this.scm_HashMap$Node__f__next
     }
+  }
+});
+$c_scm_HashMap$Node.prototype.foreach__F1__V = (function(f) {
+  var _$this = this;
+  while (true) {
+    f.apply__O__O($ct_T2__O__O__(new $c_T2(), _$this.scm_HashMap$Node__f__key, _$this.scm_HashMap$Node__f__value));
+    if ((_$this.scm_HashMap$Node__f__next !== null)) {
+      _$this = _$this.scm_HashMap$Node__f__next;
+      continue
+    };
+    break
   }
 });
 $c_scm_HashMap$Node.prototype.toString__T = (function() {
@@ -7542,16 +7725,14 @@ $c_s_util_hashing_MurmurHash3.prototype.arrayHash$mVc$sp__Ajl_Void__I__I = (func
   }
 });
 /** @constructor */
-function $c_Lhexgrid_Main$$anon$1(renderCtx$1, canvas$1, mousePos$1) {
+function $c_Lhexgrid_Main$$anon$1(renderCtx$1, mousePos$1) {
   this.Lhexgrid_Main$$anon$1__f_ctx = null;
   this.Lhexgrid_Main$$anon$1__f_tileSize = 0;
-  this.Lhexgrid_Main$$anon$1__f_screenTranslator = null;
   this.Lhexgrid_Main$$anon$1__f_mousePos$1 = null;
   this.Lhexgrid_Main$$anon$1__f_mousePos$1 = mousePos$1;
   $ct_O__(this);
   this.Lhexgrid_Main$$anon$1__f_ctx = renderCtx$1;
-  this.Lhexgrid_Main$$anon$1__f_tileSize = 30;
-  this.Lhexgrid_Main$$anon$1__f_screenTranslator = new $c_Lhexgrid_gui_DefaultScreenTranslator($uI(canvas$1.width), $uI(canvas$1.height), this.tileSize__I())
+  this.Lhexgrid_Main$$anon$1__f_tileSize = 30
 }
 $c_Lhexgrid_Main$$anon$1.prototype = new $h_O();
 $c_Lhexgrid_Main$$anon$1.prototype.constructor = $c_Lhexgrid_Main$$anon$1;
@@ -7565,9 +7746,6 @@ $c_Lhexgrid_Main$$anon$1.prototype.ctx__Lorg_scalajs_dom_raw_CanvasRenderingCont
 });
 $c_Lhexgrid_Main$$anon$1.prototype.tileSize__I = (function() {
   return this.Lhexgrid_Main$$anon$1__f_tileSize
-});
-$c_Lhexgrid_Main$$anon$1.prototype.screenTranslator__Lhexgrid_gui_ScreenTranslator = (function() {
-  return this.Lhexgrid_Main$$anon$1__f_screenTranslator
 });
 $c_Lhexgrid_Main$$anon$1.prototype.cursorPos__Lhexgrid_gui_ScreenPos = (function() {
   return $as_Lhexgrid_gui_ScreenPos(this.Lhexgrid_Main$$anon$1__f_mousePos$1.sr_ObjectRef__f_elem)
@@ -7717,19 +7895,19 @@ function $m_Lhexgrid_drawables_BlobDrawable$() {
   };
   return $n_Lhexgrid_drawables_BlobDrawable$
 }
-var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator = (function($thiz) {
-  return $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_st
-});
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawGameState__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, pos) {
-  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(self.state__Lhexgrid_core_GameState(), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_gsd$1).drawTo__Lhexgrid_gui_ScreenPos__V(pos)
+  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
+  $m_s_Predef$().implicitly__O__O($m_Lhexgrid_drawables_GameStateDrawable$().gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_BlobDrawable$().blobDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_BlobDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st));
+  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(self.state__Lhexgrid_core_GameState(), $m_Lhexgrid_drawables_GameStateDrawable$().gameStateDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileMapDrawable$().tileMapDrawable__Lhexgrid_gui_Drawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_Drawable($m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_BlobDrawable$().blobDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_BlobDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st)).drawTo__Lhexgrid_gui_ScreenPos__V(pos)
 });
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, pos) {
-  $m_sr_RichInt$().to$extension__I__I__sci_Range$Inclusive($m_s_Predef$().intWrapper__I__I(1), 5).reverse__sci_Range().foreach$mVc$sp__F1__V(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
+  $m_sr_RichInt$().to$extension__I__I__sci_Range$Inclusive($m_s_Predef$().intWrapper__I__I(1), 5).reverse__sci_Range().foreach$mVc$sp__F1__V(new $c_sjsr_AnonFunction1((function(this\u00f8, st) {
     return (function(i$2) {
       var i = $uI(i$2);
-      $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$1__I__V(this\u00f8, i)
+      $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$1__Lhexgrid_gui_ScreenTranslator__I__V(this\u00f8, st, i)
     })
-  })($thiz)));
+  })($thiz, st)));
   var mouseOver = ($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().distanceTo__Lhexgrid_gui_ScreenPos__I($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos()) < $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileSize__I());
   var topTile = $as_Lhexgrid_core_Tile(self.state__Lhexgrid_core_GameState().nextTile__s_Option().filter__F1__s_Option(new $c_sjsr_AnonFunction1((function(this$2, self) {
     return (function(x$1$2) {
@@ -7742,13 +7920,14 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_G
     })
   })($thiz))));
   if (mouseOver) {
-    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(topTile, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
+    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(topTile, $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
   } else {
-    $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(topTile, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
+    $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(topTile, $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st)).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
   }
 });
-var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, pos) {
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, mapOffset) {
   var tile$lzy = new $c_sr_LazyRef();
+  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
   var valid = self.isValid__Lhexgrid_GameAction__Z(self.toGameAction__Lhexgrid_GuiAction__Lhexgrid_GameAction($m_Lhexgrid_GuiAction$Click$()));
   var rc12 = false;
   var x2 = null;
@@ -7760,8 +7939,8 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid
       var p3 = x2.pos__s_Option();
       if ((p3 instanceof $c_s_Some)) {
         var x4 = $as_s_Some(p3);
-        var pos$2 = $as_Lhexgrid_core_TilePos(x4.value__O());
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos$2, $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos());
+        var pos = $as_Lhexgrid_core_TilePos(x4.value__O());
+        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st).toScreen__Lhexgrid_gui_ScreenPos());
         break matchEnd13
       }
     };
@@ -7770,7 +7949,7 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid
       var x = $m_s_None$();
       var x$2 = p6;
       if ((((x === null) ? (x$2 === null) : x.equals__O__Z(x$2)) && valid)) {
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toTile__Lhexgrid_core_TilePos(), $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos());
+        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
         break matchEnd13
       }
     };
@@ -7779,13 +7958,14 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid
       var x$3 = $m_s_None$();
       var x$4 = p8;
       if ((((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4)) && (!valid))) {
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Invalid$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toTile__Lhexgrid_core_TilePos(), $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos());
+        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Invalid$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
         break matchEnd13
       }
     }
   }
 });
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, offset) {
+  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
   var x1 = self.phase__Lhexgrid_GamePhase();
   matchEnd7: {
     if ((x1 instanceof $c_Lhexgrid_GamePhase$MoveMonster)) {
@@ -7794,7 +7974,7 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexg
       if ((p3 instanceof $c_s_Some)) {
         var x5 = $as_s_Some(p3);
         var pos = $as_Lhexgrid_core_TilePos(x5.value__O());
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(pos), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_md$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_mdd$1).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos());
+        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(pos), $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st).toScreen__Lhexgrid_gui_ScreenPos());
         break matchEnd7
       }
     }
@@ -7811,7 +7991,7 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexg
         if ((p4 instanceof $c_s_Some)) {
           var x6 = $as_s_Some(p4);
           var to = $as_Lhexgrid_core_TilePos(x6.value__O());
-          $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(from), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_md$1, $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_mdd$1).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(to, $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos());
+          $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(from), $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(to, st).toScreen__Lhexgrid_gui_ScreenPos());
           break matchEnd8
         }
       }
@@ -7819,31 +7999,31 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexg
   }
 });
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameManager__V = (function($thiz, self) {
-  var rc28 = false;
-  var x2 = null;
   var rc29 = false;
+  var x2 = null;
+  var rc30 = false;
   var x17 = null;
   var x1 = self.phase__Lhexgrid_GamePhase();
-  matchEnd30: {
+  matchEnd31: {
     var phaseText;
     var x = $m_Lhexgrid_GamePhase$Idle$();
     var x$2 = x1;
     if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
       var phaseText = "[IDLE] | CLICK on a monster to move | CLICK on the tile stack to draw a tile";
-      break matchEnd30
+      break matchEnd31
     };
     if ((x1 instanceof $c_Lhexgrid_GamePhase$MoveMonster)) {
-      rc28 = true;
+      rc29 = true;
       x2 = $as_Lhexgrid_GamePhase$MoveMonster(x1);
       var p3 = x2.from__s_Option();
       var x$3 = $m_s_None$();
       var x$4 = p3;
       if (((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))) {
         var phaseText = "[MOVE] | CLICK on a monster to move | BACKSPACE to cancel";
-        break matchEnd30
+        break matchEnd31
       }
     };
-    if (rc28) {
+    if (rc29) {
       var p6 = x2.from__s_Option();
       var p7 = x2.to__s_Option();
       if ((p6 instanceof $c_s_Some)) {
@@ -7855,37 +8035,45 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameM
       };
       if ($$x1) {
         var phaseText = "[MOVE] | CLICK on a tile to select a target | BACKSPACE to cancel";
-        break matchEnd30
+        break matchEnd31
       }
     };
-    if (rc28) {
+    if (rc29) {
       var p11 = x2.from__s_Option();
       var p12 = x2.to__s_Option();
       if (((p11 instanceof $c_s_Some) && (p12 instanceof $c_s_Some))) {
         var phaseText = "[MOVE] | ENTER to confirm monster placement | BACKSPACE to cancel";
-        break matchEnd30
+        break matchEnd31
       }
     };
     if ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
-      rc29 = true;
+      rc30 = true;
       x17 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1);
       var p18 = x17.pos__s_Option();
       var x$7 = $m_s_None$();
       var x$8 = p18;
       if (((x$7 === null) ? (x$8 === null) : x$7.equals__O__Z(x$8))) {
         var phaseText = "[TILE] | Click on an empty space to place the tile";
-        break matchEnd30
+        break matchEnd31
       }
     };
-    if (rc29) {
+    if (rc30) {
       var p20 = x17.pos__s_Option();
       if ((p20 instanceof $c_s_Some)) {
         var phaseText = "[TILE] | ENTER to confirm tile placement | BACKSPACE to cancel";
-        break matchEnd30
+        break matchEnd31
       }
+    };
+    if ((x1 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
+      var x23 = $as_Lhexgrid_GamePhase$GameOver(x1);
+      var p = x23.winner__Lhexgrid_core_Player();
+      var phaseText = (("[GAMEOVER] | Player " + p.id__I()) + " wins");
+      break matchEnd31
     };
     throw new $c_s_MatchError(x1)
   };
+  var x1$2 = self.phase__Lhexgrid_GamePhase();
+  var textColor = ((x1$2 instanceof $c_Lhexgrid_GamePhase$GameOver) ? "white" : "black");
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().globalAlpha = 1.0;
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().lineWidth = 1.0;
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().strokeStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
@@ -7894,7 +8082,7 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameM
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().rect($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.hintPos__Lhexgrid_gui_ScreenPos().x__I(), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.hintPos__Lhexgrid_gui_ScreenPos().y__I(), 450.0, 30.0);
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fill();
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().stroke();
-  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
+  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any(textColor);
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().font = "14px Georgia";
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textBaseline = "middle";
   $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textAlign = "left";
@@ -7904,8 +8092,29 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameM
   var x$3$2 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.hintPos__Lhexgrid_gui_ScreenPos().y__I() + 15) | 0);
   qual$1.fillText(x$1, x$2$2, x$3$2)
 });
-var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$1__I__V = (function($thiz, i) {
-  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_core_Tiles$Blank$(), $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(new $c_Lhexgrid_gui_ScreenPos(0, $imul(3, i))))
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawCursor__Lhexgrid_GameManager__V = (function($thiz, self) {
+  var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
+  if ((!self.isPlacingTile__Z())) {
+    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($m_Lhexgrid_core_Tiles$Blank$(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Highlighted$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos())
+  };
+  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
+  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textBaseline = "middle";
+  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().font = "14px Georgia";
+  var mo = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator().mapOffset__Lhexgrid_gui_ScreenPos();
+  var cp = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos();
+  var tp = $m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos();
+  var sp = $m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos();
+  var text = (((((((((((((((("[" + cp.x__I()) + ",") + cp.y__I()) + "] [") + mo.x__I()) + ",") + mo.y__I()) + "] => (") + tp.r__I()) + ",") + tp.c__I()) + ") => [") + sp.x__I()) + ",") + sp.y__I()) + "]");
+  var width = $uD($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().measureText(text).width);
+  $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().clearRect((($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().x__I() + 10) | 0), (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().y__I() + 20) | 0), (width + 10), 20.0);
+  var qual$1 = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
+  var x$1 = text;
+  var x$2 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().x__I() + 15) | 0);
+  var x$3 = (($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos().y__I() + 30) | 0);
+  qual$1.fillText(x$1, x$2, x$3)
+});
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$1__Lhexgrid_gui_ScreenTranslator__I__V = (function($thiz, st$1, i) {
+  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_core_Tiles$Blank$(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st$1)).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(new $c_Lhexgrid_gui_ScreenPos(0, $imul(3, i))))
 });
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawTileStack$2__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile__Z = (function($thiz, self$1, x$1) {
   return self$1.isPlacingTile__Z()
@@ -7930,22 +8139,10 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexg
   return (tile$lzy$1.initialized__Z() ? $as_Lhexgrid_core_Tile(tile$lzy$1.value__O()) : $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$lzycompute$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tile($thiz, tile$lzy$1, self$2))
 });
 /** @constructor */
-function $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1(dc$1, gsd$1, td$1, tdd$1, md$1, mdd$1) {
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_st = null;
+function $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1(dc$1) {
   this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1 = null;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_gsd$1 = null;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1 = null;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1 = null;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_md$1 = null;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_mdd$1 = null;
   this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1 = dc$1;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_gsd$1 = gsd$1;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_td$1 = td$1;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_tdd$1 = tdd$1;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_md$1 = md$1;
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_mdd$1 = mdd$1;
-  $ct_O__(this);
-  this.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_st = dc$1.screenTranslator__Lhexgrid_gui_ScreenTranslator()
+  $ct_O__(this)
 }
 $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype = new $h_O();
 $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype.constructor = $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1;
@@ -7959,7 +8156,8 @@ $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype.draw__Lhexgrid_GameM
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
   $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameManager__V(this, self);
-  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos)
+  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V(this, self, pos);
+  $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawCursor__Lhexgrid_GameManager__V(this, self)
 });
 $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1.prototype.draw__O__Lhexgrid_gui_ScreenPos__V = (function(a, pos) {
   this.draw__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V($as_Lhexgrid_GameManager(a), pos)
@@ -7979,27 +8177,26 @@ var $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__drawMonsters__Lhexgrid_core
   $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(self.monsters__Lhexgrid_core_TileMap(), $thiz.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_md$1).drawTo__Lhexgrid_gui_ScreenPos__V(pos)
 });
 var $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__drawBlobs__Lhexgrid_core_GameState__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, pos) {
-  var st = $thiz.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_dc$1.screenTranslator__Lhexgrid_gui_ScreenTranslator();
-  self.blobs__sci_List().foreach__F1__V(new $c_sjsr_AnonFunction1((function(this\u00f8, st) {
-    return (function(pos$2$2) {
-      var pos$2 = $as_Lhexgrid_core_TilePos(pos$2$2);
-      $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__$anonfun$drawBlobs$1__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_TilePos__V(this\u00f8, st, pos$2)
+  self.blobs__sci_List().foreach__F1__V(new $c_sjsr_AnonFunction1((function(this\u00f8, pos) {
+    return (function(p$2) {
+      var p = $as_Lhexgrid_core_TilePos(p$2);
+      $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__$anonfun$drawBlobs$1__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos__V(this\u00f8, pos, p)
     })
-  })($thiz, st)))
+  })($thiz, pos)))
 });
-var $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__$anonfun$drawBlobs$1__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_TilePos__V = (function($thiz, st$1, pos) {
-  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_core_Blob$(), $thiz.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_bd$1).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st$1).toScreen__Lhexgrid_gui_ScreenPos())
+var $p_Lhexgrid_drawables_GameStateDrawable$$anon$1__$anonfun$drawBlobs$1__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos__V = (function($thiz, pos$1, p) {
+  $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_core_Blob$(), $thiz.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_bd$1).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(p, $thiz.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_st$1).toScreen__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(pos$1))
 });
 /** @constructor */
-function $c_Lhexgrid_drawables_GameStateDrawable$$anon$1(tmd$1, md$1, dc$1, bd$1) {
+function $c_Lhexgrid_drawables_GameStateDrawable$$anon$1(tmd$1, md$1, bd$1, st$1) {
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_tmd$1 = null;
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_md$1 = null;
-  this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_dc$1 = null;
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_bd$1 = null;
+  this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_st$1 = null;
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_tmd$1 = tmd$1;
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_md$1 = md$1;
-  this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_dc$1 = dc$1;
   this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_bd$1 = bd$1;
+  this.Lhexgrid_drawables_GameStateDrawable$$anon$1__f_st$1 = st$1;
   $ct_O__(this)
 }
 $c_Lhexgrid_drawables_GameStateDrawable$$anon$1.prototype = new $h_O();
@@ -8114,8 +8311,8 @@ function $h_Lhexgrid_drawables_TileDrawable$() {
   /*<skip>*/
 }
 $h_Lhexgrid_drawables_TileDrawable$.prototype = $c_Lhexgrid_drawables_TileDrawable$.prototype;
-$c_Lhexgrid_drawables_TileDrawable$.prototype.tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable = (function(dc) {
-  return new $c_Lhexgrid_drawables_TileDrawable($m_s_Predef$().Set__sci_Set$().empty__sci_Set(), dc)
+$c_Lhexgrid_drawables_TileDrawable$.prototype.tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable = (function(dc, st) {
+  return new $c_Lhexgrid_drawables_TileDrawable($m_s_Predef$().Set__sci_Set$().empty__sci_Set(), dc, st)
 });
 $c_Lhexgrid_drawables_TileDrawable$.prototype.canDecorateTileDrawable__Lhexgrid_gui_CanDecorate = (function() {
   return this.Lhexgrid_drawables_TileDrawable$__f_canDecorateTileDrawable
@@ -8159,26 +8356,23 @@ var $d_Lhexgrid_drawables_TileDrawable$$$Lambda$1 = new $TypeData().initClass({
   Lhexgrid_gui_CanDecorate: 1
 });
 $c_Lhexgrid_drawables_TileDrawable$$$Lambda$1.prototype.$classData = $d_Lhexgrid_drawables_TileDrawable$$$Lambda$1;
-var $p_Lhexgrid_drawables_TileMapDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator = (function($thiz) {
-  return $thiz.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st
-});
 var $p_Lhexgrid_drawables_TileMapDrawable$$anon$1__$anonfun$draw$1__Lhexgrid_gui_ScreenPos__T2__V = (function($thiz, offset$1, x0$1) {
   var x1 = x0$1;
   if ((x1 !== null)) {
     var pos = $as_Lhexgrid_core_TilePos(x1._1__O());
     var tile = x1._2__O();
-    $thiz.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_td$1.draw__O__Lhexgrid_gui_ScreenPos__V(tile, $m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, $p_Lhexgrid_drawables_TileMapDrawable$$anon$1__st__Lhexgrid_gui_ScreenTranslator($thiz)).toScreen__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(offset$1))
+    $thiz.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_td$1.draw__O__Lhexgrid_gui_ScreenPos__V(tile, $m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, $thiz.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st$1).toScreen__Lhexgrid_gui_ScreenPos().$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos(offset$1))
   } else {
     throw new $c_s_MatchError(x1)
   }
 });
 /** @constructor */
-function $c_Lhexgrid_drawables_TileMapDrawable$$anon$1(dc$1, td$1) {
-  this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st = null;
+function $c_Lhexgrid_drawables_TileMapDrawable$$anon$1(td$1, st$1) {
   this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_td$1 = null;
+  this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st$1 = null;
   this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_td$1 = td$1;
-  $ct_O__(this);
-  this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st = dc$1.screenTranslator__Lhexgrid_gui_ScreenTranslator()
+  this.Lhexgrid_drawables_TileMapDrawable$$anon$1__f_st$1 = st$1;
+  $ct_O__(this)
 }
 $c_Lhexgrid_drawables_TileMapDrawable$$anon$1.prototype = new $h_O();
 $c_Lhexgrid_drawables_TileMapDrawable$$anon$1.prototype.constructor = $c_Lhexgrid_drawables_TileMapDrawable$$anon$1;
@@ -8206,6 +8400,18 @@ var $d_Lhexgrid_drawables_TileMapDrawable$$anon$1 = new $TypeData().initClass({
   Lhexgrid_gui_Drawable: 1
 });
 $c_Lhexgrid_drawables_TileMapDrawable$$anon$1.prototype.$classData = $d_Lhexgrid_drawables_TileMapDrawable$$anon$1;
+function $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__rowDistance__D($thiz) {
+  return $thiz.innerSt__Lhexgrid_gui_ScreenTranslator().rowDistance__D()
+}
+function $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__tileToScreen__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenPos($thiz, pos) {
+  return $thiz.innerSt__Lhexgrid_gui_ScreenTranslator().tileToScreen__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenPos(pos).$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos($thiz.mapOffset__Lhexgrid_gui_ScreenPos())
+}
+function $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__screenToTile__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos($thiz, pos) {
+  return $thiz.innerSt__Lhexgrid_gui_ScreenTranslator().screenToTile__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos(pos.$minus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos($thiz.mapOffset__Lhexgrid_gui_ScreenPos()))
+}
+function $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__$init$__V($thiz) {
+  /*<skip>*/
+}
 /** @constructor */
 function $c_Lhexgrid_gui_ScreenPos$() {
   $ct_O__(this);
@@ -8753,6 +8959,9 @@ $c_jl_String$.prototype.new__AC__I__I__T = (function(value, offset, count) {
     i = ((i + 1) | 0)
   };
   return result
+});
+$c_jl_String$.prototype.valueOf__Z__T = (function(b) {
+  return $f_jl_Boolean__toString__T(b)
 });
 $c_jl_String$.prototype.valueOf__I__T = (function(i) {
   return $f_jl_Integer__toString__T(i)
@@ -10448,6 +10657,66 @@ $h_sr_AbstractFunction3.prototype = $c_sr_AbstractFunction3.prototype;
 $c_sr_AbstractFunction3.prototype.toString__T = (function() {
   return $f_F3__toString__T(this)
 });
+var $s_sr_BooleanRef__create__Z__sr_BooleanRef = (function(elem) {
+  return $m_sr_BooleanRef$().create__Z__sr_BooleanRef(elem)
+});
+/** @constructor */
+function $c_sr_BooleanRef(elem) {
+  this.sr_BooleanRef__f_elem = false;
+  this.sr_BooleanRef__f_elem = elem;
+  $ct_O__(this)
+}
+$c_sr_BooleanRef.prototype = new $h_O();
+$c_sr_BooleanRef.prototype.constructor = $c_sr_BooleanRef;
+/** @constructor */
+function $h_sr_BooleanRef() {
+  /*<skip>*/
+}
+$h_sr_BooleanRef.prototype = $c_sr_BooleanRef.prototype;
+$c_sr_BooleanRef.prototype.elem__Z = (function() {
+  return this.sr_BooleanRef__f_elem
+});
+$c_sr_BooleanRef.prototype.toString__T = (function() {
+  return $s_T__valueOf__Z__T(this.elem__Z())
+});
+var $d_sr_BooleanRef = new $TypeData().initClass({
+  sr_BooleanRef: 0
+}, false, "scala.runtime.BooleanRef", {
+  sr_BooleanRef: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_sr_BooleanRef.prototype.$classData = $d_sr_BooleanRef;
+/** @constructor */
+function $c_sr_BooleanRef$() {
+  $ct_O__(this);
+  $n_sr_BooleanRef$ = this
+}
+$c_sr_BooleanRef$.prototype = new $h_O();
+$c_sr_BooleanRef$.prototype.constructor = $c_sr_BooleanRef$;
+/** @constructor */
+function $h_sr_BooleanRef$() {
+  /*<skip>*/
+}
+$h_sr_BooleanRef$.prototype = $c_sr_BooleanRef$.prototype;
+$c_sr_BooleanRef$.prototype.create__Z__sr_BooleanRef = (function(elem) {
+  return new $c_sr_BooleanRef(elem)
+});
+var $d_sr_BooleanRef$ = new $TypeData().initClass({
+  sr_BooleanRef$: 0
+}, false, "scala.runtime.BooleanRef$", {
+  sr_BooleanRef$: 1,
+  O: 1,
+  Ljava_io_Serializable: 1
+});
+$c_sr_BooleanRef$.prototype.$classData = $d_sr_BooleanRef$;
+var $n_sr_BooleanRef$;
+function $m_sr_BooleanRef$() {
+  if ((!$n_sr_BooleanRef$)) {
+    $n_sr_BooleanRef$ = new $c_sr_BooleanRef$()
+  };
+  return $n_sr_BooleanRef$
+}
 var $s_sr_IntRef__create__I__sr_IntRef = (function(elem) {
   return $m_sr_IntRef$().create__I__sr_IntRef(elem)
 });
@@ -10922,6 +11191,48 @@ var $d_s_util_hashing_MurmurHash3$accum$1 = new $TypeData().initClass({
   F2: 1
 });
 $c_s_util_hashing_MurmurHash3$accum$1.prototype.$classData = $d_s_util_hashing_MurmurHash3$accum$1;
+/** @constructor */
+function $c_Lhexgrid_GameManager$$anon$1(outer) {
+  this.Lhexgrid_GameManager$$anon$1__f_$outer = null;
+  if ((outer === null)) {
+    throw $m_sjsr_package$().unwrapJavaScriptException__jl_Throwable__O(null)
+  } else {
+    this.Lhexgrid_GameManager$$anon$1__f_$outer = outer
+  };
+  $ct_O__(this);
+  $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__$init$__V(this)
+}
+$c_Lhexgrid_GameManager$$anon$1.prototype = new $h_O();
+$c_Lhexgrid_GameManager$$anon$1.prototype.constructor = $c_Lhexgrid_GameManager$$anon$1;
+/** @constructor */
+function $h_Lhexgrid_GameManager$$anon$1() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GameManager$$anon$1.prototype = $c_Lhexgrid_GameManager$$anon$1.prototype;
+$c_Lhexgrid_GameManager$$anon$1.prototype.rowDistance__D = (function() {
+  return $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__rowDistance__D(this)
+});
+$c_Lhexgrid_GameManager$$anon$1.prototype.tileToScreen__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenPos = (function(pos) {
+  return $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__tileToScreen__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenPos(this, pos)
+});
+$c_Lhexgrid_GameManager$$anon$1.prototype.screenToTile__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos = (function(pos) {
+  return $f_Lhexgrid_gui_MapOffsetAwareScreenTranslator__screenToTile__Lhexgrid_gui_ScreenPos__Lhexgrid_core_TilePos(this, pos)
+});
+$c_Lhexgrid_GameManager$$anon$1.prototype.innerSt__Lhexgrid_gui_ScreenTranslator = (function() {
+  return this.Lhexgrid_GameManager$$anon$1__f_$outer.Lhexgrid_GameManager__f_hexgrid$GameManager$$st
+});
+$c_Lhexgrid_GameManager$$anon$1.prototype.mapOffset__Lhexgrid_gui_ScreenPos = (function() {
+  return this.Lhexgrid_GameManager$$anon$1__f_$outer.hexgrid$GameManager$$mapOffsetAccessor__Lhexgrid_gui_ScreenPos()
+});
+var $d_Lhexgrid_GameManager$$anon$1 = new $TypeData().initClass({
+  Lhexgrid_GameManager$$anon$1: 0
+}, false, "hexgrid.GameManager$$anon$1", {
+  Lhexgrid_GameManager$$anon$1: 1,
+  O: 1,
+  Lhexgrid_gui_MapOffsetAwareScreenTranslator: 1,
+  Lhexgrid_gui_ScreenTranslator: 1
+});
+$c_Lhexgrid_GameManager$$anon$1.prototype.$classData = $d_Lhexgrid_GameManager$$anon$1;
 var $s_jl_Boolean__compare__Z__Z__I = (function(x, y) {
   return $m_jl_Boolean$().compare__Z__Z__I(x, y)
 });
@@ -14277,6 +14588,15 @@ function $m_Lhexgrid_core_Blob$() {
   };
   return $n_Lhexgrid_core_Blob$
 }
+var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I = (function($thiz, x$1) {
+  return x$1.level__I()
+});
+var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$2__Lhexgrid_core_Monster__Lhexgrid_core_Player = (function($thiz, x$2) {
+  return x$2.owner__Lhexgrid_core_Player()
+});
+var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$3__sci_Set__Lhexgrid_core_Player__Z = (function($thiz, alivePlayers$1, elem) {
+  return alivePlayers$1.contains__O__Z(elem)
+});
 /** @constructor */
 function $c_Lhexgrid_core_GameState(tileMap, tileStack, monsters, playerTurns, blobs, cardStack) {
   this.Lhexgrid_core_GameState__f_tileMap = null;
@@ -14363,13 +14683,54 @@ $c_Lhexgrid_core_GameState.prototype.place__Lhexgrid_core_TilePos__Lhexgrid_core
   return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(this.tileMap__Lhexgrid_core_TileMap().place__Lhexgrid_core_TilePos__O__Lhexgrid_core_TileMap(pos, tile), this.copy$default$2__sci_List(), this.copy$default$3__Lhexgrid_core_TileMap(), this.copy$default$4__sci_List(), this.copy$default$5__sci_List(), this.copy$default$6__sci_List())
 });
 $c_Lhexgrid_core_GameState.prototype.moveMonster__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_GameState = (function(from, to) {
-  var x$1 = this.monsters__Lhexgrid_core_TileMap().move__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap(from, to);
-  var x$2 = this.copy$default$1__Lhexgrid_core_TileMap();
-  var x$3 = this.copy$default$2__sci_List();
-  var x$4 = this.copy$default$4__sci_List();
-  var x$5 = this.copy$default$5__sci_List();
-  var x$6 = this.copy$default$6__sci_List();
-  return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$2, x$3, x$1, x$4, x$5, x$6)
+  var x1 = $ct_T2__O__O__(new $c_T2(), this.monsters__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(from), this.monsters__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(to));
+  if ((x1 !== null)) {
+    var p2 = $as_s_Option(x1._1__O());
+    var p3 = $as_s_Option(x1._2__O());
+    if ((p2 instanceof $c_s_Some)) {
+      var x4 = $as_s_Some(p2);
+      var m1 = $as_Lhexgrid_core_Monster(x4.value__O());
+      if ((p3 instanceof $c_s_Some)) {
+        var x5 = $as_s_Some(p3);
+        var m2 = $as_Lhexgrid_core_Monster(x5.value__O());
+        var m = $as_Lhexgrid_core_Monster($as_sc_IterableOnceOps($m_sci_List$().apply__sci_Seq__O($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([m1, m2]))).maxBy__F1__s_math_Ordering__O(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+          return (function(x$1$2) {
+            var x$1 = $as_Lhexgrid_core_Monster(x$1$2);
+            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I(this\u00f8, x$1)
+          })
+        })(this)), $m_s_math_Ordering$Int$()));
+        var newMonsters = this.monsters__Lhexgrid_core_TileMap().remove__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap(from).place__Lhexgrid_core_TilePos__O__Lhexgrid_core_TileMap(to, m);
+        var alivePlayers = $as_sc_IterableOnceOps(newMonsters.tiles__sci_Map().values__sc_Iterable().map__F1__O(new $c_sjsr_AnonFunction1((function(this$2) {
+          return (function(x$2$2) {
+            var x$2 = $as_Lhexgrid_core_Monster(x$2$2);
+            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$2__Lhexgrid_core_Monster__Lhexgrid_core_Player(this$2, x$2)
+          })
+        })(this)))).toSet__sci_Set();
+        var x$1$3 = newMonsters;
+        var x$2$3 = this.playerTurns__sci_List().filter__F1__sci_List(new $c_sjsr_AnonFunction1((function(this$3, alivePlayers) {
+          return (function(elem$2) {
+            var elem = $as_Lhexgrid_core_Player(elem$2);
+            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$3__sci_Set__Lhexgrid_core_Player__Z(this$3, alivePlayers, elem)
+          })
+        })(this, alivePlayers)));
+        var x$3 = this.copy$default$1__Lhexgrid_core_TileMap();
+        var x$4 = this.copy$default$2__sci_List();
+        var x$5 = this.copy$default$5__sci_List();
+        var x$6 = this.copy$default$6__sci_List();
+        return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$3, x$4, x$1$3, x$2$3, x$5, x$6)
+      }
+    }
+  };
+  if ((x1 !== null)) {
+    var x$7 = this.monsters__Lhexgrid_core_TileMap().move__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap(from, to);
+    var x$8 = this.copy$default$1__Lhexgrid_core_TileMap();
+    var x$9 = this.copy$default$2__sci_List();
+    var x$10 = this.copy$default$4__sci_List();
+    var x$11 = this.copy$default$5__sci_List();
+    var x$12 = this.copy$default$6__sci_List();
+    return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$8, x$9, x$7, x$10, x$11, x$12)
+  };
+  throw new $c_s_MatchError(x1)
 });
 $c_Lhexgrid_core_GameState.prototype.changeMonster__Lhexgrid_core_TilePos__F1__Lhexgrid_core_GameState = (function(pos, f) {
   var x$1 = this.monsters__Lhexgrid_core_TileMap().change__Lhexgrid_core_TilePos__F1__Lhexgrid_core_TileMap(pos, f);
@@ -14843,6 +15204,9 @@ $c_Lhexgrid_core_TileMap.prototype.place__I__I__O__Lhexgrid_core_TileMap = (func
 $c_Lhexgrid_core_TileMap.prototype.place__Lhexgrid_core_TilePos__O__Lhexgrid_core_TileMap = (function(pos, tile) {
   return this.copy__sci_Map__Lhexgrid_core_TileMap($as_sci_Map(this.tiles__sci_Map().$plus__T2__sci_MapOps($m_s_Predef$ArrowAssoc$().$minus$greater$extension__O__O__T2($m_s_Predef$().ArrowAssoc__O__O(pos), tile))))
 });
+$c_Lhexgrid_core_TileMap.prototype.remove__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap = (function(pos) {
+  return this.copy__sci_Map__Lhexgrid_core_TileMap($as_sci_Map(this.tiles__sci_Map().$minus__O__sci_MapOps(pos)))
+});
 $c_Lhexgrid_core_TileMap.prototype.move__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap = (function(from, to) {
   var newMap = $as_sci_Map(this.tiles__sci_Map().get__O__s_Option(from).map__F1__s_Option(new $c_sjsr_AnonFunction1((function(this\u00f8, to) {
     return (function(t$2) {
@@ -15095,6 +15459,9 @@ $c_Lhexgrid_gui_ScreenPos.prototype.y__I = (function() {
 });
 $c_Lhexgrid_gui_ScreenPos.prototype.$plus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos = (function(pos) {
   return new $c_Lhexgrid_gui_ScreenPos(((this.x__I() + pos.x__I()) | 0), ((this.y__I() + pos.y__I()) | 0))
+});
+$c_Lhexgrid_gui_ScreenPos.prototype.$minus__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenPos = (function(pos) {
+  return new $c_Lhexgrid_gui_ScreenPos(((this.x__I() - pos.x__I()) | 0), ((this.y__I() - pos.y__I()) | 0))
 });
 $c_Lhexgrid_gui_ScreenPos.prototype.distanceTo__Lhexgrid_gui_ScreenPos__I = (function(pos) {
   var dx = $s_jl_Math__abs__I__I(((this.x__I() - pos.x__I()) | 0));
@@ -15566,6 +15933,9 @@ var $s_T__valueOf__O__T = (function(obj) {
 var $s_T__valueOf__I__T = (function(i) {
   return $m_jl_String$().valueOf__I__T(i)
 });
+var $s_T__valueOf__Z__T = (function(b) {
+  return $m_jl_String$().valueOf__Z__T(b)
+});
 function $f_T__java$lang$_String$$thisString__T($thiz) {
   return $as_T($thiz)
 }
@@ -16004,11 +16374,17 @@ $c_sc_AbstractIterator.prototype.copyToArray__O__I = (function(xs) {
 $c_sc_AbstractIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sc_AbstractIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sc_AbstractIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sc_AbstractIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sc_AbstractIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sc_AbstractIterator.prototype.knownSize__I = (function() {
   return $f_sc_IterableOnce__knownSize__I(this)
@@ -17739,6 +18115,84 @@ var $d_Lhexgrid_GameAction$SelectTileTarget = new $TypeData().initClass({
 });
 $c_Lhexgrid_GameAction$SelectTileTarget.prototype.$classData = $d_Lhexgrid_GameAction$SelectTileTarget;
 /** @constructor */
+function $c_Lhexgrid_GamePhase$GameOver(winner) {
+  this.Lhexgrid_GamePhase$GameOver__f_winner = null;
+  this.Lhexgrid_GamePhase$GameOver__f_winner = winner;
+  $ct_O__(this);
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_GamePhase$GameOver.prototype = new $h_O();
+$c_Lhexgrid_GamePhase$GameOver.prototype.constructor = $c_Lhexgrid_GamePhase$GameOver;
+/** @constructor */
+function $h_Lhexgrid_GamePhase$GameOver() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GamePhase$GameOver.prototype = $c_Lhexgrid_GamePhase$GameOver.prototype;
+$c_Lhexgrid_GamePhase$GameOver.prototype.winner__Lhexgrid_core_Player = (function() {
+  return this.Lhexgrid_GamePhase$GameOver__f_winner
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.productPrefix__T = (function() {
+  return "GameOver"
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.productArity__I = (function() {
+  return 1
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return ((x1 === 0) ? this.winner__Lhexgrid_core_Player() : $s_sr_Statics__ioobe__I__O(x$1))
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.canEqual__O__Z = (function(x$1) {
+  return (x$1 instanceof $c_Lhexgrid_GamePhase$GameOver)
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.hashCode__I = (function() {
+  return $m_sr_ScalaRunTime$()._hashCode__s_Product__I(this)
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.toString__T = (function() {
+  return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.equals__O__Z = (function(x$1) {
+  if ($is(this, x$1)) {
+    return true
+  } else {
+    var x1 = x$1;
+    if (((x1 instanceof $c_Lhexgrid_GamePhase$GameOver) || false)) {
+      var GameOver$1 = $as_Lhexgrid_GamePhase$GameOver(x$1);
+      var x = this.winner__Lhexgrid_core_Player();
+      var x$2 = GameOver$1.winner__Lhexgrid_core_Player();
+      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+        return GameOver$1.canEqual__O__Z(this)
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }
+});
+function $as_Lhexgrid_GamePhase$GameOver(obj) {
+  return (((obj instanceof $c_Lhexgrid_GamePhase$GameOver) || (obj === null)) ? obj : $throwClassCastException(obj, "hexgrid.GamePhase$GameOver"))
+}
+function $isArrayOf_Lhexgrid_GamePhase$GameOver(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lhexgrid_GamePhase$GameOver)))
+}
+function $asArrayOf_Lhexgrid_GamePhase$GameOver(obj, depth) {
+  return (($isArrayOf_Lhexgrid_GamePhase$GameOver(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lhexgrid.GamePhase$GameOver;", depth))
+}
+var $d_Lhexgrid_GamePhase$GameOver = new $TypeData().initClass({
+  Lhexgrid_GamePhase$GameOver: 0
+}, false, "hexgrid.GamePhase$GameOver", {
+  Lhexgrid_GamePhase$GameOver: 1,
+  O: 1,
+  Lhexgrid_GamePhase: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GamePhase$GameOver.prototype.$classData = $d_Lhexgrid_GamePhase$GameOver;
+/** @constructor */
 function $c_Lhexgrid_GamePhase$Idle$() {
   $ct_O__(this);
   $n_Lhexgrid_GamePhase$Idle$ = this;
@@ -18094,6 +18548,106 @@ var $d_Lhexgrid_GuiAction$Key = new $TypeData().initClass({
 });
 $c_Lhexgrid_GuiAction$Key.prototype.$classData = $d_Lhexgrid_GuiAction$Key;
 /** @constructor */
+function $c_Lhexgrid_GuiAction$RightClickDown$() {
+  $ct_O__(this);
+  $n_Lhexgrid_GuiAction$RightClickDown$ = this;
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype = new $h_O();
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.constructor = $c_Lhexgrid_GuiAction$RightClickDown$;
+/** @constructor */
+function $h_Lhexgrid_GuiAction$RightClickDown$() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GuiAction$RightClickDown$.prototype = $c_Lhexgrid_GuiAction$RightClickDown$.prototype;
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.productPrefix__T = (function() {
+  return "RightClickDown"
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.productArity__I = (function() {
+  return 0
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return $s_sr_Statics__ioobe__I__O(x$1)
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.hashCode__I = (function() {
+  return 1975264174
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.toString__T = (function() {
+  return "RightClickDown"
+});
+var $d_Lhexgrid_GuiAction$RightClickDown$ = new $TypeData().initClass({
+  Lhexgrid_GuiAction$RightClickDown$: 0
+}, false, "hexgrid.GuiAction$RightClickDown$", {
+  Lhexgrid_GuiAction$RightClickDown$: 1,
+  O: 1,
+  Lhexgrid_GuiAction: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GuiAction$RightClickDown$.prototype.$classData = $d_Lhexgrid_GuiAction$RightClickDown$;
+var $n_Lhexgrid_GuiAction$RightClickDown$;
+function $m_Lhexgrid_GuiAction$RightClickDown$() {
+  if ((!$n_Lhexgrid_GuiAction$RightClickDown$)) {
+    $n_Lhexgrid_GuiAction$RightClickDown$ = new $c_Lhexgrid_GuiAction$RightClickDown$()
+  };
+  return $n_Lhexgrid_GuiAction$RightClickDown$
+}
+/** @constructor */
+function $c_Lhexgrid_GuiAction$RightClickUp$() {
+  $ct_O__(this);
+  $n_Lhexgrid_GuiAction$RightClickUp$ = this;
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype = new $h_O();
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.constructor = $c_Lhexgrid_GuiAction$RightClickUp$;
+/** @constructor */
+function $h_Lhexgrid_GuiAction$RightClickUp$() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GuiAction$RightClickUp$.prototype = $c_Lhexgrid_GuiAction$RightClickUp$.prototype;
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.productPrefix__T = (function() {
+  return "RightClickUp"
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.productArity__I = (function() {
+  return 0
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return $s_sr_Statics__ioobe__I__O(x$1)
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.hashCode__I = (function() {
+  return (-1231462233)
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.toString__T = (function() {
+  return "RightClickUp"
+});
+var $d_Lhexgrid_GuiAction$RightClickUp$ = new $TypeData().initClass({
+  Lhexgrid_GuiAction$RightClickUp$: 0
+}, false, "hexgrid.GuiAction$RightClickUp$", {
+  Lhexgrid_GuiAction$RightClickUp$: 1,
+  O: 1,
+  Lhexgrid_GuiAction: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GuiAction$RightClickUp$.prototype.$classData = $d_Lhexgrid_GuiAction$RightClickUp$;
+var $n_Lhexgrid_GuiAction$RightClickUp$;
+function $m_Lhexgrid_GuiAction$RightClickUp$() {
+  if ((!$n_Lhexgrid_GuiAction$RightClickUp$)) {
+    $n_Lhexgrid_GuiAction$RightClickUp$ = new $c_Lhexgrid_GuiAction$RightClickUp$()
+  };
+  return $n_Lhexgrid_GuiAction$RightClickUp$
+}
+/** @constructor */
 function $c_Lhexgrid_GuiAction$WheelDown$() {
   $ct_O__(this);
   $n_Lhexgrid_GuiAction$WheelDown$ = this;
@@ -18192,6 +18746,134 @@ function $m_Lhexgrid_GuiAction$WheelUp$() {
     $n_Lhexgrid_GuiAction$WheelUp$ = new $c_Lhexgrid_GuiAction$WheelUp$()
   };
   return $n_Lhexgrid_GuiAction$WheelUp$
+}
+/** @constructor */
+function $c_Lhexgrid_GuiPending$MapMove(offset) {
+  this.Lhexgrid_GuiPending$MapMove__f_offset = null;
+  this.Lhexgrid_GuiPending$MapMove__f_offset = offset;
+  $ct_O__(this);
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_GuiPending$MapMove.prototype = new $h_O();
+$c_Lhexgrid_GuiPending$MapMove.prototype.constructor = $c_Lhexgrid_GuiPending$MapMove;
+/** @constructor */
+function $h_Lhexgrid_GuiPending$MapMove() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GuiPending$MapMove.prototype = $c_Lhexgrid_GuiPending$MapMove.prototype;
+$c_Lhexgrid_GuiPending$MapMove.prototype.offset__Lhexgrid_gui_ScreenPos = (function() {
+  return this.Lhexgrid_GuiPending$MapMove__f_offset
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.productPrefix__T = (function() {
+  return "MapMove"
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.productArity__I = (function() {
+  return 1
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return ((x1 === 0) ? this.offset__Lhexgrid_gui_ScreenPos() : $s_sr_Statics__ioobe__I__O(x$1))
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.canEqual__O__Z = (function(x$1) {
+  return (x$1 instanceof $c_Lhexgrid_GuiPending$MapMove)
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.hashCode__I = (function() {
+  return $m_sr_ScalaRunTime$()._hashCode__s_Product__I(this)
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.toString__T = (function() {
+  return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.equals__O__Z = (function(x$1) {
+  if ($is(this, x$1)) {
+    return true
+  } else {
+    var x1 = x$1;
+    if (((x1 instanceof $c_Lhexgrid_GuiPending$MapMove) || false)) {
+      var MapMove$1 = $as_Lhexgrid_GuiPending$MapMove(x$1);
+      var x = this.offset__Lhexgrid_gui_ScreenPos();
+      var x$2 = MapMove$1.offset__Lhexgrid_gui_ScreenPos();
+      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+        return MapMove$1.canEqual__O__Z(this)
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  }
+});
+function $as_Lhexgrid_GuiPending$MapMove(obj) {
+  return (((obj instanceof $c_Lhexgrid_GuiPending$MapMove) || (obj === null)) ? obj : $throwClassCastException(obj, "hexgrid.GuiPending$MapMove"))
+}
+function $isArrayOf_Lhexgrid_GuiPending$MapMove(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.Lhexgrid_GuiPending$MapMove)))
+}
+function $asArrayOf_Lhexgrid_GuiPending$MapMove(obj, depth) {
+  return (($isArrayOf_Lhexgrid_GuiPending$MapMove(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lhexgrid.GuiPending$MapMove;", depth))
+}
+var $d_Lhexgrid_GuiPending$MapMove = new $TypeData().initClass({
+  Lhexgrid_GuiPending$MapMove: 0
+}, false, "hexgrid.GuiPending$MapMove", {
+  Lhexgrid_GuiPending$MapMove: 1,
+  O: 1,
+  Lhexgrid_GuiPending: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GuiPending$MapMove.prototype.$classData = $d_Lhexgrid_GuiPending$MapMove;
+/** @constructor */
+function $c_Lhexgrid_GuiPending$NoPending$() {
+  $ct_O__(this);
+  $n_Lhexgrid_GuiPending$NoPending$ = this;
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_GuiPending$NoPending$.prototype = new $h_O();
+$c_Lhexgrid_GuiPending$NoPending$.prototype.constructor = $c_Lhexgrid_GuiPending$NoPending$;
+/** @constructor */
+function $h_Lhexgrid_GuiPending$NoPending$() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GuiPending$NoPending$.prototype = $c_Lhexgrid_GuiPending$NoPending$.prototype;
+$c_Lhexgrid_GuiPending$NoPending$.prototype.productPrefix__T = (function() {
+  return "NoPending"
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.productArity__I = (function() {
+  return 0
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return $s_sr_Statics__ioobe__I__O(x$1)
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.hashCode__I = (function() {
+  return 1912957046
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.toString__T = (function() {
+  return "NoPending"
+});
+var $d_Lhexgrid_GuiPending$NoPending$ = new $TypeData().initClass({
+  Lhexgrid_GuiPending$NoPending$: 0
+}, false, "hexgrid.GuiPending$NoPending$", {
+  Lhexgrid_GuiPending$NoPending$: 1,
+  O: 1,
+  Lhexgrid_GuiPending: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GuiPending$NoPending$.prototype.$classData = $d_Lhexgrid_GuiPending$NoPending$;
+var $n_Lhexgrid_GuiPending$NoPending$;
+function $m_Lhexgrid_GuiPending$NoPending$() {
+  if ((!$n_Lhexgrid_GuiPending$NoPending$)) {
+    $n_Lhexgrid_GuiPending$NoPending$ = new $c_Lhexgrid_GuiPending$NoPending$()
+  };
+  return $n_Lhexgrid_GuiPending$NoPending$
 }
 /** @constructor */
 function $c_Lhexgrid_core_Cards$PlaceBlob$() {
@@ -18787,12 +19469,12 @@ $c_Lhexgrid_drawables_MonsterDrawable.prototype.draw__Lhexgrid_core_Monster__Lhe
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textAlign = "center";
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().font = "14px Georgia";
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().beginPath();
-  this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().arc(pos.x__I(), pos.y__I(), ((this.Lhexgrid_drawables_MonsterDrawable__f_dc.tileSize__I() / 3) | 0), 0.0, 6.283185307179586);
+  this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().arc(pos.x__I(), pos.y__I(), ((this.Lhexgrid_drawables_MonsterDrawable__f_dc.tileSize__I() / 2) | 0), 0.0, 6.283185307179586);
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fill();
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().stroke();
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
   var qual$1 = this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
-  var x$1 = $f_jl_Integer__toString__T(self.level__I());
+  var x$1 = ((("" + self.level__I()) + ".") + self.power__I());
   var x$2 = pos.x__I();
   var x$3 = pos.y__I();
   qual$1.fillText(x$1, x$2, x$3)
@@ -18878,17 +19560,19 @@ var $p_Lhexgrid_drawables_TileDrawable__invalid__Z = (function($thiz) {
 });
 var $p_Lhexgrid_drawables_TileDrawable__$anonfun$draw$1__Lhexgrid_gui_ScreenPos__Lhexgrid_core_Dir__V = (function($thiz, pos$1, dir) {
   $thiz.dc__Lhexgrid_gui_DrawContext().ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().moveTo(pos$1.x__I(), pos$1.y__I());
-  $thiz.dc__Lhexgrid_gui_DrawContext().ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().lineTo((pos$1.x__I() + ($thiz.dc__Lhexgrid_gui_DrawContext().tileSize__I() * dir.xOffs__D())), (pos$1.y__I() + ($thiz.dc__Lhexgrid_gui_DrawContext().screenTranslator__Lhexgrid_gui_ScreenTranslator().rowDistance__D() * dir.yOffs__D())))
+  $thiz.dc__Lhexgrid_gui_DrawContext().ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().lineTo((pos$1.x__I() + ($thiz.dc__Lhexgrid_gui_DrawContext().tileSize__I() * dir.xOffs__D())), (pos$1.y__I() + ($thiz.st__Lhexgrid_gui_ScreenTranslator().rowDistance__D() * dir.yOffs__D())))
 });
 /** @constructor */
-function $c_Lhexgrid_drawables_TileDrawable(decorators, dc) {
+function $c_Lhexgrid_drawables_TileDrawable(decorators, dc, st) {
   this.Lhexgrid_drawables_TileDrawable__f_decorators = null;
   this.Lhexgrid_drawables_TileDrawable__f_dc = null;
+  this.Lhexgrid_drawables_TileDrawable__f_st = null;
   this.Lhexgrid_drawables_TileDrawable__f_alpha = 0.0;
   this.Lhexgrid_drawables_TileDrawable__f_highlighted = false;
   this.Lhexgrid_drawables_TileDrawable__f_invalid = false;
   this.Lhexgrid_drawables_TileDrawable__f_decorators = decorators;
   this.Lhexgrid_drawables_TileDrawable__f_dc = dc;
+  this.Lhexgrid_drawables_TileDrawable__f_st = st;
   $ct_O__(this);
   $f_s_Product__$init$__V(this);
   this.Lhexgrid_drawables_TileDrawable__f_alpha = (decorators.contains__O__Z($m_Lhexgrid_gui_Decorators$Overlay$()) ? 0.5 : 1.0);
@@ -18908,8 +19592,11 @@ $c_Lhexgrid_drawables_TileDrawable.prototype.decorators__sci_Set = (function() {
 $c_Lhexgrid_drawables_TileDrawable.prototype.dc__Lhexgrid_gui_DrawContext = (function() {
   return this.Lhexgrid_drawables_TileDrawable__f_dc
 });
+$c_Lhexgrid_drawables_TileDrawable.prototype.st__Lhexgrid_gui_ScreenTranslator = (function() {
+  return this.Lhexgrid_drawables_TileDrawable__f_st
+});
 $c_Lhexgrid_drawables_TileDrawable.prototype.decorate__Lhexgrid_gui_Decorator__Lhexgrid_drawables_TileDrawable = (function(d) {
-  return this.copy__sci_Set__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable($as_sci_Set(this.decorators__sci_Set().$plus__O__sci_SetOps(d)), this.copy$default$2__Lhexgrid_gui_DrawContext())
+  return this.copy__sci_Set__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($as_sci_Set(this.decorators__sci_Set().$plus__O__sci_SetOps(d)), this.copy$default$2__Lhexgrid_gui_DrawContext(), this.copy$default$3__Lhexgrid_gui_ScreenTranslator())
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.draw__Lhexgrid_core_Tile__Lhexgrid_gui_ScreenPos__V = (function(tile, pos) {
   this.dc__Lhexgrid_gui_DrawContext().ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().globalAlpha = $p_Lhexgrid_drawables_TileDrawable__alpha__D(this);
@@ -18958,17 +19645,20 @@ $c_Lhexgrid_drawables_TileDrawable.prototype.draw__Lhexgrid_core_Tile__Lhexgrid_
     }
   }
 });
-$c_Lhexgrid_drawables_TileDrawable.prototype.copy__sci_Set__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_TileDrawable = (function(decorators, dc) {
-  return new $c_Lhexgrid_drawables_TileDrawable(decorators, dc)
+$c_Lhexgrid_drawables_TileDrawable.prototype.copy__sci_Set__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable = (function(decorators, dc, st) {
+  return new $c_Lhexgrid_drawables_TileDrawable(decorators, dc, st)
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.copy$default$2__Lhexgrid_gui_DrawContext = (function() {
   return this.dc__Lhexgrid_gui_DrawContext()
+});
+$c_Lhexgrid_drawables_TileDrawable.prototype.copy$default$3__Lhexgrid_gui_ScreenTranslator = (function() {
+  return this.st__Lhexgrid_gui_ScreenTranslator()
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.productPrefix__T = (function() {
   return "TileDrawable"
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.productArity__I = (function() {
-  return 2
+  return 3
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.productElement__I__O = (function(x$1) {
   var x1 = x$1;
@@ -18979,6 +19669,10 @@ $c_Lhexgrid_drawables_TileDrawable.prototype.productElement__I__O = (function(x$
     }
     case 1: {
       return this.dc__Lhexgrid_gui_DrawContext();
+      break
+    }
+    case 2: {
+      return this.st__Lhexgrid_gui_ScreenTranslator();
       break
     }
     default: {
@@ -19010,7 +19704,14 @@ $c_Lhexgrid_drawables_TileDrawable.prototype.equals__O__Z = (function(x$1) {
       if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
         var x$3 = this.dc__Lhexgrid_gui_DrawContext();
         var x$4 = TileDrawable$1.dc__Lhexgrid_gui_DrawContext();
-        var $$x1 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+        var $$x2 = ((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))
+      } else {
+        var $$x2 = false
+      };
+      if ($$x2) {
+        var x$5 = this.st__Lhexgrid_gui_ScreenTranslator();
+        var x$6 = TileDrawable$1.st__Lhexgrid_gui_ScreenTranslator();
+        var $$x1 = ((x$5 === null) ? (x$6 === null) : x$5.equals__O__Z(x$6))
       } else {
         var $$x1 = false
       };
@@ -19893,6 +20594,15 @@ $c_s_Option.prototype.foreach__F1__V = (function(f) {
 $c_s_Option.prototype.iterator__sc_Iterator = (function() {
   return (this.isEmpty__Z() ? $m_sc_Iterator$().empty__sc_Iterator() : $m_sc_Iterator$().single__O__sc_Iterator(this.get__O()))
 });
+function $as_s_Option(obj) {
+  return (((obj instanceof $c_s_Option) || (obj === null)) ? obj : $throwClassCastException(obj, "scala.Option"))
+}
+function $isArrayOf_s_Option(obj, depth) {
+  return (!(!(((obj && obj.$classData) && (obj.$classData.arrayDepth === depth)) && obj.$classData.arrayBase.ancestors.s_Option)))
+}
+function $asArrayOf_s_Option(obj, depth) {
+  return (($isArrayOf_s_Option(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.Option;", depth))
+}
 var $ct_T2__O__O__ = (function($thiz, _1, _2) {
   $thiz.T2__f__1 = _1;
   $thiz.T2__f__2 = _2;
@@ -20246,8 +20956,14 @@ function $f_sc_Iterable__toIterable__sc_Iterable($thiz) {
 function $f_sc_Iterable__coll__sc_Iterable($thiz) {
   return $thiz
 }
+function $f_sc_Iterable__iterableFactory__sc_IterableFactory($thiz) {
+  return $m_sc_Iterable$()
+}
 function $f_sc_Iterable__className__T($thiz) {
   return $thiz.stringPrefix__T()
+}
+function $f_sc_Iterable__stringPrefix__T($thiz) {
+  return "Iterable"
 }
 function $f_sc_Iterable__toString__T($thiz) {
   return $thiz.mkString__T__T__T__T(($thiz.className__T() + "("), ", ", ")")
@@ -20775,6 +21491,39 @@ function $isArrayOf_sc_LinearSeqOps(obj, depth) {
 function $asArrayOf_sc_LinearSeqOps(obj, depth) {
   return (($isArrayOf_sc_LinearSeqOps(obj, depth) || (obj === null)) ? obj : $throwArrayCastException(obj, "Lscala.collection.LinearSeqOps;", depth))
 }
+var $p_sc_MapOps$$anon$4__iter__sc_Iterator = (function($thiz) {
+  return $thiz.sc_MapOps$$anon$4__f_iter
+});
+/** @constructor */
+function $c_sc_MapOps$$anon$4(outer) {
+  this.sc_MapOps$$anon$4__f_iter = null;
+  $ct_sc_AbstractIterator__(this);
+  this.sc_MapOps$$anon$4__f_iter = outer.iterator__sc_Iterator()
+}
+$c_sc_MapOps$$anon$4.prototype = new $h_sc_AbstractIterator();
+$c_sc_MapOps$$anon$4.prototype.constructor = $c_sc_MapOps$$anon$4;
+/** @constructor */
+function $h_sc_MapOps$$anon$4() {
+  /*<skip>*/
+}
+$h_sc_MapOps$$anon$4.prototype = $c_sc_MapOps$$anon$4.prototype;
+$c_sc_MapOps$$anon$4.prototype.hasNext__Z = (function() {
+  return $p_sc_MapOps$$anon$4__iter__sc_Iterator(this).hasNext__Z()
+});
+$c_sc_MapOps$$anon$4.prototype.next__O = (function() {
+  return $as_T2($p_sc_MapOps$$anon$4__iter__sc_Iterator(this).next__O())._2__O()
+});
+var $d_sc_MapOps$$anon$4 = new $TypeData().initClass({
+  sc_MapOps$$anon$4: 0
+}, false, "scala.collection.MapOps$$anon$4", {
+  sc_MapOps$$anon$4: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sc_MapOps$$anon$4.prototype.$classData = $d_sc_MapOps$$anon$4;
 function $f_sc_SetOps__apply__O__Z($thiz, elem) {
   return $thiz.contains__O__Z(elem)
 }
@@ -21768,11 +22517,17 @@ $c_sci_MapKeyValueTupleHashIterator.prototype.copyToArray__O__I = (function(xs) 
 $c_sci_MapKeyValueTupleHashIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sci_MapKeyValueTupleHashIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sci_MapKeyValueTupleHashIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sci_MapKeyValueTupleHashIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_MapKeyValueTupleHashIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sci_MapKeyValueTupleHashIterator.prototype.knownSize__I = (function() {
   return $f_sc_IterableOnce__knownSize__I(this)
@@ -21862,11 +22617,17 @@ $c_sci_MapKeyValueTupleIterator.prototype.copyToArray__O__I = (function(xs) {
 $c_sci_MapKeyValueTupleIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sci_MapKeyValueTupleIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sci_MapKeyValueTupleIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sci_MapKeyValueTupleIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_MapKeyValueTupleIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sci_MapKeyValueTupleIterator.prototype.knownSize__I = (function() {
   return $f_sc_IterableOnce__knownSize__I(this)
@@ -21893,6 +22654,99 @@ var $d_sci_MapKeyValueTupleIterator = new $TypeData().initClass({
   sc_IterableOnceOps: 1
 });
 $c_sci_MapKeyValueTupleIterator.prototype.$classData = $d_sci_MapKeyValueTupleIterator;
+/** @constructor */
+function $c_sci_MapValueIterator(rootNode) {
+  this.sci_ChampBaseIterator__f_currentValueCursor = 0;
+  this.sci_ChampBaseIterator__f_currentValueLength = 0;
+  this.sci_ChampBaseIterator__f_currentValueNode = null;
+  this.sci_ChampBaseIterator__f_currentStackLevel = 0;
+  this.sci_ChampBaseIterator__f_nodeCursorsAndLengths = null;
+  this.sci_ChampBaseIterator__f_nodes = null;
+  $ct_sci_ChampBaseIterator__sci_Node__(this, rootNode);
+  $f_sc_IterableOnce__$init$__V(this);
+  $f_sc_IterableOnceOps__$init$__V(this);
+  $f_sc_Iterator__$init$__V(this)
+}
+$c_sci_MapValueIterator.prototype = new $h_sci_ChampBaseIterator();
+$c_sci_MapValueIterator.prototype.constructor = $c_sci_MapValueIterator;
+/** @constructor */
+function $h_sci_MapValueIterator() {
+  /*<skip>*/
+}
+$h_sci_MapValueIterator.prototype = $c_sci_MapValueIterator.prototype;
+$c_sci_MapValueIterator.prototype.iterator__sc_Iterator = (function() {
+  return $f_sc_Iterator__iterator__sc_Iterator(this)
+});
+$c_sci_MapValueIterator.prototype.indexWhere__F1__I__I = (function(p, from) {
+  return $f_sc_Iterator__indexWhere__F1__I__I(this, p, from)
+});
+$c_sci_MapValueIterator.prototype.isEmpty__Z = (function() {
+  return $f_sc_Iterator__isEmpty__Z(this)
+});
+$c_sci_MapValueIterator.prototype.map__F1__sc_Iterator = (function(f) {
+  return $f_sc_Iterator__map__F1__sc_Iterator(this, f)
+});
+$c_sci_MapValueIterator.prototype.flatMap__F1__sc_Iterator = (function(f) {
+  return $f_sc_Iterator__flatMap__F1__sc_Iterator(this, f)
+});
+$c_sci_MapValueIterator.prototype.concat__F0__sc_Iterator = (function(xs) {
+  return $f_sc_Iterator__concat__F0__sc_Iterator(this, xs)
+});
+$c_sci_MapValueIterator.prototype.$plus$plus__F0__sc_Iterator = (function(xs) {
+  return $f_sc_Iterator__$plus$plus__F0__sc_Iterator(this, xs)
+});
+$c_sci_MapValueIterator.prototype.drop__I__sc_Iterator = (function(n) {
+  return $f_sc_Iterator__drop__I__sc_Iterator(this, n)
+});
+$c_sci_MapValueIterator.prototype.sameElements__sc_IterableOnce__Z = (function(that) {
+  return $f_sc_Iterator__sameElements__sc_IterableOnce__Z(this, that)
+});
+$c_sci_MapValueIterator.prototype.toString__T = (function() {
+  return $f_sc_Iterator__toString__T(this)
+});
+$c_sci_MapValueIterator.prototype.foreach__F1__V = (function(f) {
+  $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
+$c_sci_MapValueIterator.prototype.copyToArray__O__I = (function(xs) {
+  return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
+});
+$c_sci_MapValueIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
+  return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
+});
+$c_sci_MapValueIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
+$c_sci_MapValueIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
+  return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
+});
+$c_sci_MapValueIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
+  return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_MapValueIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
+});
+$c_sci_MapValueIterator.prototype.knownSize__I = (function() {
+  return $f_sc_IterableOnce__knownSize__I(this)
+});
+$c_sci_MapValueIterator.prototype.next__O = (function() {
+  if ((!this.hasNext__Z())) {
+    throw $ct_ju_NoSuchElementException__(new $c_ju_NoSuchElementException())
+  };
+  var value = $as_sci_MapNode(this.currentValueNode__sci_Node()).getValue__I__O(this.currentValueCursor__I());
+  this.currentValueCursor_$eq__I__V(((this.currentValueCursor__I() + 1) | 0));
+  return value
+});
+var $d_sci_MapValueIterator = new $TypeData().initClass({
+  sci_MapValueIterator: 0
+}, false, "scala.collection.immutable.MapValueIterator", {
+  sci_MapValueIterator: 1,
+  sci_ChampBaseIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sci_MapValueIterator.prototype.$classData = $d_sci_MapValueIterator;
 var $p_sci_NewVectorIterator__advanceSlice__V = (function($thiz) {
   if ((!$thiz.hasNext__Z())) {
     $m_sc_Iterator$().empty__sc_Iterator().next__O()
@@ -22085,11 +22939,17 @@ $c_sci_NewVectorIterator.prototype.copyToArray__O__I = (function(xs) {
 $c_sci_NewVectorIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sci_NewVectorIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sci_NewVectorIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sci_NewVectorIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_NewVectorIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sci_NewVectorIterator.prototype.knownSize__I = (function() {
   return ((this.sci_NewVectorIterator__f_scala$collection$immutable$NewVectorIterator$$len1 - this.sci_NewVectorIterator__f_scala$collection$immutable$NewVectorIterator$$i1) | 0)
@@ -22333,11 +23193,17 @@ $c_sci_SetHashIterator.prototype.copyToArray__O__I = (function(xs) {
 $c_sci_SetHashIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sci_SetHashIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sci_SetHashIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sci_SetHashIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_SetHashIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sci_SetHashIterator.prototype.knownSize__I = (function() {
   return $f_sc_IterableOnce__knownSize__I(this)
@@ -22423,11 +23289,17 @@ $c_sci_SetIterator.prototype.copyToArray__O__I = (function(xs) {
 $c_sci_SetIterator.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sci_SetIterator.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sci_SetIterator.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sci_SetIterator.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sci_SetIterator.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sci_SetIterator.prototype.knownSize__I = (function() {
   return $f_sc_IterableOnce__knownSize__I(this)
@@ -23492,6 +24364,9 @@ function $m_scm_Queue$() {
 function $f_s_math_Ordering__lteq__O__O__Z($thiz, x, y) {
   return ($thiz.compare__O__O__I(x, y) <= 0)
 }
+function $f_s_math_Ordering__gt__O__O__Z($thiz, x, y) {
+  return ($thiz.compare__O__O__I(x, y) > 0)
+}
 function $f_s_math_Ordering__reverse__s_math_Ordering($thiz) {
   return new $c_s_math_Ordering$Reverse($thiz)
 }
@@ -23983,6 +24858,9 @@ $h_ju_Arrays$$anon$1.prototype = $c_ju_Arrays$$anon$1.prototype;
 $c_ju_Arrays$$anon$1.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_ju_Arrays$$anon$1.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_ju_Arrays$$anon$1.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
 });
@@ -24022,6 +24900,9 @@ function $h_ju_Arrays$$anon$3() {
 $h_ju_Arrays$$anon$3.prototype = $c_ju_Arrays$$anon$3.prototype;
 $c_ju_Arrays$$anon$3.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
+});
+$c_ju_Arrays$$anon$3.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
 });
 $c_ju_Arrays$$anon$3.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
@@ -24198,8 +25079,17 @@ $c_sc_AbstractIterable.prototype.toIterable__sc_Iterable = (function() {
 $c_sc_AbstractIterable.prototype.coll__sc_Iterable = (function() {
   return $f_sc_Iterable__coll__sc_Iterable(this)
 });
+$c_sc_AbstractIterable.prototype.iterableFactory__sc_IterableFactory = (function() {
+  return $f_sc_Iterable__iterableFactory__sc_IterableFactory(this)
+});
 $c_sc_AbstractIterable.prototype.className__T = (function() {
   return $f_sc_Iterable__className__T(this)
+});
+$c_sc_AbstractIterable.prototype.stringPrefix__T = (function() {
+  return $f_sc_Iterable__stringPrefix__T(this)
+});
+$c_sc_AbstractIterable.prototype.toString__T = (function() {
+  return $f_sc_Iterable__toString__T(this)
 });
 $c_sc_AbstractIterable.prototype.fromSpecific__sc_IterableOnce__sc_IterableOps = (function(coll) {
   return $f_sc_IterableFactoryDefaults__fromSpecific__sc_IterableOnce__sc_IterableOps(this, coll)
@@ -24252,11 +25142,17 @@ $c_sc_AbstractIterable.prototype.copyToArray__O__I = (function(xs) {
 $c_sc_AbstractIterable.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sc_AbstractIterable.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sc_AbstractIterable.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sc_AbstractIterable.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sc_AbstractIterable.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sc_AbstractIterable.prototype.toArray__s_reflect_ClassTag__O = (function(evidence$2) {
   return $f_sc_IterableOnceOps__toArray__s_reflect_ClassTag__O(this, evidence$2)
@@ -24513,6 +25409,12 @@ function $f_sc_MapOps__apply__O__O($thiz, key) {
     throw new $c_s_MatchError(x1)
   }
 }
+function $f_sc_MapOps__values__sc_Iterable($thiz) {
+  return new $c_sc_MapOps$$anon$2($thiz)
+}
+function $f_sc_MapOps__valuesIterator__sc_Iterator($thiz) {
+  return new $c_sc_MapOps$$anon$4($thiz)
+}
 function $f_sc_MapOps__foreachEntry__F2__V($thiz, f) {
   var it = $thiz.iterator__sc_Iterator();
   while (it.hasNext__Z()) {
@@ -24763,6 +25665,34 @@ var $d_sci_Map$Map2$$anon$1 = new $TypeData().initClass({
 });
 $c_sci_Map$Map2$$anon$1.prototype.$classData = $d_sci_Map$Map2$$anon$1;
 /** @constructor */
+function $c_sci_Map$Map2$$anon$3(outer) {
+  this.sci_Map$Map2$Map2Iterator__f_i = 0;
+  this.sci_Map$Map2$Map2Iterator__f_$outer = null;
+  $ct_sci_Map$Map2$Map2Iterator__sci_Map$Map2__(this, outer)
+}
+$c_sci_Map$Map2$$anon$3.prototype = new $h_sci_Map$Map2$Map2Iterator();
+$c_sci_Map$Map2$$anon$3.prototype.constructor = $c_sci_Map$Map2$$anon$3;
+/** @constructor */
+function $h_sci_Map$Map2$$anon$3() {
+  /*<skip>*/
+}
+$h_sci_Map$Map2$$anon$3.prototype = $c_sci_Map$Map2$$anon$3.prototype;
+$c_sci_Map$Map2$$anon$3.prototype.nextResult__O__O__O = (function(k, v) {
+  return v
+});
+var $d_sci_Map$Map2$$anon$3 = new $TypeData().initClass({
+  sci_Map$Map2$$anon$3: 0
+}, false, "scala.collection.immutable.Map$Map2$$anon$3", {
+  sci_Map$Map2$$anon$3: 1,
+  sci_Map$Map2$Map2Iterator: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sci_Map$Map2$$anon$3.prototype.$classData = $d_sci_Map$Map2$$anon$3;
+/** @constructor */
 function $c_sci_Map$Map3$$anon$4(outer) {
   this.sci_Map$Map3$Map3Iterator__f_i = 0;
   this.sci_Map$Map3$Map3Iterator__f_$outer = null;
@@ -24794,6 +25724,34 @@ var $d_sci_Map$Map3$$anon$4 = new $TypeData().initClass({
 });
 $c_sci_Map$Map3$$anon$4.prototype.$classData = $d_sci_Map$Map3$$anon$4;
 /** @constructor */
+function $c_sci_Map$Map3$$anon$6(outer) {
+  this.sci_Map$Map3$Map3Iterator__f_i = 0;
+  this.sci_Map$Map3$Map3Iterator__f_$outer = null;
+  $ct_sci_Map$Map3$Map3Iterator__sci_Map$Map3__(this, outer)
+}
+$c_sci_Map$Map3$$anon$6.prototype = new $h_sci_Map$Map3$Map3Iterator();
+$c_sci_Map$Map3$$anon$6.prototype.constructor = $c_sci_Map$Map3$$anon$6;
+/** @constructor */
+function $h_sci_Map$Map3$$anon$6() {
+  /*<skip>*/
+}
+$h_sci_Map$Map3$$anon$6.prototype = $c_sci_Map$Map3$$anon$6.prototype;
+$c_sci_Map$Map3$$anon$6.prototype.nextResult__O__O__O = (function(k, v) {
+  return v
+});
+var $d_sci_Map$Map3$$anon$6 = new $TypeData().initClass({
+  sci_Map$Map3$$anon$6: 0
+}, false, "scala.collection.immutable.Map$Map3$$anon$6", {
+  sci_Map$Map3$$anon$6: 1,
+  sci_Map$Map3$Map3Iterator: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sci_Map$Map3$$anon$6.prototype.$classData = $d_sci_Map$Map3$$anon$6;
+/** @constructor */
 function $c_sci_Map$Map4$$anon$7(outer) {
   this.sci_Map$Map4$Map4Iterator__f_i = 0;
   this.sci_Map$Map4$Map4Iterator__f_$outer = null;
@@ -24824,6 +25782,34 @@ var $d_sci_Map$Map4$$anon$7 = new $TypeData().initClass({
   sc_IterableOnceOps: 1
 });
 $c_sci_Map$Map4$$anon$7.prototype.$classData = $d_sci_Map$Map4$$anon$7;
+/** @constructor */
+function $c_sci_Map$Map4$$anon$9(outer) {
+  this.sci_Map$Map4$Map4Iterator__f_i = 0;
+  this.sci_Map$Map4$Map4Iterator__f_$outer = null;
+  $ct_sci_Map$Map4$Map4Iterator__sci_Map$Map4__(this, outer)
+}
+$c_sci_Map$Map4$$anon$9.prototype = new $h_sci_Map$Map4$Map4Iterator();
+$c_sci_Map$Map4$$anon$9.prototype.constructor = $c_sci_Map$Map4$$anon$9;
+/** @constructor */
+function $h_sci_Map$Map4$$anon$9() {
+  /*<skip>*/
+}
+$h_sci_Map$Map4$$anon$9.prototype = $c_sci_Map$Map4$$anon$9.prototype;
+$c_sci_Map$Map4$$anon$9.prototype.nextResult__O__O__O = (function(k, v) {
+  return v
+});
+var $d_sci_Map$Map4$$anon$9 = new $TypeData().initClass({
+  sci_Map$Map4$$anon$9: 0
+}, false, "scala.collection.immutable.Map$Map4$$anon$9", {
+  sci_Map$Map4$$anon$9: 1,
+  sci_Map$Map4$Map4Iterator: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_sci_Map$Map4$$anon$9.prototype.$classData = $d_sci_Map$Map4$$anon$9;
 /** @constructor */
 function $c_sci_RangeIterator(start, step, lastElement, initiallyEmpty) {
   this.sci_RangeIterator__f_step = 0;
@@ -25133,6 +26119,36 @@ var $d_scm_HashMap$$anon$1 = new $TypeData().initClass({
 });
 $c_scm_HashMap$$anon$1.prototype.$classData = $d_scm_HashMap$$anon$1;
 /** @constructor */
+function $c_scm_HashMap$$anon$3(outer) {
+  this.scm_HashMap$HashMapIterator__f_i = 0;
+  this.scm_HashMap$HashMapIterator__f_node = null;
+  this.scm_HashMap$HashMapIterator__f_len = 0;
+  this.scm_HashMap$HashMapIterator__f_$outer = null;
+  $ct_scm_HashMap$HashMapIterator__scm_HashMap__(this, outer)
+}
+$c_scm_HashMap$$anon$3.prototype = new $h_scm_HashMap$HashMapIterator();
+$c_scm_HashMap$$anon$3.prototype.constructor = $c_scm_HashMap$$anon$3;
+/** @constructor */
+function $h_scm_HashMap$$anon$3() {
+  /*<skip>*/
+}
+$h_scm_HashMap$$anon$3.prototype = $c_scm_HashMap$$anon$3.prototype;
+$c_scm_HashMap$$anon$3.prototype.extract__scm_HashMap$Node__O = (function(nd) {
+  return nd.value__O()
+});
+var $d_scm_HashMap$$anon$3 = new $TypeData().initClass({
+  scm_HashMap$$anon$3: 0
+}, false, "scala.collection.mutable.HashMap$$anon$3", {
+  scm_HashMap$$anon$3: 1,
+  scm_HashMap$HashMapIterator: 1,
+  sc_AbstractIterator: 1,
+  O: 1,
+  sc_Iterator: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOnceOps: 1
+});
+$c_scm_HashMap$$anon$3.prototype.$classData = $d_scm_HashMap$$anon$3;
+/** @constructor */
 function $c_scm_HashMap$$anon$4(outer) {
   this.scm_HashMap$HashMapIterator__f_i = 0;
   this.scm_HashMap$HashMapIterator__f_node = null;
@@ -25246,6 +26262,9 @@ $h_s_math_Ordering$$anon$1.prototype = $c_s_math_Ordering$$anon$1.prototype;
 $c_s_math_Ordering$$anon$1.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_s_math_Ordering$$anon$1.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_s_math_Ordering$$anon$1.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
 });
@@ -25296,6 +26315,9 @@ function $f_s_math_Ordering$Double$IeeeOrdering__compare__D__D__I($thiz, x, y) {
 }
 function $f_s_math_Ordering$Double$IeeeOrdering__lteq__D__D__Z($thiz, x, y) {
   return (x <= y)
+}
+function $f_s_math_Ordering$Double$IeeeOrdering__gt__D__D__Z($thiz, x, y) {
+  return (x > y)
 }
 function $f_s_math_Ordering$Double$IeeeOrdering__$init$__V($thiz) {
   /*<skip>*/
@@ -25349,6 +26371,9 @@ $c_s_math_Ordering$Reverse.prototype.compare__O__O__I = (function(x, y) {
 });
 $c_s_math_Ordering$Reverse.prototype.lteq__O__O__Z = (function(x, y) {
   return this.outer__s_math_Ordering().lteq__O__O__Z(y, x)
+});
+$c_s_math_Ordering$Reverse.prototype.gt__O__O__Z = (function(x, y) {
+  return this.outer__s_math_Ordering().gt__O__O__Z(y, x)
 });
 $c_s_math_Ordering$Reverse.prototype.equals__O__Z = (function(obj) {
   var x1 = obj;
@@ -26304,6 +27329,9 @@ $c_s_math_Ordering$Boolean$.prototype.compare__Z__Z__I = (function(x, y) {
 $c_s_math_Ordering$Boolean$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_s_math_Ordering$Boolean$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_s_math_Ordering$Boolean$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
 });
@@ -26353,6 +27381,9 @@ $c_s_math_Ordering$Byte$.prototype.compare__B__B__I = (function(x, y) {
 });
 $c_s_math_Ordering$Byte$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
+});
+$c_s_math_Ordering$Byte$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
 });
 $c_s_math_Ordering$Byte$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
@@ -26404,6 +27435,9 @@ $c_s_math_Ordering$Char$.prototype.compare__C__C__I = (function(x, y) {
 $c_s_math_Ordering$Char$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_s_math_Ordering$Char$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_s_math_Ordering$Char$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
 });
@@ -26453,6 +27487,9 @@ $c_s_math_Ordering$Double$TotalOrdering$.prototype.compare__D__D__I = (function(
 });
 $c_s_math_Ordering$Double$TotalOrdering$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
+});
+$c_s_math_Ordering$Double$TotalOrdering$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
 });
 $c_s_math_Ordering$Double$TotalOrdering$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
@@ -26504,6 +27541,9 @@ $c_s_math_Ordering$Long$.prototype.compare__J__J__I = (function(x, y) {
 $c_s_math_Ordering$Long$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_s_math_Ordering$Long$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_s_math_Ordering$Long$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
 });
@@ -26553,6 +27593,9 @@ $c_s_math_Ordering$Short$.prototype.compare__S__S__I = (function(x, y) {
 });
 $c_s_math_Ordering$Short$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
+});
+$c_s_math_Ordering$Short$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
 });
 $c_s_math_Ordering$Short$.prototype.isReverseOf__s_math_Ordering__Z = (function(other) {
   return $f_s_math_Ordering__isReverseOf__s_math_Ordering__Z(this, other)
@@ -26873,6 +27916,9 @@ $c_s_math_Ordering$Int$.prototype.compare__I__I__I = (function(x, y) {
 $c_s_math_Ordering$Int$.prototype.lteq__O__O__Z = (function(x, y) {
   return $f_s_math_Ordering__lteq__O__O__Z(this, x, y)
 });
+$c_s_math_Ordering$Int$.prototype.gt__O__O__Z = (function(x, y) {
+  return $f_s_math_Ordering__gt__O__O__Z(this, x, y)
+});
 $c_s_math_Ordering$Int$.prototype.on__F1__s_math_Ordering = (function(f) {
   return $f_s_math_Ordering__on__F1__s_math_Ordering(this, f)
 });
@@ -27189,6 +28235,45 @@ $c_sc_AbstractView.prototype.toString__T = (function() {
 $c_sc_AbstractView.prototype.stringPrefix__T = (function() {
   return $f_sc_View__stringPrefix__T(this)
 });
+/** @constructor */
+function $c_sc_MapOps$$anon$2(outer) {
+  this.sc_MapOps$$anon$2__f_$outer = null;
+  if ((outer === null)) {
+    throw $m_sjsr_package$().unwrapJavaScriptException__jl_Throwable__O(null)
+  } else {
+    this.sc_MapOps$$anon$2__f_$outer = outer
+  };
+  $ct_sc_AbstractIterable__(this);
+  $f_scg_DefaultSerializable__$init$__V(this)
+}
+$c_sc_MapOps$$anon$2.prototype = new $h_sc_AbstractIterable();
+$c_sc_MapOps$$anon$2.prototype.constructor = $c_sc_MapOps$$anon$2;
+/** @constructor */
+function $h_sc_MapOps$$anon$2() {
+  /*<skip>*/
+}
+$h_sc_MapOps$$anon$2.prototype = $c_sc_MapOps$$anon$2.prototype;
+$c_sc_MapOps$$anon$2.prototype.knownSize__I = (function() {
+  return this.sc_MapOps$$anon$2__f_$outer.knownSize__I()
+});
+$c_sc_MapOps$$anon$2.prototype.iterator__sc_Iterator = (function() {
+  return this.sc_MapOps$$anon$2__f_$outer.valuesIterator__sc_Iterator()
+});
+var $d_sc_MapOps$$anon$2 = new $TypeData().initClass({
+  sc_MapOps$$anon$2: 0
+}, false, "scala.collection.MapOps$$anon$2", {
+  sc_MapOps$$anon$2: 1,
+  sc_AbstractIterable: 1,
+  O: 1,
+  sc_Iterable: 1,
+  sc_IterableOnce: 1,
+  sc_IterableOps: 1,
+  sc_IterableOnceOps: 1,
+  sc_IterableFactoryDefaults: 1,
+  scg_DefaultSerializable: 1,
+  Ljava_io_Serializable: 1
+});
+$c_sc_MapOps$$anon$2.prototype.$classData = $d_sc_MapOps$$anon$2;
 function $f_sc_SeqView__map__F1__sc_SeqView($thiz, f) {
   return $ct_sc_SeqView$Map__sc_SeqOps__F1__(new $c_sc_SeqView$Map(), $thiz, f)
 }
@@ -27982,6 +29067,9 @@ $c_sc_SeqView$Sorted.prototype.head__O = (function() {
 $c_sc_SeqView$Sorted.prototype.tail__O = (function() {
   return $f_sc_IterableOps__tail__O(this)
 });
+$c_sc_SeqView$Sorted.prototype.foreach__F1__V = (function(f) {
+  $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
 $c_sc_SeqView$Sorted.prototype.exists__F1__Z = (function(p) {
   return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
@@ -27991,11 +29079,17 @@ $c_sc_SeqView$Sorted.prototype.copyToArray__O__I = (function(xs) {
 $c_sc_SeqView$Sorted.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sc_SeqView$Sorted.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sc_SeqView$Sorted.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sc_SeqView$Sorted.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sc_SeqView$Sorted.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sc_SeqView$Sorted.prototype.scala$collection$SeqView$Sorted$$_sorted__sc_Seq = (function() {
   return ((!this.sc_SeqView$Sorted__f_bitmap$0) ? $p_sc_SeqView$Sorted___sorted$lzycompute__sc_Seq(this) : this.sc_SeqView$Sorted__f_scala$collection$SeqView$Sorted$$_sorted)
@@ -28166,6 +29260,9 @@ $c_sc_SeqView$Sorted$ReverseSorted.prototype.head__O = (function() {
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.tail__O = (function() {
   return $f_sc_IterableOps__tail__O(this)
 });
+$c_sc_SeqView$Sorted$ReverseSorted.prototype.foreach__F1__V = (function(f) {
+  $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.exists__F1__Z = (function(p) {
   return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
@@ -28175,11 +29272,17 @@ $c_sc_SeqView$Sorted$ReverseSorted.prototype.copyToArray__O__I = (function(xs) {
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sc_SeqView$Sorted$ReverseSorted.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sc_SeqView$Sorted$ReverseSorted.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.apply__I__O = (function(i) {
   return $p_sc_SeqView$Sorted$ReverseSorted___reversed__sc_SeqView$Reverse(this).apply__I__O(i)
@@ -28612,6 +29715,9 @@ $c_s_math_Numeric$DoubleIsFractional$.prototype.compare__D__D__I = (function(x, 
 $c_s_math_Numeric$DoubleIsFractional$.prototype.lteq__D__D__Z = (function(x, y) {
   return $f_s_math_Ordering$Double$IeeeOrdering__lteq__D__D__Z(this, x, y)
 });
+$c_s_math_Numeric$DoubleIsFractional$.prototype.gt__D__D__Z = (function(x, y) {
+  return $f_s_math_Ordering$Double$IeeeOrdering__gt__D__D__Z(this, x, y)
+});
 $c_s_math_Numeric$DoubleIsFractional$.prototype.sign__D__D = (function(x) {
   return $f_s_math_Numeric$DoubleIsFractional__sign__D__D(this, x)
 });
@@ -28623,6 +29729,9 @@ $c_s_math_Numeric$DoubleIsFractional$.prototype.on__F1__s_math_Ordering = (funct
 });
 $c_s_math_Numeric$DoubleIsFractional$.prototype.sign__O__O = (function(x) {
   return this.sign__D__D($uD(x))
+});
+$c_s_math_Numeric$DoubleIsFractional$.prototype.gt__O__O__Z = (function(x, y) {
+  return this.gt__D__D__Z($uD(x), $uD(y))
 });
 $c_s_math_Numeric$DoubleIsFractional$.prototype.lteq__O__O__Z = (function(x, y) {
   return this.lteq__D__D__Z($uD(x), $uD(y))
@@ -29026,6 +30135,12 @@ $c_sc_AbstractMap.prototype.getOrElse__O__F0__O = (function(key, default\u00f8) 
 });
 $c_sc_AbstractMap.prototype.apply__O__O = (function(key) {
   return $f_sc_MapOps__apply__O__O(this, key)
+});
+$c_sc_AbstractMap.prototype.values__sc_Iterable = (function() {
+  return $f_sc_MapOps__values__sc_Iterable(this)
+});
+$c_sc_AbstractMap.prototype.valuesIterator__sc_Iterator = (function() {
+  return $f_sc_MapOps__valuesIterator__sc_Iterator(this)
 });
 $c_sc_AbstractMap.prototype.foreachEntry__F2__V = (function(f) {
   $f_sc_MapOps__foreachEntry__F2__V(this, f)
@@ -31085,6 +32200,9 @@ $c_sci_Map$EmptyMap$.prototype.getOrElse__O__F0__O = (function(key, default\u00f
 $c_sci_Map$EmptyMap$.prototype.iterator__sc_Iterator = (function() {
   return $m_sc_Iterator$().empty__sc_Iterator()
 });
+$c_sci_Map$EmptyMap$.prototype.valuesIterator__sc_Iterator = (function() {
+  return $m_sc_Iterator$().empty__sc_Iterator()
+});
 $c_sci_Map$EmptyMap$.prototype.updated__O__O__sci_Map = (function(key, value) {
   return new $c_sci_Map$Map1(key, value)
 });
@@ -31211,6 +32329,9 @@ $c_sci_Map$Map1.prototype.getOrElse__O__F0__O = (function(key, default\u00f8) {
 });
 $c_sci_Map$Map1.prototype.iterator__sc_Iterator = (function() {
   return $m_sc_Iterator$().single__O__sc_Iterator($ct_T2__O__O__(new $c_T2(), this.sci_Map$Map1__f_key1, this.sci_Map$Map1__f_value1))
+});
+$c_sci_Map$Map1.prototype.valuesIterator__sc_Iterator = (function() {
+  return $m_sc_Iterator$().single__O__sc_Iterator(this.sci_Map$Map1__f_value1)
 });
 $c_sci_Map$Map1.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map1__f_key1) ? new $c_sci_Map$Map1(this.sci_Map$Map1__f_key1, value) : new $c_sci_Map$Map2(this.sci_Map$Map1__f_key1, this.sci_Map$Map1__f_value1, key, value))
@@ -31344,6 +32465,9 @@ $c_sci_Map$Map2.prototype.getOrElse__O__F0__O = (function(key, default\u00f8) {
 });
 $c_sci_Map$Map2.prototype.iterator__sc_Iterator = (function() {
   return new $c_sci_Map$Map2$$anon$1(this)
+});
+$c_sci_Map$Map2.prototype.valuesIterator__sc_Iterator = (function() {
+  return new $c_sci_Map$Map2$$anon$3(this)
 });
 $c_sci_Map$Map2.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1) ? new $c_sci_Map$Map2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, value, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2) ? new $c_sci_Map$Map2(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, value) : new $c_sci_Map$Map3(this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value1, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$key2, this.sci_Map$Map2__f_scala$collection$immutable$Map$Map2$$value2, key, value)))
@@ -31520,6 +32644,9 @@ $c_sci_Map$Map3.prototype.getOrElse__O__F0__O = (function(key, default\u00f8) {
 });
 $c_sci_Map$Map3.prototype.iterator__sc_Iterator = (function() {
   return new $c_sci_Map$Map3$$anon$4(this)
+});
+$c_sci_Map$Map3.prototype.valuesIterator__sc_Iterator = (function() {
+  return new $c_sci_Map$Map3$$anon$6(this)
 });
 $c_sci_Map$Map3.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, value, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, value, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3) ? new $c_sci_Map$Map3(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, value) : new $c_sci_Map$Map4(this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value1, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value2, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$key3, this.sci_Map$Map3__f_scala$collection$immutable$Map$Map3$$value3, key, value))))
@@ -31726,6 +32853,9 @@ $c_sci_Map$Map4.prototype.getOrElse__O__F0__O = (function(key, default\u00f8) {
 });
 $c_sci_Map$Map4.prototype.iterator__sc_Iterator = (function() {
   return new $c_sci_Map$Map4$$anon$7(this)
+});
+$c_sci_Map$Map4.prototype.valuesIterator__sc_Iterator = (function() {
+  return new $c_sci_Map$Map4$$anon$9(this)
 });
 $c_sci_Map$Map4.prototype.updated__O__O__sci_Map = (function(key, value) {
   return ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1) ? new $c_sci_Map$Map4(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, value, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2) ? new $c_sci_Map$Map4(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, value, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3) ? new $c_sci_Map$Map4(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, value, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4) : ($m_sr_BoxesRunTime$().equals__O__O__Z(key, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4) ? new $c_sci_Map$Map4(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, value) : $m_sci_HashMap$().empty__sci_HashMap().updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key1, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value1).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key2, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value2).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key3, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value3).updated__O__O__sci_HashMap(this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$key4, this.sci_Map$Map4__f_scala$collection$immutable$Map$Map4$$value4).updated__O__O__sci_HashMap(key, value)))))
@@ -33009,11 +34139,17 @@ $c_sjsr_WrappedVarArgs.prototype.copyToArray__O__I = (function(xs) {
 $c_sjsr_WrappedVarArgs.prototype.copyToArray__O__I__I = (function(xs, start) {
   return $f_sc_IterableOnceOps__copyToArray__O__I__I(this, xs, start)
 });
+$c_sjsr_WrappedVarArgs.prototype.maxBy__F1__s_math_Ordering__O = (function(f, cmp) {
+  return $f_sc_IterableOnceOps__maxBy__F1__s_math_Ordering__O(this, f, cmp)
+});
 $c_sjsr_WrappedVarArgs.prototype.mkString__T__T__T__T = (function(start, sep, end) {
   return $f_sc_IterableOnceOps__mkString__T__T__T__T(this, start, sep, end)
 });
 $c_sjsr_WrappedVarArgs.prototype.addString__scm_StringBuilder__T__T__T__scm_StringBuilder = (function(b, start, sep, end) {
   return $f_sc_IterableOnceOps__addString__scm_StringBuilder__T__T__T__scm_StringBuilder(this, b, start, sep, end)
+});
+$c_sjsr_WrappedVarArgs.prototype.toSet__sci_Set = (function() {
+  return $f_sc_IterableOnceOps__toSet__sci_Set(this)
 });
 $c_sjsr_WrappedVarArgs.prototype.iterableFactory__sc_SeqFactory = (function() {
   return $m_sjsr_WrappedVarArgs$()
@@ -33129,6 +34265,9 @@ $c_sci_HashMap.prototype.isEmpty__Z = (function() {
 });
 $c_sci_HashMap.prototype.iterator__sc_Iterator = (function() {
   return (this.isEmpty__Z() ? $m_sc_Iterator$().empty__sc_Iterator() : new $c_sci_MapKeyValueTupleIterator(this.rootNode__sci_BitmapIndexedMapNode()))
+});
+$c_sci_HashMap.prototype.valuesIterator__sc_Iterator = (function() {
+  return (this.isEmpty__Z() ? $m_sc_Iterator$().empty__sc_Iterator() : new $c_sci_MapValueIterator(this.rootNode__sci_BitmapIndexedMapNode()))
 });
 $c_sci_HashMap.prototype.contains__O__Z = (function(key) {
   var keyUnimprovedHash = $s_sr_Statics__anyHash__O__I(key);
@@ -35772,6 +36911,11 @@ var $d_sci_ArraySeq$ofUnit = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_sci_ArraySeq$ofUnit.prototype.$classData = $d_sci_ArraySeq$ofUnit;
+var $p_sci_List__filterCommon__F1__Z__sci_List = (function($thiz, p, isFlipped) {
+  var result = $p_sci_List__noneIn$1__sci_List__F1__Z__sci_List($thiz, $thiz, p, isFlipped);
+  $s_sr_Statics__releaseFence__V();
+  return result
+});
 var $p_sci_List__loop$2__I__sci_List__I__I = (function($thiz, i, xs, len$1) {
   var _$this = $thiz;
   while (true) {
@@ -35786,6 +36930,69 @@ var $p_sci_List__loop$2__I__sci_List__I__I = (function($thiz, i, xs, len$1) {
       xs = temp$xs
     }
   }
+});
+var $p_sci_List__noneIn$1__sci_List__F1__Z__sci_List = (function($thiz, l, p$1, isFlipped$1) {
+  var _$this = $thiz;
+  while (true) {
+    if (l.isEmpty__Z()) {
+      return $m_sci_Nil$()
+    } else {
+      var h = l.head__O();
+      var t = $as_sci_List(l.tail__O());
+      if (($uZ(p$1.apply__O__O(h)) !== isFlipped$1)) {
+        return $p_sci_List__allIn$1__sci_List__sci_List__F1__Z__sci_List(_$this, l, t, p$1, isFlipped$1)
+      } else {
+        l = t
+      }
+    }
+  }
+});
+var $p_sci_List__allIn$1__sci_List__sci_List__F1__Z__sci_List = (function($thiz, start, remaining, p$1, isFlipped$1) {
+  var _$this = $thiz;
+  while (true) {
+    if (remaining.isEmpty__Z()) {
+      return start
+    } else {
+      var x = remaining.head__O();
+      if (($uZ(p$1.apply__O__O(x)) !== isFlipped$1)) {
+        remaining = $as_sci_List(remaining.tail__O())
+      } else {
+        return $p_sci_List__partialFill$1__sci_List__sci_List__F1__Z__sci_List(_$this, start, remaining, p$1, isFlipped$1)
+      }
+    }
+  }
+});
+var $p_sci_List__partialFill$1__sci_List__sci_List__F1__Z__sci_List = (function($thiz, origStart, firstMiss, p$1, isFlipped$1) {
+  var newHead = new $c_sci_$colon$colon(origStart.head__O(), $m_sci_Nil$());
+  var toProcess = $as_sci_List(origStart.tail__O());
+  var currentLast = newHead;
+  while ((!$is(toProcess, firstMiss))) {
+    var newElem = new $c_sci_$colon$colon(toProcess.head__O(), $m_sci_Nil$());
+    currentLast.next_$eq__sci_List__V(newElem);
+    currentLast = newElem;
+    toProcess = $as_sci_List(toProcess.tail__O())
+  };
+  var next = $as_sci_List(firstMiss.tail__O());
+  var nextToCopy = next;
+  while ((!next.isEmpty__Z())) {
+    var head = next.head__O();
+    if (($uZ(p$1.apply__O__O(head)) !== isFlipped$1)) {
+      next = $as_sci_List(next.tail__O())
+    } else {
+      while ((!$is(nextToCopy, next))) {
+        var newElem$2 = new $c_sci_$colon$colon(nextToCopy.head__O(), $m_sci_Nil$());
+        currentLast.next_$eq__sci_List__V(newElem$2);
+        currentLast = newElem$2;
+        nextToCopy = $as_sci_List(nextToCopy.tail__O())
+      };
+      nextToCopy = $as_sci_List(next.tail__O());
+      next = $as_sci_List(next.tail__O())
+    }
+  };
+  if ((!nextToCopy.isEmpty__Z())) {
+    currentLast.next_$eq__sci_List__V(nextToCopy)
+  };
+  return newHead
 });
 var $p_sci_List__listEq$1__sci_List__sci_List__Z = (function($thiz, a, b) {
   var _$this = $thiz;
@@ -36036,6 +37243,9 @@ $c_sci_List.prototype.find__F1__s_Option = (function(p) {
 });
 $c_sci_List.prototype.className__T = (function() {
   return "List"
+});
+$c_sci_List.prototype.filter__F1__sci_List = (function(p) {
+  return $p_sci_List__filterCommon__F1__Z__sci_List(this, p, false)
 });
 $c_sci_List.prototype.equals__O__Z = (function(o) {
   var x1 = o;
@@ -37289,6 +38499,9 @@ $c_scm_HashMap.prototype.addAll__sc_IterableOnce__scm_HashMap = (function(xs) {
 $c_scm_HashMap.prototype.iterator__sc_Iterator = (function() {
   return ((this.size__I() === 0) ? $m_sc_Iterator$().empty__sc_Iterator() : new $c_scm_HashMap$$anon$1(this))
 });
+$c_scm_HashMap.prototype.valuesIterator__sc_Iterator = (function() {
+  return ((this.size__I() === 0) ? $m_sc_Iterator$().empty__sc_Iterator() : new $c_scm_HashMap$$anon$3(this))
+});
 $c_scm_HashMap.prototype.nodeIterator__sc_Iterator = (function() {
   return ((this.size__I() === 0) ? $m_sc_Iterator$().empty__sc_Iterator() : new $c_scm_HashMap$$anon$4(this))
 });
@@ -37322,6 +38535,17 @@ $c_scm_HashMap.prototype.knownSize__I = (function() {
 });
 $c_scm_HashMap.prototype.isEmpty__Z = (function() {
   return (this.size__I() === 0)
+});
+$c_scm_HashMap.prototype.foreach__F1__V = (function(f) {
+  var len = this.scm_HashMap__f_scala$collection$mutable$HashMap$$table.u.length;
+  var i = 0;
+  while ((i < len)) {
+    var n = this.scm_HashMap__f_scala$collection$mutable$HashMap$$table.get(i);
+    if ((n !== null)) {
+      n.foreach__F1__V(f)
+    };
+    i = ((i + 1) | 0)
+  }
 });
 $c_scm_HashMap.prototype.mapFactory__sc_MapFactory = (function() {
   return $m_scm_HashMap$()
