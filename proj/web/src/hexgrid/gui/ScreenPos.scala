@@ -5,6 +5,9 @@ case class ScreenPos(x: Int, y: Int) {
   def +(pos: ScreenPos): ScreenPos =
     ScreenPos(x + pos.x, y + pos.y)
 
+  def -(pos: ScreenPos): ScreenPos =
+    ScreenPos(x - pos.x, y - pos.y)
+
   def distanceTo(pos: ScreenPos): Int = {
     val dx = Math.abs(x - pos.x)
     val dy = Math.abs(y - pos.y)

@@ -1,10 +1,5 @@
 package hexgrid
-import hexgrid.drawables.GameStateDrawable._
 import hexgrid.drawables.GameManagerDrawable._
-import hexgrid.drawables.TileDrawable._
-import hexgrid.drawables.TileMapDrawable._
-import hexgrid.drawables.MonsterDrawable._
-import hexgrid.drawables.BlobDrawable._
 import hexgrid.gui.DefaultScreenTranslator
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
@@ -32,30 +27,42 @@ object Main {
     implicit val dc: DrawContext = new DrawContext {
       override val ctx: CanvasRenderingContext2D = renderCtx
       override val tileSize: Int = 30
-      override val screenTranslator: ScreenTranslator = DefaultScreenTranslator(canvas.width, canvas.height, tileSize)
       override def cursorPos: ScreenPos = mousePos
       override def tileStackPos: ScreenPos = ScreenPos(tileSize + 20, tileSize + 20)
       override def hintPos: ScreenPos = ScreenPos(tileSize * 2 + 40, 20)
     }
 
-    val gameManager = GameManager(dc)
+    implicit val screenTranslator: ScreenTranslator = DefaultScreenTranslator(canvas.width, canvas.height, dc.tileSize)
+    val gameManager = GameManager(dc, screenTranslator)
 
     def updateScreen(timeStamp: Double): Unit = {
       renderCtx.clearRect(0, 0, canvas.width, canvas.height)
-      implicitly[Drawable[GameManager]]
       gameManager.drawTo(ScreenPos(0, 0))
     }
 
     dom.window.requestAnimationFrame(updateScreen)
+
+    canvas.addEventListener("contextmenu", (e: dom.MouseEvent) => e.preventDefault())
 
     canvas.onmousemove = (e: dom.MouseEvent) => {
       mousePos = ScreenPos(e.pageX, e.pageY)
       dom.window.requestAnimationFrame(updateScreen)
     }
 
-    canvas.onmouseup = (_: dom.MouseEvent) => {
-      gameManager.tryPerform(GuiAction.Click)
+    canvas.onmouseup = (e: dom.MouseEvent) => {
+      println(e.button)
+      e.button match {
+        case 0 => gameManager.tryPerform(GuiAction.Click)
+        case 2 => gameManager.tryPerform(GuiAction.RightClickUp)
+      }
       dom.window.requestAnimationFrame(updateScreen)
+    }
+
+    canvas.onmousedown = (e: dom.MouseEvent) => {
+      if (e.button == 2) {
+        gameManager.tryPerform(GuiAction.RightClickDown)
+        dom.window.requestAnimationFrame(updateScreen)
+      }
     }
 
     dom.document.onkeyup = (e: dom.KeyboardEvent) => {

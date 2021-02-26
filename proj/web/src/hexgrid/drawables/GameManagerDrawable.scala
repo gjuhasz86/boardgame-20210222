@@ -20,22 +20,15 @@ import hexgrid.gui.Drawable._
 import hexgrid.gui.ScreenPos
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
+import hexgrid.drawables.GameStateDrawable._
+import hexgrid.drawables.TileDrawable._
+import hexgrid.drawables.TileMapDrawable._
+import hexgrid.drawables.MonsterDrawable._
+import hexgrid.drawables.BlobDrawable._
 
 object GameManagerDrawable {
-  implicit def gameManagerDrawable[
-    DM <: Drawable[Monster],
-    DT <: Drawable[Tile],
-  ](
-    implicit gsd: Drawable[GameState],
-    td: DT,
-    md: DM,
-    mdd: CanDecorate[DM],
-    tdd: CanDecorate[DT],
-    dc: DrawContext
-  ): Drawable[GameManager] =
+  implicit def gameManagerDrawable(implicit dc: DrawContext): Drawable[GameManager] =
     new Drawable[GameManager] {
-
-      private implicit val st: ScreenTranslator = dc.screenTranslator
 
       override def draw(self: GameManager, pos: ScreenPos): Unit = {
         drawGameState(self, pos)
@@ -43,14 +36,17 @@ object GameManagerDrawable {
         drawMonsterOverlay(self, pos)
         drawHints(self)
         drawTileStack(self, pos)
-        //        drawCursor(self)
+        drawCursor(self)
       }
 
       private def drawGameState(self: GameManager, pos: ScreenPos): Unit = {
+        implicit val st: ScreenTranslator = self.screenTranslator
+        implicitly[Drawable[GameState]]
         self.state.drawTo(pos)
       }
 
       private def drawTileStack(self: GameManager, pos: ScreenPos): Unit = {
+        implicit val st: ScreenTranslator = self.screenTranslator
         (1 to 5).reverse.foreach { i =>
           Tiles.Blank.drawTo(dc.tileStackPos + ScreenPos(0, 3 * i))
         }
@@ -69,7 +65,8 @@ object GameManagerDrawable {
         }
       }
 
-      private def drawTileOverlay(self: GameManager, pos: ScreenPos): Unit = {
+      private def drawTileOverlay(self: GameManager, mapOffset: ScreenPos): Unit = {
+        implicit val st: ScreenTranslator = self.screenTranslator
         lazy val tile = self.state.nextTile.getOrElse(Tiles.Blank)
         val valid = self.isValid(self.toGameAction(Click))
         self.phase match {
@@ -84,6 +81,7 @@ object GameManagerDrawable {
       }
 
       private def drawMonsterOverlay(self: GameManager, offset: ScreenPos): Unit = {
+        implicit val st: ScreenTranslator = self.screenTranslator
         self.phase match {
           case MoveMonster(Some(pos), _) =>
             self.state.monsters.tiles(pos).make(Highlighted).drawTo(pos.toScreen)
@@ -133,6 +131,7 @@ object GameManagerDrawable {
       }
 
       private def drawCursor(self: GameManager): Unit = {
+        implicit val st: ScreenTranslator = self.screenTranslator
         if (!self.isPlacingTile) {
           Tiles.Blank.make(Overlay, Highlighted).drawTo(dc.cursorPos.toTile.toScreen)
         }
@@ -140,8 +139,11 @@ object GameManagerDrawable {
         dc.ctx.textBaseline = "middle"
         dc.ctx.font = "14px Georgia"
 
+        val mo = self.screenTranslator.mapOffset
+        val cp = dc.cursorPos
         val tp = dc.cursorPos.toTile
-        val text = s"(${tp.r},${tp.c})"
+        val sp = dc.cursorPos.toTile.toScreen
+        val text = s"[${cp.x},${cp.y}] [${mo.x},${mo.y}] => (${tp.r},${tp.c}) => [${sp.x},${sp.y}]"
         val width = dc.ctx.measureText(text).width
 
         dc.ctx.clearRect(dc.cursorPos.x + 10, dc.cursorPos.y + 20, width + 10, 20)

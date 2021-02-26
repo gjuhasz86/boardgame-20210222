@@ -5,25 +5,60 @@ import hexgrid.core.Dirs
 import hexgrid.core.GameState
 import hexgrid.core.TilePos
 import hexgrid.gui.DrawContext
+import hexgrid.gui.MapOffsetAwareScreenTranslator
+import hexgrid.gui.ScreenPos
 import hexgrid.gui.ScreenTranslator
 import hexgrid.gui.ScreenTranslator._
 import org.scalajs.dom.ext.KeyCode
 
 
-class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawContext) {
+sealed trait GuiPending
+object GuiPending {
+  case class MapMove(offset: ScreenPos) extends GuiPending
+  case object NoPending extends GuiPending
+}
+
+class GameManager(
+  var state: GameState, var phase: GamePhase, var guiPending: GuiPending, var mapOffset0: ScreenPos,
+  drawContext: DrawContext, st: ScreenTranslator) {
+
   import GameAction._
   import GamePhase._
   import GuiAction._
+  import GuiPending._
 
   private implicit val dc: DrawContext = drawContext
-  private implicit val st: ScreenTranslator = drawContext.screenTranslator
+  implicit val screenTranslator: MapOffsetAwareScreenTranslator = new MapOffsetAwareScreenTranslator {
+    override def innerSt: ScreenTranslator = st
+    override def mapOffset: ScreenPos = mapOffsetAccessor
+  }
+  private def mapOffsetAccessor = mapOffset
+
+  def mapOffset: ScreenPos = guiPending match {
+    case MapMove(pos) => mapOffset0 + dc.cursorPos - pos
+    case _ => mapOffset0
+  }
 
   def tryPerform(action: GuiAction): Boolean = {
     println(action)
     val gameAction = toGameAction(action)
     println(gameAction)
+    changeGui(action)
     tryPerform(gameAction)
   }
+
+
+  def changeGui(action: GuiAction): Unit =
+    guiPending =
+      (action, guiPending) match {
+        case (RightClickDown, _) =>
+          MapMove(dc.cursorPos)
+        case (RightClickUp, MapMove(pos)) =>
+          mapOffset0 += dc.cursorPos - pos
+          NoPending
+        case _ =>
+          guiPending
+      }
 
   def toGameAction(action: GuiAction): GameAction = {
     val pos = dc.cursorPos.toTile
@@ -179,5 +214,6 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
 }
 
 object GameManager {
-  def apply(drawContext: DrawContext): GameManager = new GameManager(GameState.default(), GamePhase.Idle, drawContext)
+  def apply(drawContext: DrawContext, st: ScreenTranslator): GameManager =
+    new GameManager(GameState.default(), GamePhase.Idle, GuiPending.NoPending, ScreenPos(0, 0), drawContext, st)
 }

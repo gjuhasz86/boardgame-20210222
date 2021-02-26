@@ -17,6 +17,14 @@ object ScreenTranslator {
   }
 }
 
+trait MapOffsetAwareScreenTranslator extends ScreenTranslator {
+  def innerSt: ScreenTranslator
+  def mapOffset: ScreenPos
+  override def rowDistance: Double = innerSt.rowDistance
+  override def tileToScreen(pos: TilePos): ScreenPos = innerSt.tileToScreen(pos) + mapOffset
+  override def screenToTile(pos: ScreenPos): TilePos = innerSt.screenToTile(pos - mapOffset)
+}
+
 case class DefaultScreenTranslator(screenWidth: Int, screenHeight: Int, size: Int) extends ScreenTranslator {
   val rowDistance: Double = Math.sqrt((size * size * 4) - size * size)
   val origin: ScreenPos = ScreenPos(screenWidth / 2, screenHeight / 2)

@@ -21,11 +21,11 @@ case class MonsterDrawable(decorators: Set[Decorator])(implicit dc: DrawContext)
     dc.ctx.textAlign = "center"
     dc.ctx.font = "14px Georgia"
     dc.ctx.beginPath()
-    dc.ctx.arc(pos.x, pos.y, dc.tileSize / 3, 0, Math.PI * 2)
+    dc.ctx.arc(pos.x, pos.y, dc.tileSize / 2, 0, Math.PI * 2)
     dc.ctx.fill()
     dc.ctx.stroke()
     dc.ctx.fillStyle = "black"
-    dc.ctx.fillText(self.level.toString, pos.x, pos.y)
+    dc.ctx.fillText(s"${self.level}.${self.power}", pos.x, pos.y)
   }
 
   def decorate(d: Decorator): MonsterDrawable = this.copy(decorators = decorators + d)

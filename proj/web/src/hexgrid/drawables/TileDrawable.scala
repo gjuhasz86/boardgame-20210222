@@ -11,8 +11,9 @@ import hexgrid.gui.Decorators.Overlay
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.ScreenPos
+import hexgrid.gui.ScreenTranslator
 
-case class TileDrawable(decorators: Set[Decorator], dc: DrawContext) extends Drawable[Tile] {
+case class TileDrawable(decorators: Set[Decorator], dc: DrawContext, st: ScreenTranslator) extends Drawable[Tile] {
 
   def decorate(d: Decorator): TileDrawable = copy(decorators = decorators + d)
 
@@ -48,7 +49,7 @@ case class TileDrawable(decorators: Set[Decorator], dc: DrawContext) extends Dra
         dc.ctx.beginPath()
         path.rotatedDirs.foreach { dir =>
           dc.ctx.moveTo(pos.x, pos.y)
-          dc.ctx.lineTo(pos.x + dc.tileSize * dir.xOffs, pos.y + dc.screenTranslator.rowDistance * dir.yOffs)
+          dc.ctx.lineTo(pos.x + dc.tileSize * dir.xOffs, pos.y + st.rowDistance * dir.yOffs)
         }
         dc.ctx.stroke()
 
@@ -78,8 +79,8 @@ case class TileDrawable(decorators: Set[Decorator], dc: DrawContext) extends Dra
 
 object TileDrawable {
 
-  implicit def tileDrawable(implicit dc: DrawContext): TileDrawable =
-    new TileDrawable(Set.empty, dc)
+  implicit def tileDrawable(implicit dc: DrawContext, st: ScreenTranslator): TileDrawable =
+    new TileDrawable(Set.empty, dc, st)
 
   implicit val canDecorateTileDrawable: CanDecorate[TileDrawable] =
     (a: TileDrawable, d: Decorator) => a.decorate(d)

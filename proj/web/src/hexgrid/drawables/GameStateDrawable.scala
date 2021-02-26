@@ -17,7 +17,8 @@ object GameStateDrawable {
     implicit tmd: Drawable[TileMap[Tile]],
     md: Drawable[TileMap[Monster]],
     bd: Drawable[Blob.type],
-    dc: DrawContext
+    dc: DrawContext,
+    st: ScreenTranslator
   ): Drawable[GameState] =
     new Drawable[GameState] {
 
@@ -36,8 +37,7 @@ object GameStateDrawable {
       }
 
       private def drawBlobs(self: GameState, pos: ScreenPos): Unit = {
-        implicit val st: ScreenTranslator = dc.screenTranslator
-        self.blobs.foreach(pos => Blob.drawTo(pos.toScreen))
+        self.blobs.foreach(p => Blob.drawTo(p.toScreen + pos))
       }
 
     }
