@@ -8033,7 +8033,15 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileStack__Lhexgrid_G
   if (mouseOver) {
     $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(topTile, $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
   } else {
-    $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(topTile, $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st)).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos())
+    $m_Lhexgrid_gui_Drawable$().DrawableOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_Drawable$DrawableOps(topTile, $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st)).drawTo__Lhexgrid_gui_ScreenPos__V($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos());
+    $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
+    $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textBaseline = "middle";
+    $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().textAlign = "center";
+    var qual$1 = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
+    var x$1$3 = $f_jl_Integer__toString__T(self.state__Lhexgrid_core_GameState().tileStack__sci_List().size__I());
+    var x$2 = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos().x__I();
+    var x$3 = $thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.tileStackPos__Lhexgrid_gui_ScreenPos().y__I();
+    qual$1.fillText(x$1$3, x$2, x$3)
   }
 });
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileGapOverlay__Lhexgrid_GameManager__Lhexgrid_gui_ScreenPos__V = (function($thiz, self, mapOffset) {
