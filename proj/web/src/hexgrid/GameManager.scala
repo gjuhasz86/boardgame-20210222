@@ -19,7 +19,7 @@ object GuiPending {
 }
 
 class GameManager(
-  var state: GameState, var phase: GamePhase, var guiPending: GuiPending, var mapOffset0: ScreenPos,
+  var state: GameState, var phase: GamePhase, var guiPending: GuiPending, var mapOffset0: ScreenPos, var debug: Boolean,
   drawContext: DrawContext, st: ScreenTranslator) {
 
   import GameAction._
@@ -40,9 +40,8 @@ class GameManager(
   }
 
   def tryPerform(action: GuiAction): Boolean = {
-    println(action)
     val gameAction = toGameAction(action)
-    println(gameAction)
+    println(action, gameAction)
     changeGui(action)
     tryPerform(gameAction)
   }
@@ -52,10 +51,15 @@ class GameManager(
     guiPending =
       (action, guiPending) match {
         case (RightClickDown, _) =>
+          println(state.validTiles(dc.cursorPos.toTile))
+          println(dc.cursorPos.toTile.ring(1).flatMap(state.tileAt))
           MapMove(dc.cursorPos)
         case (RightClickUp, MapMove(pos)) =>
           mapOffset0 += dc.cursorPos - pos
           NoPending
+        case (Key(KeyCode.B), _) =>
+          debug = !debug
+          guiPending
         case _ =>
           guiPending
       }
@@ -215,5 +219,5 @@ class GameManager(
 
 object GameManager {
   def apply(drawContext: DrawContext, st: ScreenTranslator): GameManager =
-    new GameManager(GameState.default(), GamePhase.Idle, GuiPending.NoPending, ScreenPos(0, 0), drawContext, st)
+    new GameManager(GameState.default(), GamePhase.Idle, GuiPending.NoPending, ScreenPos(0, 0), false, drawContext, st)
 }

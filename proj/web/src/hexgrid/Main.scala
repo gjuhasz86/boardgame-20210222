@@ -12,6 +12,7 @@ import org.scalajs.dom.html
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 object Main {
+
   @JSExportTopLevel("main")
   def main(canvas: html.Canvas): Unit = {
     import Drawable._
@@ -50,7 +51,6 @@ object Main {
     }
 
     canvas.onmouseup = (e: dom.MouseEvent) => {
-      println(e.button)
       e.button match {
         case 0 => gameManager.tryPerform(GuiAction.Click)
         case 2 => gameManager.tryPerform(GuiAction.RightClickUp)

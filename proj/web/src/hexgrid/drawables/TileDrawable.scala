@@ -6,8 +6,11 @@ import hexgrid.core.Tiles
 import hexgrid.gui.CanDecorate
 import hexgrid.gui.Decorator
 import hexgrid.gui.Decorators.Highlighted
+import hexgrid.gui.Decorators.ImpossibleGap
 import hexgrid.gui.Decorators.Invalid
 import hexgrid.gui.Decorators.Overlay
+import hexgrid.gui.Decorators.PossibleGap
+import hexgrid.gui.Decorators.RestrictedGap
 import hexgrid.gui.DrawContext
 import hexgrid.gui.Drawable
 import hexgrid.gui.ScreenPos
@@ -17,19 +20,27 @@ case class TileDrawable(decorators: Set[Decorator], dc: DrawContext, st: ScreenT
 
   def decorate(d: Decorator): TileDrawable = copy(decorators = decorators + d)
 
-  private val alpha = if (decorators.contains(Overlay)) 0.5 else 1.0
-  private val highlighted = decorators.contains(Highlighted)
-  private val invalid = decorators.contains(Invalid)
+  private val shouldBeTransparent =
+    List(Overlay).exists(decorators.contains)
 
+  private val alpha = if (shouldBeTransparent) 0.5 else 1.0
+
+  private def is(d: Decorator) = decorators.contains(d)
   override def draw(tile: Tile, pos: ScreenPos): Unit = {
 
     dc.ctx.globalAlpha = alpha
 
     tile match {
       case path@Tiles.Path(_, _) =>
-        val bkgColor = if (highlighted) "yellow" else if (invalid) "#F44336" else "#8BC34A"
-        val edgeColor = "black"
-        val pathColor = "#AD6800"
+        val bkgColor =
+          if (is(Highlighted)) "yellow"
+          else if (is(Invalid)) "#F44336"
+          else if (is(PossibleGap)) "white"
+          else if (is(RestrictedGap)) "#FFED74"
+          else if (is(ImpossibleGap)) "#A5A5A5"
+          else "#8BC34A"
+        val edgeColor = if (is(PossibleGap) || is(RestrictedGap)) "grey" else "black"
+        val pathColor = if (is(RestrictedGap)) "#F8D700" else "#AD6800"
 
         // outer line
         dc.ctx.lineWidth = 1
@@ -54,23 +65,14 @@ case class TileDrawable(decorators: Set[Decorator], dc: DrawContext, st: ScreenT
         dc.ctx.stroke()
 
         // middle path join
-        dc.ctx.lineWidth = 1
-        dc.ctx.strokeStyle = pathColor
-        dc.ctx.fillStyle = pathColor
-        dc.ctx.beginPath()
-        dc.ctx.arc(pos.x, pos.y, 5, 0, PI * 2)
-        dc.ctx.fill()
-
-      case Tiles.Blank =>
-        val color = if (highlighted) "yellow" else "white"
-        dc.ctx.lineWidth = 1
-        dc.ctx.strokeStyle = "black"
-        dc.ctx.fillStyle = color
-
-        dc.ctx.beginPath()
-        dc.ctx.arc(pos.x, pos.y, dc.tileSize, 0, PI * 2)
-        dc.ctx.fill()
-        dc.ctx.stroke()
+        if (path.dirs.nonEmpty) {
+          dc.ctx.lineWidth = 1
+          dc.ctx.strokeStyle = pathColor
+          dc.ctx.fillStyle = pathColor
+          dc.ctx.beginPath()
+          dc.ctx.arc(pos.x, pos.y, 5, 0, PI * 2)
+          dc.ctx.fill()
+        }
 
       case _ =>
     }

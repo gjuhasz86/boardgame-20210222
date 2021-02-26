@@ -71,6 +71,45 @@ case class GameState(
   def endTurn: GameState =
     copy(playerTurns = playerTurns.tail :+ playerTurns.head)
 
+  def activeMonsters: Set[TilePos] =
+    monstersOfPlayer(nextPlayer)
+
+  def monstersOfPlayer(p: Player): Set[TilePos] =
+    monsters.tiles
+      .filter { case (pos, m) => m.owner == p }
+      .keySet
+
+
+  def tileAt(pos: TilePos): Option[GameTile] =
+    tileMap.tiles.get(pos)
+
+  def validTiles(pos: TilePos): Seq[Tile] =
+    Tiles.regularTiles
+      .flatMap(tile => (0 to 5).map(n => tile.rotate(n)))
+      .filter(validPlacement(pos, _))
+
+  def validPlacement(pos: TilePos, tile: Tile): Boolean =
+    tileMap.tiles.get(pos) match {
+      case Some(_) => false
+      case None =>
+        val neighbors = Dirs.all.flatMap(dir => tileMap.tiles.get(pos.neighbor(dir)).map(dir -> _))
+        neighbors.nonEmpty &&
+          neighbors.forall { case (d, t) => tile.canPlaceNextTo(t, d) } &&
+          neighbors.exists { case (d, t) => tile.isJoined(t, d) }
+    }
+
+  def neighbors(pos: TilePos): Seq[(Dir, GameTile)] =
+    Dirs.all.flatMap(dir => tileMap.tiles.get(pos.neighbor(dir)).map(dir -> _))
+
+  def canMove(from: TilePos, to: TilePos): Boolean =
+    Dirs.all.filter(d => from.neighbor(d) == to)
+      .exists(d => canMove(from, d))
+
+  def canMove(pos: TilePos, dir: Dir): Boolean =
+    (tileAt(pos), tileAt(pos.neighbor(dir))) match {
+      case (Some(from), Some(to)) => from.isJoined(to, dir)
+      case _ => false
+    }
 }
 
 object GameState {

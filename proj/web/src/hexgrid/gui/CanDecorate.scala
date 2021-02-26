@@ -19,4 +19,7 @@ object Decorators {
   case object Highlighted extends Decorator
   case object Overlay extends Decorator
   case object Invalid extends Decorator
+  case object PossibleGap extends Decorator
+  case object RestrictedGap extends Decorator
+  case object ImpossibleGap extends Decorator
 }
