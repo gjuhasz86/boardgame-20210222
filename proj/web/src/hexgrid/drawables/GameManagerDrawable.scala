@@ -75,7 +75,9 @@ object GameManagerDrawable {
             val neighbors = self.state.neighbors(pos)
             val validTiles = self.state.validTiles(pos).map(_.resetRotation).toSet
 
-            if (neighbors.isEmpty) {
+            if (self.isPlacingTile && dc.cursorPos.toTile == pos) {
+              // skip if placing tile
+            } else if (neighbors.isEmpty) {
               // has no neighbors
             } else if (neighbors.forall { case (d, t) => !t.rotatedDirs.contains(d.opposite) }) {
               // all neighbors are blocked
