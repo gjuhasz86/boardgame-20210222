@@ -7,6 +7,9 @@ case class TileMap[+A](tiles: Map[TilePos, A]) {
   def place[B >: A](pos: TilePos, tile: B): TileMap[B] =
     copy(tiles = tiles + (pos -> tile))
 
+  def remove[B >: A](pos: TilePos): TileMap[B] =
+    copy(tiles = tiles - pos)
+
   def move(from: TilePos, to: TilePos): TileMap[A] = {
     val newMap = tiles.get(from).map(t => Map(to -> t)).getOrElse(Map.empty)
     copy(tiles = (tiles - from) ++ newMap)

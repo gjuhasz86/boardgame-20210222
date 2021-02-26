@@ -107,6 +107,12 @@ object GameManagerDrawable {
           case MoveMonster(Some(_), Some(_)) => "[MOVE] | ENTER to confirm monster placement | BACKSPACE to cancel"
           case PlacingNextTile(None) => "[TILE] | Click on an empty space to place the tile"
           case PlacingNextTile(Some(_)) => "[TILE] | ENTER to confirm tile placement | BACKSPACE to cancel"
+          case GameOver(p) => s"[GAMEOVER] | Player ${p.id} wins"
+        }
+
+        val textColor = self.phase match {
+          case GameOver(_) => "white"
+          case _ => "black"
         }
 
         dc.ctx.globalAlpha = 1.0
@@ -119,7 +125,7 @@ object GameManagerDrawable {
         dc.ctx.stroke()
 
 
-        dc.ctx.fillStyle = "black"
+        dc.ctx.fillStyle = textColor
         dc.ctx.font = "14px Georgia"
         dc.ctx.textBaseline = "middle"
         dc.ctx.textAlign = "left"

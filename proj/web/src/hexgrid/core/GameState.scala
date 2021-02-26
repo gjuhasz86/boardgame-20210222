@@ -38,7 +38,15 @@ case class GameState(
     copy(tileMap = tileMap.place(pos, tile))
 
   def moveMonster(from: TilePos, to: TilePos): GameState =
-    copy(monsters = monsters.move(from, to))
+    (monsters.tiles.get(from), monsters.tiles.get(to)) match {
+      case (Some(m1), Some(m2)) =>
+        val m = List(m1, m2).maxBy(_.level)
+        val newMonsters = monsters.remove(from).place(to, m)
+        val alivePlayers = newMonsters.tiles.values.map(_.owner).toSet
+        copy(monsters = newMonsters, playerTurns = playerTurns.filter(alivePlayers.contains))
+      case (_, _) =>
+        copy(monsters = monsters.move(from, to))
+    }
 
   def changeMonster(pos: TilePos)(f: Monster => Monster): GameState =
     copy(monsters = monsters.change(pos)(f))

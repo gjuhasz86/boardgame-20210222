@@ -107,7 +107,10 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
               state = state.takeBlob(to).changeMonster(to)(_.incPower.levelUp)
             }
             state = state.endTurn
-            phase = Idle
+            phase = state.playerTurns match {
+              case p :: Nil => GameOver(p)
+              case _ => Idle
+            }
           case _ =>
         }
       case Cancel if isPlacingTile =>
@@ -140,6 +143,7 @@ class GameManager(var state: GameState, var phase: GamePhase, drawContext: DrawC
       case (Confirm, _) => false
       case (Cancel, PlacingNextTile(None)) => false
       case (Cancel, _) => true
+      case (_, GameOver(_)) => false
       case (Noop, _) => false
     }
   }
