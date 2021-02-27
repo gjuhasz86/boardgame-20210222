@@ -6,6 +6,8 @@ import hexgrid.GamePhase.MoveMonster
 import hexgrid.GamePhase.PlacingNextTile
 import hexgrid.GuiAction.Click
 import hexgrid.core.GameState
+import hexgrid.core.Monster
+import hexgrid.core.TilePos
 import hexgrid.core.Tiles
 import hexgrid.drawables.BlobDrawable._
 import hexgrid.drawables.GameStateDrawable._
@@ -13,6 +15,7 @@ import hexgrid.drawables.MonsterDrawable._
 import hexgrid.drawables.TileDrawable._
 import hexgrid.drawables.TileMapDrawable._
 import hexgrid.gui.CanDecorate._
+import hexgrid.gui.Decorators.Empty
 import hexgrid.gui.Decorators.Highlighted
 import hexgrid.gui.Decorators.ImpossibleGap
 import hexgrid.gui.Decorators.Invalid
@@ -115,7 +118,15 @@ object GameManagerDrawable {
         implicit val st: ScreenTranslator = self.screenTranslator
         self.phase match {
           case MoveMonster(Some(pos), _) =>
-            self.state.monsters.tiles(pos).make(Highlighted).drawTo(pos.toScreen)
+            val monster = self.state.monsters.tiles(pos)
+            monster.make(Highlighted).drawTo(pos.toScreen)
+            pos.ring(1).filter(self.state.canMove(pos, _))
+              .foreach {
+                case candPos if dc.cursorPos.toTile == candPos =>
+                  monster.make(Empty, Overlay, Highlighted).drawTo(candPos.toScreen)
+                case candPos =>
+                  monster.make(Empty, Overlay).drawTo(candPos.toScreen)
+              }
           case _ =>
         }
 

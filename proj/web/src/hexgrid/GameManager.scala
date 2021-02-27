@@ -167,7 +167,7 @@ class GameManager(
         state.monsters.tiles.get(pos).exists(_.owner == state.nextPlayer)
       case (SelectMonster(_), _) => false
       case (SelectMonsterTarget(to), MoveMonster(Some(from), _)) =>
-        state.tileMap.tiles.get(from).isDefined && from != to
+        state.tileMap.tiles.get(from).isDefined && state.canMove(from, to)
       case (SelectMonsterTarget(_), _) => false
       case (DrawTile, PlacingNextTile(_)) => false
       case (DrawTile, _) => state.nextTile.isDefined

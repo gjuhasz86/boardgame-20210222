@@ -22,4 +22,5 @@ object Decorators {
   case object PossibleGap extends Decorator
   case object RestrictedGap extends Decorator
   case object ImpossibleGap extends Decorator
+  case object Empty extends Decorator
 }
