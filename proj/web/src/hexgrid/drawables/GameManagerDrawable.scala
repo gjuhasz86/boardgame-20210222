@@ -2,6 +2,7 @@ package hexgrid.drawables
 
 import hexgrid.GameManager
 import hexgrid.GamePhase
+import hexgrid.GamePhase.GameOver
 import hexgrid.GamePhase.MoveMonster
 import hexgrid.GamePhase.PlacingNextTile
 import hexgrid.GuiAction.Click
@@ -106,9 +107,9 @@ object GameManagerDrawable {
         self.phase match {
           case PlacingNextTile(Some(pos)) =>
             tile.make(Overlay).drawTo(pos.toScreen)
-          case PlacingNextTile(None) if valid =>
+          case PlacingNextTile(None) | GameOver(_, true) if valid =>
             tile.make(Overlay).drawTo(dc.cursorPos.toTile.toScreen)
-          case PlacingNextTile(None) if !valid =>
+          case PlacingNextTile(None) | GameOver(_, true) if !valid =>
             tile.make(Overlay, Invalid).drawTo(dc.cursorPos.toTile.toScreen)
           case _ =>
         }
@@ -147,11 +148,11 @@ object GameManagerDrawable {
           case MoveMonster(Some(_), Some(_)) => "[MOVE] | ENTER to confirm monster placement | BACKSPACE to cancel"
           case PlacingNextTile(None) => "[TILE] | Click on an empty space to place the tile"
           case PlacingNextTile(Some(_)) => "[TILE] | ENTER to confirm tile placement | BACKSPACE to cancel"
-          case GameOver(p) => s"[GAMEOVER] | Player ${p.id} wins"
+          case GameOver(p, nvp) => s"[GAMEOVER] | Player ${p.id} wins ${if (nvp) {"(Tile placement impossible)"} else ""}"
         }
 
         val textColor = self.phase match {
-          case GameOver(_) => "white"
+          case GameOver(_, _d) => "white"
           case _ => "black"
         }
 

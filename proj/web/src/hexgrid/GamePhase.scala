@@ -7,7 +7,7 @@ object GamePhase {
   case class MoveMonster(from: Option[TilePos], to: Option[TilePos]) extends GamePhase
   case class PlacingNextTile(pos: Option[TilePos]) extends GamePhase
   case object Idle extends GamePhase
-  case class GameOver(winner: Player) extends GamePhase
+  case class GameOver(winner: Player, noValidPlacement: Boolean = false) extends GamePhase
 
   implicit class HelpersOnGamePhase(self: GamePhase) {
 

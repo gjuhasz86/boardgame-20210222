@@ -7,6 +7,7 @@ sealed trait Tile {
   def rotate(n: Int): Tile
   def rotateRight: Tile = rotate(1)
   def rotateLeft: Tile = rotate(-1)
+  def rotations: Set[Tile] = Dirs.all.indices.map(this.rotate).toSet
 
   def canPlaceNextTo(that: Tile, dir: Dir): Boolean =
     this.rotatedDirs.contains(dir) == that.rotatedDirs.contains(dir.opposite)

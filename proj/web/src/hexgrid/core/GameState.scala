@@ -21,6 +21,8 @@ case class GameState(
   cardStack: List[Card]
 ) {
 
+  def alivePlayers: Set[Player] = monsters.tiles.values.map(_.owner).toSet
+
   def drawCard: GameState =
     cardStack match {
       case _ :: rest =>
@@ -41,9 +43,7 @@ case class GameState(
     (monsters.tiles.get(from), monsters.tiles.get(to)) match {
       case (Some(m1), Some(m2)) =>
         val m = List(m1, m2).maxBy(_.level)
-        val newMonsters = monsters.remove(from).place(to, m)
-        val alivePlayers = newMonsters.tiles.values.map(_.owner).toSet
-        copy(monsters = newMonsters, playerTurns = playerTurns.filter(alivePlayers.contains))
+        copy(monsters = monsters.remove(from).place(to, m))
       case (_, _) =>
         copy(monsters = monsters.move(from, to))
     }
@@ -67,9 +67,29 @@ case class GameState(
     case _ => this
   }
 
+  def revealNextTile: GameState = {
+    val hasValidMove =
+      nextTile.map(_.rotations).getOrElse(Set.empty)
+        .flatMap(validPlacements)
+        .intersect(monstersOfPlayer(nextPlayer).flatMap(_.rings(3)))
+        .nonEmpty
+
+    if (hasValidMove)
+      this
+    else
+      copy(playerTurns = playerTurns.tail)
+  }
+
+
   def nextPlayer: Player = playerTurns.head
   def endTurn: GameState =
-    copy(playerTurns = playerTurns.tail :+ playerTurns.head)
+    copy(playerTurns = playerTurns.filter(alivePlayers.contains).tail :+ playerTurns.filter(alivePlayers.contains).head)
+
+  def winner: Option[Player] =
+    playerTurns match {
+      case p :: Nil => Some(p)
+      case _ => None
+    }
 
   def activeMonsters: Set[TilePos] =
     monstersOfPlayer(nextPlayer)
@@ -97,6 +117,12 @@ case class GameState(
           neighbors.forall { case (d, t) => tile.canPlaceNextTo(t, d) } &&
           neighbors.exists { case (d, t) => tile.isJoined(t, d) }
     }
+
+  def validPlacements(tile: Tile): Set[TilePos] =
+    tileMap.tiles.keySet
+      .flatMap(_.ring(1))
+      .filter(validPlacement(_, tile))
+
 
   def neighbors(pos: TilePos): Seq[(Dir, GameTile)] =
     Dirs.all.flatMap(dir => tileMap.tiles.get(pos.neighbor(dir)).map(dir -> _))

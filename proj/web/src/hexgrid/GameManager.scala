@@ -81,13 +81,13 @@ class GameManager(
         SelectMonsterTarget(pos)
       case (Click, PlacingNextTile(_)) =>
         SelectTileTarget(pos)
-      case (Key(KeyCode.E), PlacingNextTile(_)) =>
+      case (Key(KeyCode.E), _) if isPlacingTile =>
         RotateTileRight
-      case (Key(KeyCode.Q), PlacingNextTile(_)) =>
+      case (Key(KeyCode.Q), _) if isPlacingTile =>
         RotateTileLeft
-      case (WheelDown, PlacingNextTile(_)) =>
+      case (WheelDown, _) if isPlacingTile =>
         RotateTileRight
-      case (WheelUp, PlacingNextTile(_)) =>
+      case (WheelUp, _) if isPlacingTile =>
         RotateTileLeft
       case (Key(KeyCode.Backspace), _) =>
         Cancel
@@ -123,7 +123,13 @@ class GameManager(
           case _ =>
         }
       case DrawTile =>
-        phase = PlacingNextTile(None)
+        state = state.revealNextTile
+        state.winner match {
+          case Some(p) =>
+            phase = GameOver(p, noValidPlacement = true)
+          case _ =>
+            phase = PlacingNextTile(None)
+        }
       case SelectTileTarget(pos) =>
         phase = PlacingNextTile(Some(pos))
         perform(Confirm)
@@ -146,8 +152,8 @@ class GameManager(
               state = state.takeBlob(to).changeMonster(to)(_.incPower.levelUp)
             }
             state = state.endTurn
-            phase = state.playerTurns match {
-              case p :: Nil => GameOver(p)
+            phase = state.winner match {
+              case Some(p) => GameOver(p)
               case _ => Idle
             }
           case _ =>
@@ -173,16 +179,16 @@ class GameManager(
       case (DrawTile, _) => state.nextTile.isDefined
       case (SelectTileTarget(pos), PlacingNextTile(_)) => canPlaceTile(pos)
       case (SelectTileTarget(_), _) => false
-      case (RotateTileLeft, PlacingNextTile(_)) => true
+      case (RotateTileLeft, _) if isPlacingTile => true
       case (RotateTileLeft, _) => false
-      case (RotateTileRight, PlacingNextTile(_)) => true
+      case (RotateTileRight, _) if isPlacingTile => true
       case (RotateTileRight, _) => false
       case (Confirm, MoveMonster(Some(_), Some(_))) => true
       case (Confirm, PlacingNextTile(Some(_))) => true
       case (Confirm, _) => false
       case (Cancel, PlacingNextTile(None)) => false
       case (Cancel, _) => true
-      case (_, GameOver(_)) => false
+      case (_, GameOver(_, _)) => false
       case (Noop, _) => false
     }
   }
@@ -208,6 +214,7 @@ class GameManager(
 
   def isPlacingTile: Boolean = phase match {
     case PlacingNextTile(_) => true
+    case GameOver(_, _) => true
     case _ => false
   }
 
