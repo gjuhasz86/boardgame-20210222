@@ -1397,42 +1397,58 @@ $c_Lhexgrid_GameManager.prototype.toGameAction__Lhexgrid_GuiAction__Lhexgrid_Gam
   };
   if ((x1 !== null)) {
     var p30 = $as_Lhexgrid_GuiAction(x1._1__O());
-    var p31 = $as_Lhexgrid_GamePhase(x1._2__O());
     if ((p30 instanceof $c_Lhexgrid_GuiAction$Key)) {
       var x32 = $as_Lhexgrid_GuiAction$Key(p30);
       var p33 = x32.code__I();
-      if (((69 === p33) && (p31 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+      if (((69 === p33) && this.isPlacingTile__Z())) {
         return $m_Lhexgrid_GameAction$RotateTileRight$()
       }
     }
   };
   if ((x1 !== null)) {
-    var p36 = $as_Lhexgrid_GuiAction(x1._1__O());
-    var p37 = $as_Lhexgrid_GamePhase(x1._2__O());
-    if ((p36 instanceof $c_Lhexgrid_GuiAction$Key)) {
-      var x38 = $as_Lhexgrid_GuiAction$Key(p36);
-      var p39 = x38.code__I();
-      if (((81 === p39) && (p37 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    var p34 = $as_Lhexgrid_GuiAction(x1._1__O());
+    if ((p34 instanceof $c_Lhexgrid_GuiAction$Key)) {
+      var x36 = $as_Lhexgrid_GuiAction$Key(p34);
+      var p37 = x36.code__I();
+      if (((81 === p37) && this.isPlacingTile__Z())) {
         return $m_Lhexgrid_GameAction$RotateTileLeft$()
       }
     }
   };
   if ((x1 !== null)) {
-    var p42 = $as_Lhexgrid_GuiAction(x1._1__O());
-    var p43 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var p38 = $as_Lhexgrid_GuiAction(x1._1__O());
     var x$21 = $m_Lhexgrid_GuiAction$WheelDown$();
-    var x$22 = p42;
-    if ((((x$21 === null) ? (x$22 === null) : x$21.equals__O__Z(x$22)) && (p43 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    var x$22 = p38;
+    if ((((x$21 === null) ? (x$22 === null) : x$21.equals__O__Z(x$22)) && this.isPlacingTile__Z())) {
       return $m_Lhexgrid_GameAction$RotateTileRight$()
     }
   };
   if ((x1 !== null)) {
-    var p46 = $as_Lhexgrid_GuiAction(x1._1__O());
-    var p47 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var p40 = $as_Lhexgrid_GuiAction(x1._1__O());
     var x$23 = $m_Lhexgrid_GuiAction$WheelUp$();
-    var x$24 = p46;
-    if ((((x$23 === null) ? (x$24 === null) : x$23.equals__O__Z(x$24)) && (p47 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    var x$24 = p40;
+    if ((((x$23 === null) ? (x$24 === null) : x$23.equals__O__Z(x$24)) && this.isPlacingTile__Z())) {
       return $m_Lhexgrid_GameAction$RotateTileLeft$()
+    }
+  };
+  if ((x1 !== null)) {
+    var p42 = $as_Lhexgrid_GuiAction(x1._1__O());
+    if ((p42 instanceof $c_Lhexgrid_GuiAction$Key)) {
+      var x44 = $as_Lhexgrid_GuiAction$Key(p42);
+      var p45 = x44.code__I();
+      if ((8 === p45)) {
+        return $m_Lhexgrid_GameAction$Cancel$()
+      }
+    }
+  };
+  if ((x1 !== null)) {
+    var p46 = $as_Lhexgrid_GuiAction(x1._1__O());
+    if ((p46 instanceof $c_Lhexgrid_GuiAction$Key)) {
+      var x48 = $as_Lhexgrid_GuiAction$Key(p46);
+      var p49 = x48.code__I();
+      if ((13 === p49)) {
+        return $m_Lhexgrid_GameAction$Confirm$()
+      }
     }
   };
   if ((x1 !== null)) {
@@ -1440,27 +1456,7 @@ $c_Lhexgrid_GameManager.prototype.toGameAction__Lhexgrid_GuiAction__Lhexgrid_Gam
     if ((p50 instanceof $c_Lhexgrid_GuiAction$Key)) {
       var x52 = $as_Lhexgrid_GuiAction$Key(p50);
       var p53 = x52.code__I();
-      if ((8 === p53)) {
-        return $m_Lhexgrid_GameAction$Cancel$()
-      }
-    }
-  };
-  if ((x1 !== null)) {
-    var p54 = $as_Lhexgrid_GuiAction(x1._1__O());
-    if ((p54 instanceof $c_Lhexgrid_GuiAction$Key)) {
-      var x56 = $as_Lhexgrid_GuiAction$Key(p54);
-      var p57 = x56.code__I();
-      if ((13 === p57)) {
-        return $m_Lhexgrid_GameAction$Confirm$()
-      }
-    }
-  };
-  if ((x1 !== null)) {
-    var p58 = $as_Lhexgrid_GuiAction(x1._1__O());
-    if ((p58 instanceof $c_Lhexgrid_GuiAction$Key)) {
-      var x60 = $as_Lhexgrid_GuiAction$Key(p58);
-      var p61 = x60.code__I();
-      if ((32 === p61)) {
+      if ((32 === p53)) {
         return $m_Lhexgrid_GameAction$Confirm$()
       }
     }
@@ -1505,7 +1501,17 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
     var x$4 = $m_Lhexgrid_GameAction$DrawTile$();
     var x$5 = x1;
     if (((x$4 === null) ? (x$5 === null) : x$4.equals__O__Z(x$5))) {
-      this.phase_$eq__Lhexgrid_GamePhase__V(new $c_Lhexgrid_GamePhase$PlacingNextTile($m_s_None$()));
+      this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().revealNextTile__Lhexgrid_core_GameState());
+      var x1$3 = this.state__Lhexgrid_core_GameState().winner__s_Option();
+      if ((x1$3 instanceof $c_s_Some)) {
+        var x2$3 = $as_s_Some(x1$3);
+        var p = $as_Lhexgrid_core_Player(x2$3.value__O());
+        this.phase_$eq__Lhexgrid_GamePhase__V(new $c_Lhexgrid_GamePhase$GameOver(p, true));
+        var x$6 = (void 0)
+      } else {
+        this.phase_$eq__Lhexgrid_GamePhase__V(new $c_Lhexgrid_GamePhase$PlacingNextTile($m_s_None$()));
+        var x$6 = (void 0)
+      };
       break matchEnd15
     };
     if ((x1 instanceof $c_Lhexgrid_GameAction$SelectTileTarget)) {
@@ -1515,9 +1521,9 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
       this.perform__Lhexgrid_GameAction__V($m_Lhexgrid_GameAction$Confirm$());
       break matchEnd15
     };
-    var x$6 = $m_Lhexgrid_GameAction$RotateTileLeft$();
-    var x$7 = x1;
-    if (((x$6 === null) ? (x$7 === null) : x$6.equals__O__Z(x$7))) {
+    var x$7 = $m_Lhexgrid_GameAction$RotateTileLeft$();
+    var x$8 = x1;
+    if (((x$7 === null) ? (x$8 === null) : x$7.equals__O__Z(x$8))) {
       this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().changeNextTile__F1__Lhexgrid_core_GameState(new $c_sjsr_AnonFunction1((function(this\u00f8) {
         return (function(x$1$2) {
           var x$1 = $as_Lhexgrid_core_Tiles$GameTile(x$1$2);
@@ -1526,9 +1532,9 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
       })(this))));
       break matchEnd15
     };
-    var x$8 = $m_Lhexgrid_GameAction$RotateTileRight$();
-    var x$9 = x1;
-    if (((x$8 === null) ? (x$9 === null) : x$8.equals__O__Z(x$9))) {
+    var x$9 = $m_Lhexgrid_GameAction$RotateTileRight$();
+    var x$10 = x1;
+    if (((x$9 === null) ? (x$10 === null) : x$9.equals__O__Z(x$10))) {
       this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().changeNextTile__F1__Lhexgrid_core_GameState(new $c_sjsr_AnonFunction1((function(this$2) {
         return (function(x$2$2$2) {
           var x$2$2 = $as_Lhexgrid_core_Tiles$GameTile(x$2$2$2);
@@ -1537,32 +1543,32 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
       })(this))));
       break matchEnd15
     };
-    var x$10 = $m_Lhexgrid_GameAction$Confirm$();
-    var x$11 = x1;
-    if (((x$10 === null) ? (x$11 === null) : x$10.equals__O__Z(x$11))) {
-      var x1$3 = this.phase__Lhexgrid_GamePhase();
+    var x$11 = $m_Lhexgrid_GameAction$Confirm$();
+    var x$12 = x1;
+    if (((x$11 === null) ? (x$12 === null) : x$11.equals__O__Z(x$12))) {
+      var x1$4 = this.phase__Lhexgrid_GamePhase();
       matchEnd11: {
-        var x$16;
-        if ((x1$3 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
-          var x2$3 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1$3);
-          var p3 = x2$3.pos__s_Option();
+        var x$15;
+        if ((x1$4 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
+          var x2$4 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1$4);
+          var p3 = x2$4.pos__s_Option();
           if ((p3 instanceof $c_s_Some)) {
             var x4$2 = $as_s_Some(p3);
             var pos$4 = $as_Lhexgrid_core_TilePos(x4$2.value__O());
             this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().placeNext__Lhexgrid_core_TilePos__Lhexgrid_core_GameState(pos$4));
-            var x$12 = this.state__Lhexgrid_core_GameState().nextCard__s_Option();
-            var x$13 = new $c_s_Some($m_Lhexgrid_core_Cards$PlaceBlob$());
-            if (((x$12 === null) ? (x$13 === null) : x$12.equals__O__Z(x$13))) {
+            var x$13 = this.state__Lhexgrid_core_GameState().nextCard__s_Option();
+            var x$14 = new $c_s_Some($m_Lhexgrid_core_Cards$PlaceBlob$());
+            if (((x$13 === null) ? (x$14 === null) : x$13.equals__O__Z(x$14))) {
               this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().placeBlob__Lhexgrid_core_TilePos__Lhexgrid_core_GameState(pos$4))
             };
             this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().drawCard__Lhexgrid_core_GameState().endTurn__Lhexgrid_core_GameState());
             this.phase_$eq__Lhexgrid_GamePhase__V($m_Lhexgrid_GamePhase$Idle$());
-            var x$16 = (void 0);
+            var x$15 = (void 0);
             break matchEnd11
           }
         };
-        if ((x1$3 instanceof $c_Lhexgrid_GamePhase$MoveMonster)) {
-          var x5 = $as_Lhexgrid_GamePhase$MoveMonster(x1$3);
+        if ((x1$4 instanceof $c_Lhexgrid_GamePhase$MoveMonster)) {
+          var x5 = $as_Lhexgrid_GamePhase$MoveMonster(x1$4);
           var p6 = x5.from__s_Option();
           var p7 = x5.to__s_Option();
           if ((p6 instanceof $c_s_Some)) {
@@ -1581,35 +1587,27 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
                 })(this))))
               };
               this.state_$eq__Lhexgrid_core_GameState__V(this.state__Lhexgrid_core_GameState().endTurn__Lhexgrid_core_GameState());
-              var x1$4 = this.state__Lhexgrid_core_GameState().playerTurns__sci_List();
-              matchEnd6: {
-                var $$x1;
-                if ((x1$4 instanceof $c_sci_$colon$colon)) {
-                  var x2$4 = $as_sci_$colon$colon(x1$4);
-                  var p = $as_Lhexgrid_core_Player(x2$4.head__O());
-                  var p3$2 = x2$4.next$access$1__sci_List();
-                  var x$14 = $m_sci_Nil$();
-                  var x$15 = p3$2;
-                  if (((x$14 === null) ? (x$15 === null) : x$14.equals__O__Z(x$15))) {
-                    var $$x1 = new $c_Lhexgrid_GamePhase$GameOver(p);
-                    break matchEnd6
-                  }
-                };
+              var x1$5 = this.state__Lhexgrid_core_GameState().winner__s_Option();
+              if ((x1$5 instanceof $c_s_Some)) {
+                var x2$5 = $as_s_Some(x1$5);
+                var p$2 = $as_Lhexgrid_core_Player(x2$5.value__O());
+                var $$x1 = new $c_Lhexgrid_GamePhase$GameOver(p$2, $m_Lhexgrid_GamePhase$GameOver$().apply$default$2__Z())
+              } else {
                 var $$x1 = $m_Lhexgrid_GamePhase$Idle$()
               };
               this.phase_$eq__Lhexgrid_GamePhase__V($$x1);
-              var x$16 = (void 0);
+              var x$15 = (void 0);
               break matchEnd11
             }
           }
         };
-        var x$16 = (void 0)
+        var x$15 = (void 0)
       };
       break matchEnd15
     };
-    var x$17 = $m_Lhexgrid_GameAction$Cancel$();
-    var x$18 = x1;
-    if (((x$17 === null) ? (x$18 === null) : x$17.equals__O__Z(x$18))) {
+    var x$16 = $m_Lhexgrid_GameAction$Cancel$();
+    var x$17 = x1;
+    if (((x$16 === null) ? (x$17 === null) : x$16.equals__O__Z(x$17))) {
       rc14 = true;
       x10 = x1;
       if (this.isPlacingTile__Z()) {
@@ -1621,9 +1619,9 @@ $c_Lhexgrid_GameManager.prototype.perform__Lhexgrid_GameAction__V = (function(ac
       this.phase_$eq__Lhexgrid_GamePhase__V($m_Lhexgrid_GamePhase$Idle$());
       break matchEnd15
     };
-    var x$19 = $m_Lhexgrid_GameAction$Noop$();
-    var x$20 = x1;
-    if (((x$19 === null) ? (x$20 === null) : x$19.equals__O__Z(x$20))) {
+    var x$18 = $m_Lhexgrid_GameAction$Noop$();
+    var x$19 = x1;
+    if (((x$18 === null) ? (x$19 === null) : x$18.equals__O__Z(x$19))) {
       break matchEnd15
     };
     throw new $c_s_MatchError(x1)
@@ -1684,13 +1682,7 @@ $c_Lhexgrid_GameManager.prototype.isValid__Lhexgrid_GameAction__Z = (function(ac
         if ((p22 instanceof $c_s_Some)) {
           var x24 = $as_s_Some(p22);
           var from = $as_Lhexgrid_core_TilePos(x24.value__O());
-          if (this.state__Lhexgrid_core_GameState().tileMap__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(from).isDefined__Z()) {
-            var x$7 = from;
-            var x$8 = to;
-            return (!((x$7 === null) ? (x$8 === null) : x$7.equals__O__Z(x$8)))
-          } else {
-            return false
-          }
+          return (this.state__Lhexgrid_core_GameState().tileMap__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(from).isDefined__Z() && this.state__Lhexgrid_core_GameState().canMove__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Z(from, to))
         }
       }
     }
@@ -1704,17 +1696,17 @@ $c_Lhexgrid_GameManager.prototype.isValid__Lhexgrid_GameAction__Z = (function(ac
   if ((x1 !== null)) {
     var p29 = $as_Lhexgrid_GameAction(x1._1__O());
     var p30 = $as_Lhexgrid_GamePhase(x1._2__O());
-    var x$9 = $m_Lhexgrid_GameAction$DrawTile$();
-    var x$10 = p29;
-    if ((((x$9 === null) ? (x$10 === null) : x$9.equals__O__Z(x$10)) && (p30 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    var x$7 = $m_Lhexgrid_GameAction$DrawTile$();
+    var x$8 = p29;
+    if ((((x$7 === null) ? (x$8 === null) : x$7.equals__O__Z(x$8)) && (p30 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
       return false
     }
   };
   if ((x1 !== null)) {
     var p33 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$11 = $m_Lhexgrid_GameAction$DrawTile$();
-    var x$12 = p33;
-    if (((x$11 === null) ? (x$12 === null) : x$11.equals__O__Z(x$12))) {
+    var x$9 = $m_Lhexgrid_GameAction$DrawTile$();
+    var x$10 = p33;
+    if (((x$9 === null) ? (x$10 === null) : x$9.equals__O__Z(x$10))) {
       return this.state__Lhexgrid_core_GameState().nextTile__s_Option().isDefined__Z()
     }
   };
@@ -1737,107 +1729,105 @@ $c_Lhexgrid_GameManager.prototype.isValid__Lhexgrid_GameAction__Z = (function(ac
   };
   if ((x1 !== null)) {
     var p44 = $as_Lhexgrid_GameAction(x1._1__O());
-    var p45 = $as_Lhexgrid_GamePhase(x1._2__O());
-    var x$13 = $m_Lhexgrid_GameAction$RotateTileLeft$();
-    var x$14 = p44;
-    if ((((x$13 === null) ? (x$14 === null) : x$13.equals__O__Z(x$14)) && (p45 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    var x$11 = $m_Lhexgrid_GameAction$RotateTileLeft$();
+    var x$12 = p44;
+    if ((((x$11 === null) ? (x$12 === null) : x$11.equals__O__Z(x$12)) && this.isPlacingTile__Z())) {
       return true
+    }
+  };
+  if ((x1 !== null)) {
+    var p46 = $as_Lhexgrid_GameAction(x1._1__O());
+    var x$13 = $m_Lhexgrid_GameAction$RotateTileLeft$();
+    var x$14 = p46;
+    if (((x$13 === null) ? (x$14 === null) : x$13.equals__O__Z(x$14))) {
+      return false
     }
   };
   if ((x1 !== null)) {
     var p48 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$15 = $m_Lhexgrid_GameAction$RotateTileLeft$();
+    var x$15 = $m_Lhexgrid_GameAction$RotateTileRight$();
     var x$16 = p48;
-    if (((x$15 === null) ? (x$16 === null) : x$15.equals__O__Z(x$16))) {
-      return false
-    }
-  };
-  if ((x1 !== null)) {
-    var p50 = $as_Lhexgrid_GameAction(x1._1__O());
-    var p51 = $as_Lhexgrid_GamePhase(x1._2__O());
-    var x$17 = $m_Lhexgrid_GameAction$RotateTileRight$();
-    var x$18 = p50;
-    if ((((x$17 === null) ? (x$18 === null) : x$17.equals__O__Z(x$18)) && (p51 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+    if ((((x$15 === null) ? (x$16 === null) : x$15.equals__O__Z(x$16)) && this.isPlacingTile__Z())) {
       return true
     }
   };
   if ((x1 !== null)) {
-    var p54 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$19 = $m_Lhexgrid_GameAction$RotateTileRight$();
-    var x$20 = p54;
-    if (((x$19 === null) ? (x$20 === null) : x$19.equals__O__Z(x$20))) {
+    var p50 = $as_Lhexgrid_GameAction(x1._1__O());
+    var x$17 = $m_Lhexgrid_GameAction$RotateTileRight$();
+    var x$18 = p50;
+    if (((x$17 === null) ? (x$18 === null) : x$17.equals__O__Z(x$18))) {
       return false
     }
   };
   if ((x1 !== null)) {
-    var p56 = $as_Lhexgrid_GameAction(x1._1__O());
-    var p57 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var p52 = $as_Lhexgrid_GameAction(x1._1__O());
+    var p53 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var x$19 = $m_Lhexgrid_GameAction$Confirm$();
+    var x$20 = p52;
+    if ((((x$19 === null) ? (x$20 === null) : x$19.equals__O__Z(x$20)) && (p53 instanceof $c_Lhexgrid_GamePhase$MoveMonster))) {
+      var x54 = $as_Lhexgrid_GamePhase$MoveMonster(p53);
+      var p55 = x54.from__s_Option();
+      var p56 = x54.to__s_Option();
+      if (((p55 instanceof $c_s_Some) && (p56 instanceof $c_s_Some))) {
+        return true
+      }
+    }
+  };
+  if ((x1 !== null)) {
+    var p61 = $as_Lhexgrid_GameAction(x1._1__O());
+    var p62 = $as_Lhexgrid_GamePhase(x1._2__O());
     var x$21 = $m_Lhexgrid_GameAction$Confirm$();
-    var x$22 = p56;
-    if ((((x$21 === null) ? (x$22 === null) : x$21.equals__O__Z(x$22)) && (p57 instanceof $c_Lhexgrid_GamePhase$MoveMonster))) {
-      var x58 = $as_Lhexgrid_GamePhase$MoveMonster(p57);
-      var p59 = x58.from__s_Option();
-      var p60 = x58.to__s_Option();
-      if (((p59 instanceof $c_s_Some) && (p60 instanceof $c_s_Some))) {
+    var x$22 = p61;
+    if ((((x$21 === null) ? (x$22 === null) : x$21.equals__O__Z(x$22)) && (p62 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+      var x63 = $as_Lhexgrid_GamePhase$PlacingNextTile(p62);
+      var p64 = x63.pos__s_Option();
+      if ((p64 instanceof $c_s_Some)) {
         return true
       }
     }
   };
   if ((x1 !== null)) {
-    var p65 = $as_Lhexgrid_GameAction(x1._1__O());
-    var p66 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var p67 = $as_Lhexgrid_GameAction(x1._1__O());
     var x$23 = $m_Lhexgrid_GameAction$Confirm$();
-    var x$24 = p65;
-    if ((((x$23 === null) ? (x$24 === null) : x$23.equals__O__Z(x$24)) && (p66 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
-      var x67 = $as_Lhexgrid_GamePhase$PlacingNextTile(p66);
-      var p68 = x67.pos__s_Option();
-      if ((p68 instanceof $c_s_Some)) {
-        return true
-      }
-    }
-  };
-  if ((x1 !== null)) {
-    var p71 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$25 = $m_Lhexgrid_GameAction$Confirm$();
-    var x$26 = p71;
-    if (((x$25 === null) ? (x$26 === null) : x$25.equals__O__Z(x$26))) {
+    var x$24 = p67;
+    if (((x$23 === null) ? (x$24 === null) : x$23.equals__O__Z(x$24))) {
       return false
     }
   };
   if ((x1 !== null)) {
-    var p73 = $as_Lhexgrid_GameAction(x1._1__O());
-    var p74 = $as_Lhexgrid_GamePhase(x1._2__O());
-    var x$27 = $m_Lhexgrid_GameAction$Cancel$();
-    var x$28 = p73;
-    if ((((x$27 === null) ? (x$28 === null) : x$27.equals__O__Z(x$28)) && (p74 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
-      var x75 = $as_Lhexgrid_GamePhase$PlacingNextTile(p74);
-      var p76 = x75.pos__s_Option();
-      var x$29 = $m_s_None$();
-      var x$30 = p76;
-      if (((x$29 === null) ? (x$30 === null) : x$29.equals__O__Z(x$30))) {
+    var p69 = $as_Lhexgrid_GameAction(x1._1__O());
+    var p70 = $as_Lhexgrid_GamePhase(x1._2__O());
+    var x$25 = $m_Lhexgrid_GameAction$Cancel$();
+    var x$26 = p69;
+    if ((((x$25 === null) ? (x$26 === null) : x$25.equals__O__Z(x$26)) && (p70 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile))) {
+      var x71 = $as_Lhexgrid_GamePhase$PlacingNextTile(p70);
+      var p72 = x71.pos__s_Option();
+      var x$27 = $m_s_None$();
+      var x$28 = p72;
+      if (((x$27 === null) ? (x$28 === null) : x$27.equals__O__Z(x$28))) {
         return false
       }
     }
   };
   if ((x1 !== null)) {
-    var p77 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$31 = $m_Lhexgrid_GameAction$Cancel$();
-    var x$32 = p77;
-    if (((x$31 === null) ? (x$32 === null) : x$31.equals__O__Z(x$32))) {
+    var p73 = $as_Lhexgrid_GameAction(x1._1__O());
+    var x$29 = $m_Lhexgrid_GameAction$Cancel$();
+    var x$30 = p73;
+    if (((x$29 === null) ? (x$30 === null) : x$29.equals__O__Z(x$30))) {
       return true
     }
   };
   if ((x1 !== null)) {
-    var p80 = $as_Lhexgrid_GamePhase(x1._2__O());
-    if ((p80 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
+    var p76 = $as_Lhexgrid_GamePhase(x1._2__O());
+    if ((p76 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
       return false
     }
   };
   if ((x1 !== null)) {
-    var p83 = $as_Lhexgrid_GameAction(x1._1__O());
-    var x$33 = $m_Lhexgrid_GameAction$Noop$();
-    var x$34 = p83;
-    if (((x$33 === null) ? (x$34 === null) : x$33.equals__O__Z(x$34))) {
+    var p80 = $as_Lhexgrid_GameAction(x1._1__O());
+    var x$31 = $m_Lhexgrid_GameAction$Noop$();
+    var x$32 = p80;
+    if (((x$31 === null) ? (x$32 === null) : x$31.equals__O__Z(x$32))) {
       return false
     }
   };
@@ -1886,7 +1876,7 @@ $c_Lhexgrid_GameManager.prototype.canPlaceTile__Lhexgrid_core_TilePos__Z = (func
 });
 $c_Lhexgrid_GameManager.prototype.isPlacingTile__Z = (function() {
   var x1 = this.phase__Lhexgrid_GamePhase();
-  return ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile) || false)
+  return ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile) || ((x1 instanceof $c_Lhexgrid_GamePhase$GameOver) || false))
 });
 function $as_Lhexgrid_GameManager(obj) {
   return (((obj instanceof $c_Lhexgrid_GameManager) || (obj === null)) ? obj : $throwClassCastException(obj, "hexgrid.GameManager"))
@@ -2265,6 +2255,17 @@ function $m_Lhexgrid_core_Dirs$() {
     $n_Lhexgrid_core_Dirs$ = new $c_Lhexgrid_core_Dirs$()
   };
   return $n_Lhexgrid_core_Dirs$
+}
+var $p_Lhexgrid_core_Tile__$anonfun$rotations$1__I__Lhexgrid_core_Tile = (function($thiz, n) {
+  return $thiz.rotate__I__Lhexgrid_core_Tile(n)
+});
+function $f_Lhexgrid_core_Tile__rotations__sci_Set($thiz) {
+  return $m_Lhexgrid_core_Dirs$().all__sci_Seq().indices__sci_Range().map__F1__sci_IndexedSeq(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+    return (function(n$2) {
+      var n = $uI(n$2);
+      return $p_Lhexgrid_core_Tile__$anonfun$rotations$1__I__Lhexgrid_core_Tile(this\u00f8, n)
+    })
+  })($thiz))).toSet__sci_Set()
 }
 function $f_Lhexgrid_core_Tile__canPlaceNextTo__Lhexgrid_core_Tile__Lhexgrid_core_Dir__Z($thiz, that, dir) {
   return ($thiz.rotatedDirs__sci_Set().contains__O__Z(dir) === that.rotatedDirs__sci_Set().contains__O__Z(dir.opposite__Lhexgrid_core_Dir()))
@@ -8067,38 +8068,69 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawTileOverlay__Lhexgrid
   var tile$lzy = new $c_sr_LazyRef();
   var st = self.screenTranslator__Lhexgrid_gui_MapOffsetAwareScreenTranslator();
   var valid = self.isValid__Lhexgrid_GameAction__Z(self.toGameAction__Lhexgrid_GuiAction__Lhexgrid_GameAction($m_Lhexgrid_GuiAction$Click$()));
-  var rc12 = false;
-  var x2 = null;
   var x1 = self.phase__Lhexgrid_GamePhase();
-  matchEnd13: {
+  matchEnd20: {
     if ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
-      rc12 = true;
-      x2 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1);
+      var x2 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1);
       var p3 = x2.pos__s_Option();
       if ((p3 instanceof $c_s_Some)) {
         var x4 = $as_s_Some(p3);
         var pos = $as_Lhexgrid_core_TilePos(x4.value__O());
         $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st).toScreen__Lhexgrid_gui_ScreenPos());
-        break matchEnd13
+        break matchEnd20
       }
     };
-    if (rc12) {
-      var p6 = x2.pos__s_Option();
-      var x = $m_s_None$();
-      var x$2 = p6;
-      if ((((x === null) ? (x$2 === null) : x.equals__O__Z(x$2)) && valid)) {
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
-        break matchEnd13
-      }
+    matchEnd24: {
+      var $$x1;
+      if ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
+        var x5 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1);
+        var p6 = x5.pos__s_Option();
+        var x = $m_s_None$();
+        var x$2 = p6;
+        if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+          var $$x1 = true;
+          break matchEnd24
+        }
+      };
+      if ((x1 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
+        var x7 = $as_Lhexgrid_GamePhase$GameOver(x1);
+        var p9 = x7.noValidPlacement__Z();
+        if ((true === p9)) {
+          var $$x1 = true;
+          break matchEnd24
+        }
+      };
+      var $$x1 = false
     };
-    if (rc12) {
-      var p8 = x2.pos__s_Option();
-      var x$3 = $m_s_None$();
-      var x$4 = p8;
-      if ((((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4)) && (!valid))) {
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Invalid$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
-        break matchEnd13
-      }
+    if (($$x1 && valid)) {
+      $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Overlay$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
+      break matchEnd20
+    };
+    matchEnd29: {
+      var $$x2;
+      if ((x1 instanceof $c_Lhexgrid_GamePhase$PlacingNextTile)) {
+        var x10 = $as_Lhexgrid_GamePhase$PlacingNextTile(x1);
+        var p11 = x10.pos__s_Option();
+        var x$3 = $m_s_None$();
+        var x$4 = p11;
+        if (((x$3 === null) ? (x$4 === null) : x$3.equals__O__Z(x$4))) {
+          var $$x2 = true;
+          break matchEnd29
+        }
+      };
+      if ((x1 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
+        var x12 = $as_Lhexgrid_GamePhase$GameOver(x1);
+        var p14 = x12.noValidPlacement__Z();
+        if ((true === p14)) {
+          var $$x2 = true;
+          break matchEnd29
+        }
+      };
+      var $$x2 = false
+    };
+    if (($$x2 && (!valid))) {
+      $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy, self), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Invalid$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos($m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st).toTile__Lhexgrid_core_TilePos(), st).toScreen__Lhexgrid_gui_ScreenPos());
+      break matchEnd20
     }
   }
 });
@@ -8112,7 +8144,19 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawMonsterOverlay__Lhexg
       if ((p3 instanceof $c_s_Some)) {
         var x5 = $as_s_Some(p3);
         var pos = $as_Lhexgrid_core_TilePos(x5.value__O());
-        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(pos), $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st).toScreen__Lhexgrid_gui_ScreenPos());
+        var monster = $as_Lhexgrid_core_Monster(self.state__Lhexgrid_core_GameState().monsters__Lhexgrid_core_TileMap().tiles__sci_Map().apply__O__O(pos));
+        $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(monster, $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__Lhexgrid_gui_Decorator__Lhexgrid_gui_Drawable$DrawableOps($m_Lhexgrid_gui_Decorators$Highlighted$()).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st).toScreen__Lhexgrid_gui_ScreenPos());
+        $as_sc_IterableOnceOps(pos.ring__I__sci_Set(1).filter__F1__O(new $c_sjsr_AnonFunction1((function(this\u00f8, self, pos) {
+          return (function(x$5$2) {
+            var x$5 = $as_Lhexgrid_core_TilePos(x$5$2);
+            return $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawMonsterOverlay$1__Lhexgrid_GameManager__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Z(this\u00f8, self, pos, x$5)
+          })
+        })($thiz, self, pos)))).foreach__F1__V(new $c_sjsr_AnonFunction1((function(this$2, st, monster) {
+          return (function(x0$1$2) {
+            var x0$1 = $as_Lhexgrid_core_TilePos(x0$1$2);
+            $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawMonsterOverlay$2__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_Monster__Lhexgrid_core_TilePos__V(this$2, st, monster, x0$1)
+          })
+        })($thiz, st, monster)));
         break matchEnd7
       }
     }
@@ -8205,7 +8249,8 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__drawHints__Lhexgrid_GameM
     if ((x1 instanceof $c_Lhexgrid_GamePhase$GameOver)) {
       var x23 = $as_Lhexgrid_GamePhase$GameOver(x1);
       var p = x23.winner__Lhexgrid_core_Player();
-      var phaseText = (("[GAMEOVER] | Player " + p.id__I()) + " wins");
+      var nvp = x23.noValidPlacement__Z();
+      var phaseText = ((("[GAMEOVER] | Player " + p.id__I()) + " wins ") + (nvp ? "(Tile placement impossible)" : ""));
       break matchEnd31
     };
     throw new $c_s_MatchError(x1)
@@ -8335,8 +8380,21 @@ var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$lzycompute$1__sr_Laz
 var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile = (function($thiz, tile$lzy$1, self$3) {
   return (tile$lzy$1.initialized__Z() ? $as_Lhexgrid_core_Tiles$GameTile(tile$lzy$1.value__O()) : $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__tile$lzycompute$1__sr_LazyRef__Lhexgrid_GameManager__Lhexgrid_core_Tiles$GameTile($thiz, tile$lzy$1, self$3))
 });
-var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawCursor$1__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_TilePos__V = (function($thiz, st$3, pos) {
-  $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($m_Lhexgrid_core_Tiles$().Blank__Lhexgrid_core_Tiles$Path(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st$3), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Highlighted$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st$3).toScreen__Lhexgrid_gui_ScreenPos())
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawMonsterOverlay$1__Lhexgrid_GameManager__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Z = (function($thiz, self$4, pos$1, x$5) {
+  return self$4.state__Lhexgrid_core_GameState().canMove__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Z(pos$1, x$5)
+});
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawMonsterOverlay$2__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_Monster__Lhexgrid_core_TilePos__V = (function($thiz, st$3, monster$1, x0$1) {
+  var x1 = x0$1;
+  var x = $m_Lhexgrid_gui_ScreenTranslator$().ToTileOnScreenPos__Lhexgrid_gui_ScreenPos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToTileOnScreenPos($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1.cursorPos__Lhexgrid_gui_ScreenPos(), st$3).toTile__Lhexgrid_core_TilePos();
+  var x$2 = x1;
+  if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(monster$1, $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Empty$(), $m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Highlighted$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(x1, st$3).toScreen__Lhexgrid_gui_ScreenPos())
+  } else {
+    $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps(monster$1, $m_Lhexgrid_drawables_MonsterDrawable$().monsterDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1), $m_Lhexgrid_drawables_MonsterDrawable$().canHighlightMonster__Lhexgrid_gui_DrawContext__Lhexgrid_gui_CanDecorate($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1)).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Empty$(), $m_Lhexgrid_gui_Decorators$Overlay$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(x1, st$3).toScreen__Lhexgrid_gui_ScreenPos())
+  }
+});
+var $p_Lhexgrid_drawables_GameManagerDrawable$$anon$1__$anonfun$drawCursor$1__Lhexgrid_gui_ScreenTranslator__Lhexgrid_core_TilePos__V = (function($thiz, st$4, pos) {
+  $m_Lhexgrid_gui_CanDecorate$().CanDecorateOps__O__Lhexgrid_gui_Drawable__Lhexgrid_gui_CanDecorate__Lhexgrid_gui_CanDecorate$CanDecorateOps($m_Lhexgrid_core_Tiles$().Blank__Lhexgrid_core_Tiles$Path(), $m_Lhexgrid_drawables_TileDrawable$().tileDrawable__Lhexgrid_gui_DrawContext__Lhexgrid_gui_ScreenTranslator__Lhexgrid_drawables_TileDrawable($thiz.Lhexgrid_drawables_GameManagerDrawable$$anon$1__f_dc$1, st$4), $m_Lhexgrid_drawables_TileDrawable$().canDecorateTileDrawable__Lhexgrid_gui_CanDecorate()).make__sci_Seq__Lhexgrid_gui_Drawable$DrawableOps($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([$m_Lhexgrid_gui_Decorators$Overlay$(), $m_Lhexgrid_gui_Decorators$Highlighted$()])).drawTo__Lhexgrid_gui_ScreenPos__V($m_Lhexgrid_gui_ScreenTranslator$().ToScreenOnTilePos__Lhexgrid_core_TilePos__Lhexgrid_gui_ScreenTranslator__Lhexgrid_gui_ScreenTranslator$ToScreenOnTilePos(pos, st$4).toScreen__Lhexgrid_gui_ScreenPos())
 });
 /** @constructor */
 function $c_Lhexgrid_drawables_GameManagerDrawable$$anon$1(dc$1) {
@@ -15050,6 +15108,47 @@ var $d_Lexample_TileMap = new $TypeData().initClass({
 });
 $c_Lexample_TileMap.prototype.$classData = $d_Lexample_TileMap;
 /** @constructor */
+function $c_Lhexgrid_GamePhase$GameOver$() {
+  $ct_sr_AbstractFunction2__(this);
+  $n_Lhexgrid_GamePhase$GameOver$ = this
+}
+$c_Lhexgrid_GamePhase$GameOver$.prototype = new $h_sr_AbstractFunction2();
+$c_Lhexgrid_GamePhase$GameOver$.prototype.constructor = $c_Lhexgrid_GamePhase$GameOver$;
+/** @constructor */
+function $h_Lhexgrid_GamePhase$GameOver$() {
+  /*<skip>*/
+}
+$h_Lhexgrid_GamePhase$GameOver$.prototype = $c_Lhexgrid_GamePhase$GameOver$.prototype;
+$c_Lhexgrid_GamePhase$GameOver$.prototype.toString__T = (function() {
+  return "GameOver"
+});
+$c_Lhexgrid_GamePhase$GameOver$.prototype.apply__Lhexgrid_core_Player__Z__Lhexgrid_GamePhase$GameOver = (function(winner, noValidPlacement) {
+  return new $c_Lhexgrid_GamePhase$GameOver(winner, noValidPlacement)
+});
+$c_Lhexgrid_GamePhase$GameOver$.prototype.apply$default$2__Z = (function() {
+  return false
+});
+$c_Lhexgrid_GamePhase$GameOver$.prototype.apply__O__O__O = (function(v1, v2) {
+  return this.apply__Lhexgrid_core_Player__Z__Lhexgrid_GamePhase$GameOver($as_Lhexgrid_core_Player(v1), $uZ(v2))
+});
+var $d_Lhexgrid_GamePhase$GameOver$ = new $TypeData().initClass({
+  Lhexgrid_GamePhase$GameOver$: 0
+}, false, "hexgrid.GamePhase$GameOver$", {
+  Lhexgrid_GamePhase$GameOver$: 1,
+  sr_AbstractFunction2: 1,
+  O: 1,
+  F2: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_GamePhase$GameOver$.prototype.$classData = $d_Lhexgrid_GamePhase$GameOver$;
+var $n_Lhexgrid_GamePhase$GameOver$;
+function $m_Lhexgrid_GamePhase$GameOver$() {
+  if ((!$n_Lhexgrid_GamePhase$GameOver$)) {
+    $n_Lhexgrid_GamePhase$GameOver$ = new $c_Lhexgrid_GamePhase$GameOver$()
+  };
+  return $n_Lhexgrid_GamePhase$GameOver$
+}
+/** @constructor */
 function $c_Lhexgrid_core_Blob$() {
   $ct_O__(this);
   $n_Lhexgrid_core_Blob$ = this;
@@ -15107,14 +15206,29 @@ function $m_Lhexgrid_core_Blob$() {
   };
   return $n_Lhexgrid_core_Blob$
 }
-var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I = (function($thiz, x$1) {
-  return x$1.level__I()
+var $p_Lhexgrid_core_GameState__$anonfun$alivePlayers$1__Lhexgrid_core_Monster__Lhexgrid_core_Player = (function($thiz, x$1) {
+  return x$1.owner__Lhexgrid_core_Player()
 });
-var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$2__Lhexgrid_core_Monster__Lhexgrid_core_Player = (function($thiz, x$2) {
-  return x$2.owner__Lhexgrid_core_Player()
+var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I = (function($thiz, x$2) {
+  return x$2.level__I()
 });
-var $p_Lhexgrid_core_GameState__$anonfun$moveMonster$3__sci_Set__Lhexgrid_core_Player__Z = (function($thiz, alivePlayers$1, elem) {
-  return alivePlayers$1.contains__O__Z(elem)
+var $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$1__Lhexgrid_core_Tiles$GameTile__sci_Set = (function($thiz, x$3) {
+  return x$3.rotations__sci_Set()
+});
+var $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$2__sci_Set = (function($thiz) {
+  return $m_s_Predef$().Set__sci_Set$().empty__sci_Set()
+});
+var $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$3__Lhexgrid_core_Tile__sci_Set = (function($thiz, tile) {
+  return $thiz.validPlacements__Lhexgrid_core_Tile__sci_Set(tile)
+});
+var $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$4__Lhexgrid_core_TilePos__sci_Set = (function($thiz, x$4) {
+  return x$4.rings__I__sci_Set(3)
+});
+var $p_Lhexgrid_core_GameState__$anonfun$endTurn$1__sci_Set__Lhexgrid_core_Player__Z = (function($thiz, eta$0$1$1, elem) {
+  return eta$0$1$1.contains__O__Z(elem)
+});
+var $p_Lhexgrid_core_GameState__$anonfun$endTurn$2__sci_Set__Lhexgrid_core_Player__Z = (function($thiz, eta$0$2$1, elem) {
+  return eta$0$2$1.contains__O__Z(elem)
 });
 var $p_Lhexgrid_core_GameState__$anonfun$monstersOfPlayer$1__Lhexgrid_core_Player__T2__Z = (function($thiz, p$1, x0$1) {
   var x1 = x0$1;
@@ -15138,17 +15252,17 @@ var $p_Lhexgrid_core_GameState__$anonfun$validTiles$1__Lhexgrid_core_Tiles$Path_
     })
   })($thiz, tile)))
 });
-var $p_Lhexgrid_core_GameState__$anonfun$validTiles$3__Lhexgrid_core_TilePos__Lhexgrid_core_Tiles$Path__Z = (function($thiz, pos$1, x$3) {
-  return $thiz.validPlacement__Lhexgrid_core_TilePos__Lhexgrid_core_Tile__Z(pos$1, x$3)
+var $p_Lhexgrid_core_GameState__$anonfun$validTiles$3__Lhexgrid_core_TilePos__Lhexgrid_core_Tiles$Path__Z = (function($thiz, pos$1, x$5) {
+  return $thiz.validPlacement__Lhexgrid_core_TilePos__Lhexgrid_core_Tile__Z(pos$1, x$5)
 });
-var $p_Lhexgrid_core_GameState__$anonfun$validPlacement$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2 = (function($thiz, dir$1, x$4) {
-  return $m_s_Predef$ArrowAssoc$().$minus$greater$extension__O__O__T2($m_s_Predef$().ArrowAssoc__O__O(dir$1), x$4)
+var $p_Lhexgrid_core_GameState__$anonfun$validPlacement$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2 = (function($thiz, dir$1, x$6) {
+  return $m_s_Predef$ArrowAssoc$().$minus$greater$extension__O__O__T2($m_s_Predef$().ArrowAssoc__O__O(dir$1), x$6)
 });
 var $p_Lhexgrid_core_GameState__$anonfun$validPlacement$1__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__s_Option = (function($thiz, pos$2, dir) {
   return $thiz.tileMap__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(pos$2.neighbor__Lhexgrid_core_Dir__Lhexgrid_core_TilePos(dir)).map__F1__s_Option(new $c_sjsr_AnonFunction1((function(this\u00f8, dir) {
-    return (function(x$4$2) {
-      var x$4 = $as_Lhexgrid_core_Tiles$GameTile(x$4$2);
-      return $p_Lhexgrid_core_GameState__$anonfun$validPlacement$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2(this\u00f8, dir, x$4)
+    return (function(x$6$2) {
+      var x$6 = $as_Lhexgrid_core_Tiles$GameTile(x$6$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$validPlacement$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2(this\u00f8, dir, x$6)
     })
   })($thiz, dir)))
 });
@@ -15172,16 +15286,30 @@ var $p_Lhexgrid_core_GameState__$anonfun$validPlacement$4__Lhexgrid_core_Tile__T
     throw new $c_s_MatchError(x1)
   }
 });
-var $p_Lhexgrid_core_GameState__$anonfun$neighbors$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2 = (function($thiz, dir$2, x$5) {
-  return $m_s_Predef$ArrowAssoc$().$minus$greater$extension__O__O__T2($m_s_Predef$().ArrowAssoc__O__O(dir$2), x$5)
+var $p_Lhexgrid_core_GameState__$anonfun$validPlacements$1__Lhexgrid_core_TilePos__sci_Set = (function($thiz, x$7) {
+  return x$7.ring__I__sci_Set(1)
+});
+var $p_Lhexgrid_core_GameState__$anonfun$validPlacements$2__Lhexgrid_core_Tile__Lhexgrid_core_TilePos__Z = (function($thiz, tile$3, x$8) {
+  return $thiz.validPlacement__Lhexgrid_core_TilePos__Lhexgrid_core_Tile__Z(x$8, tile$3)
+});
+var $p_Lhexgrid_core_GameState__$anonfun$neighbors$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2 = (function($thiz, dir$2, x$9) {
+  return $m_s_Predef$ArrowAssoc$().$minus$greater$extension__O__O__T2($m_s_Predef$().ArrowAssoc__O__O(dir$2), x$9)
 });
 var $p_Lhexgrid_core_GameState__$anonfun$neighbors$1__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__s_Option = (function($thiz, pos$3, dir) {
   return $thiz.tileMap__Lhexgrid_core_TileMap().tiles__sci_Map().get__O__s_Option(pos$3.neighbor__Lhexgrid_core_Dir__Lhexgrid_core_TilePos(dir)).map__F1__s_Option(new $c_sjsr_AnonFunction1((function(this\u00f8, dir) {
-    return (function(x$5$2) {
-      var x$5 = $as_Lhexgrid_core_Tiles$GameTile(x$5$2);
-      return $p_Lhexgrid_core_GameState__$anonfun$neighbors$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2(this\u00f8, dir, x$5)
+    return (function(x$9$2) {
+      var x$9 = $as_Lhexgrid_core_Tiles$GameTile(x$9$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$neighbors$2__Lhexgrid_core_Dir__Lhexgrid_core_Tiles$GameTile__T2(this\u00f8, dir, x$9)
     })
   })($thiz, dir)))
+});
+var $p_Lhexgrid_core_GameState__$anonfun$canMove$1__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z = (function($thiz, from$1, to$1, d) {
+  var x = from$1.neighbor__Lhexgrid_core_Dir__Lhexgrid_core_TilePos(d);
+  var x$2 = to$1;
+  return ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+});
+var $p_Lhexgrid_core_GameState__$anonfun$canMove$2__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z = (function($thiz, from$1, d) {
+  return $thiz.canMove__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z(from$1, d)
 });
 /** @constructor */
 function $c_Lhexgrid_core_GameState(tileMap, tileStack, monsters, playerTurns, blobs, cardStack) {
@@ -15224,6 +15352,14 @@ $c_Lhexgrid_core_GameState.prototype.blobs__sci_List = (function() {
 });
 $c_Lhexgrid_core_GameState.prototype.cardStack__sci_List = (function() {
   return this.Lhexgrid_core_GameState__f_cardStack
+});
+$c_Lhexgrid_core_GameState.prototype.alivePlayers__sci_Set = (function() {
+  return $as_sc_IterableOnceOps(this.monsters__Lhexgrid_core_TileMap().tiles__sci_Map().values__sc_Iterable().map__F1__O(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+    return (function(x$1$2) {
+      var x$1 = $as_Lhexgrid_core_Monster(x$1$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$alivePlayers$1__Lhexgrid_core_Monster__Lhexgrid_core_Player(this\u00f8, x$1)
+    })
+  })(this)))).toSet__sci_Set()
 });
 $c_Lhexgrid_core_GameState.prototype.drawCard__Lhexgrid_core_GameState = (function() {
   var x1 = this.cardStack__sci_List();
@@ -15280,30 +15416,18 @@ $c_Lhexgrid_core_GameState.prototype.moveMonster__Lhexgrid_core_TilePos__Lhexgri
         var x5 = $as_s_Some(p3);
         var m2 = $as_Lhexgrid_core_Monster(x5.value__O());
         var m = $as_Lhexgrid_core_Monster($as_sc_IterableOnceOps($m_sci_List$().apply__sci_Seq__O($m_sjsr_package$().toScalaVarArgs__sjs_js_Array__sci_Seq([m1, m2]))).maxBy__F1__s_math_Ordering__O(new $c_sjsr_AnonFunction1((function(this\u00f8) {
-          return (function(x$1$2) {
-            var x$1 = $as_Lhexgrid_core_Monster(x$1$2);
-            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I(this\u00f8, x$1)
-          })
-        })(this)), $m_s_math_Ordering$Int$()));
-        var newMonsters = this.monsters__Lhexgrid_core_TileMap().remove__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap(from).place__Lhexgrid_core_TilePos__O__Lhexgrid_core_TileMap(to, m);
-        var alivePlayers = $as_sc_IterableOnceOps(newMonsters.tiles__sci_Map().values__sc_Iterable().map__F1__O(new $c_sjsr_AnonFunction1((function(this$2) {
           return (function(x$2$2) {
             var x$2 = $as_Lhexgrid_core_Monster(x$2$2);
-            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$2__Lhexgrid_core_Monster__Lhexgrid_core_Player(this$2, x$2)
+            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$1__Lhexgrid_core_Monster__I(this\u00f8, x$2)
           })
-        })(this)))).toSet__sci_Set();
-        var x$1$3 = newMonsters;
-        var x$2$3 = this.playerTurns__sci_List().filter__F1__sci_List(new $c_sjsr_AnonFunction1((function(this$3, alivePlayers) {
-          return (function(elem$2) {
-            var elem = $as_Lhexgrid_core_Player(elem$2);
-            return $p_Lhexgrid_core_GameState__$anonfun$moveMonster$3__sci_Set__Lhexgrid_core_Player__Z(this$3, alivePlayers, elem)
-          })
-        })(this, alivePlayers)));
-        var x$3 = this.copy$default$1__Lhexgrid_core_TileMap();
-        var x$4 = this.copy$default$2__sci_List();
+        })(this)), $m_s_math_Ordering$Int$()));
+        var x$1 = this.monsters__Lhexgrid_core_TileMap().remove__Lhexgrid_core_TilePos__Lhexgrid_core_TileMap(from).place__Lhexgrid_core_TilePos__O__Lhexgrid_core_TileMap(to, m);
+        var x$2$3 = this.copy$default$1__Lhexgrid_core_TileMap();
+        var x$3 = this.copy$default$2__sci_List();
+        var x$4 = this.copy$default$4__sci_List();
         var x$5 = this.copy$default$5__sci_List();
         var x$6 = this.copy$default$6__sci_List();
-        return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$3, x$4, x$1$3, x$2$3, x$5, x$6)
+        return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$2$3, x$3, x$1, x$4, x$5, x$6)
       }
     }
   };
@@ -15370,17 +15494,79 @@ $c_Lhexgrid_core_GameState.prototype.changeNextTile__F1__Lhexgrid_core_GameState
     return this
   }
 });
+$c_Lhexgrid_core_GameState.prototype.revealNextTile__Lhexgrid_core_GameState = (function() {
+  var hasValidMove = $as_sc_SetOps($as_sc_IterableOps(this.nextTile__s_Option().map__F1__s_Option(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+    return (function(x$3$2) {
+      var x$3 = $as_Lhexgrid_core_Tiles$GameTile(x$3$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$1__Lhexgrid_core_Tiles$GameTile__sci_Set(this\u00f8, x$3)
+    })
+  })(this))).getOrElse__F0__O(new $c_sjsr_AnonFunction0((function(this$2) {
+    return (function() {
+      return $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$2__sci_Set(this$2)
+    })
+  })(this)))).flatMap__F1__O(new $c_sjsr_AnonFunction1((function(this$3) {
+    return (function(tile$2) {
+      var tile = $as_Lhexgrid_core_Tile(tile$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$3__Lhexgrid_core_Tile__sci_Set(this$3, tile)
+    })
+  })(this)))).intersect__sc_Set__sc_SetOps($as_sc_Set(this.monstersOfPlayer__Lhexgrid_core_Player__sci_Set(this.nextPlayer__Lhexgrid_core_Player()).flatMap__F1__O(new $c_sjsr_AnonFunction1((function(this$4) {
+    return (function(x$4$2) {
+      var x$4 = $as_Lhexgrid_core_TilePos(x$4$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$revealNextTile$4__Lhexgrid_core_TilePos__sci_Set(this$4, x$4)
+    })
+  })(this))))).nonEmpty__Z();
+  if (hasValidMove) {
+    return this
+  } else {
+    var x$1 = $as_sci_List(this.playerTurns__sci_List().tail__O());
+    var x$2 = this.copy$default$1__Lhexgrid_core_TileMap();
+    var x$3$3 = this.copy$default$2__sci_List();
+    var x$4$3 = this.copy$default$3__Lhexgrid_core_TileMap();
+    var x$5 = this.copy$default$5__sci_List();
+    var x$6 = this.copy$default$6__sci_List();
+    return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$2, x$3$3, x$4$3, x$1, x$5, x$6)
+  }
+});
 $c_Lhexgrid_core_GameState.prototype.nextPlayer__Lhexgrid_core_Player = (function() {
   return $as_Lhexgrid_core_Player(this.playerTurns__sci_List().head__O())
 });
 $c_Lhexgrid_core_GameState.prototype.endTurn__Lhexgrid_core_GameState = (function() {
-  var x$1 = $as_sci_List($as_sc_SeqOps(this.playerTurns__sci_List().tail__O()).$colon$plus__O__O(this.playerTurns__sci_List().head__O()));
+  var $$x3 = this.playerTurns__sci_List();
+  var eta$0$1 = this.alivePlayers__sci_Set();
+  var $$x2 = $as_sc_SeqOps($$x3.filter__F1__sci_List(new $c_sjsr_AnonFunction1((function(this\u00f8, eta$0$1) {
+    return (function(elem$2) {
+      var elem = $as_Lhexgrid_core_Player(elem$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$endTurn$1__sci_Set__Lhexgrid_core_Player__Z(this\u00f8, eta$0$1, elem)
+    })
+  })(this, eta$0$1))).tail__O());
+  var $$x1 = this.playerTurns__sci_List();
+  var eta$0$2 = this.alivePlayers__sci_Set();
+  var x$1 = $as_sci_List($$x2.$colon$plus__O__O($$x1.filter__F1__sci_List(new $c_sjsr_AnonFunction1((function(this$2, eta$0$2) {
+    return (function(elem$3$2) {
+      var elem$3 = $as_Lhexgrid_core_Player(elem$3$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$endTurn$2__sci_Set__Lhexgrid_core_Player__Z(this$2, eta$0$2, elem$3)
+    })
+  })(this, eta$0$2))).head__O()));
   var x$2 = this.copy$default$1__Lhexgrid_core_TileMap();
   var x$3 = this.copy$default$2__sci_List();
   var x$4 = this.copy$default$3__Lhexgrid_core_TileMap();
   var x$5 = this.copy$default$5__sci_List();
   var x$6 = this.copy$default$6__sci_List();
   return this.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState(x$2, x$3, x$4, x$1, x$5, x$6)
+});
+$c_Lhexgrid_core_GameState.prototype.winner__s_Option = (function() {
+  var x1 = this.playerTurns__sci_List();
+  if ((x1 instanceof $c_sci_$colon$colon)) {
+    var x2 = $as_sci_$colon$colon(x1);
+    var p = $as_Lhexgrid_core_Player(x2.head__O());
+    var p3 = x2.next$access$1__sci_List();
+    var x = $m_sci_Nil$();
+    var x$2 = p3;
+    if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+      return new $c_s_Some(p)
+    }
+  };
+  return $m_s_None$()
 });
 $c_Lhexgrid_core_GameState.prototype.activeMonsters__sci_Set = (function() {
   return this.monstersOfPlayer__Lhexgrid_core_Player__sci_Set(this.nextPlayer__Lhexgrid_core_Player())
@@ -15403,9 +15589,9 @@ $c_Lhexgrid_core_GameState.prototype.validTiles__Lhexgrid_core_TilePos__sci_Seq 
       return $p_Lhexgrid_core_GameState__$anonfun$validTiles$1__Lhexgrid_core_Tiles$Path__sci_IndexedSeq(this\u00f8, tile)
     })
   })(this))).filter__F1__sci_List(new $c_sjsr_AnonFunction1((function(this$2, pos) {
-    return (function(x$3$2) {
-      var x$3 = $as_Lhexgrid_core_Tiles$Path(x$3$2);
-      return $p_Lhexgrid_core_GameState__$anonfun$validTiles$3__Lhexgrid_core_TilePos__Lhexgrid_core_Tiles$Path__Z(this$2, pos, x$3)
+    return (function(x$5$2) {
+      var x$5 = $as_Lhexgrid_core_Tiles$Path(x$5$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$validTiles$3__Lhexgrid_core_TilePos__Lhexgrid_core_Tiles$Path__Z(this$2, pos, x$5)
     })
   })(this, pos)))
 });
@@ -15439,6 +15625,19 @@ $c_Lhexgrid_core_GameState.prototype.validPlacement__Lhexgrid_core_TilePos__Lhex
     }
   }
 });
+$c_Lhexgrid_core_GameState.prototype.validPlacements__Lhexgrid_core_Tile__sci_Set = (function(tile) {
+  return $as_sci_Set($as_sc_IterableOps(this.tileMap__Lhexgrid_core_TileMap().tiles__sci_Map().keySet__sci_Set().flatMap__F1__O(new $c_sjsr_AnonFunction1((function(this\u00f8) {
+    return (function(x$7$2) {
+      var x$7 = $as_Lhexgrid_core_TilePos(x$7$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$validPlacements$1__Lhexgrid_core_TilePos__sci_Set(this\u00f8, x$7)
+    })
+  })(this)))).filter__F1__O(new $c_sjsr_AnonFunction1((function(this$2, tile) {
+    return (function(x$8$2) {
+      var x$8 = $as_Lhexgrid_core_TilePos(x$8$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$validPlacements$2__Lhexgrid_core_Tile__Lhexgrid_core_TilePos__Z(this$2, tile, x$8)
+    })
+  })(this, tile))))
+});
 $c_Lhexgrid_core_GameState.prototype.neighbors__Lhexgrid_core_TilePos__sci_Seq = (function(pos) {
   return $as_sci_Seq($m_Lhexgrid_core_Dirs$().all__sci_Seq().flatMap__F1__O(new $c_sjsr_AnonFunction1((function(this\u00f8, pos) {
     return (function(dir$2) {
@@ -15446,6 +15645,36 @@ $c_Lhexgrid_core_GameState.prototype.neighbors__Lhexgrid_core_TilePos__sci_Seq =
       return $p_Lhexgrid_core_GameState__$anonfun$neighbors$1__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__s_Option(this\u00f8, pos, dir)
     })
   })(this, pos))))
+});
+$c_Lhexgrid_core_GameState.prototype.canMove__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Z = (function(from, to) {
+  return $as_sc_IterableOnceOps($m_Lhexgrid_core_Dirs$().all__sci_Seq().filter__F1__O(new $c_sjsr_AnonFunction1((function(this\u00f8, from, to) {
+    return (function(d$2) {
+      var d = $as_Lhexgrid_core_Dir(d$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$canMove$1__Lhexgrid_core_TilePos__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z(this\u00f8, from, to, d)
+    })
+  })(this, from, to)))).exists__F1__Z(new $c_sjsr_AnonFunction1((function(this$2, from) {
+    return (function(d$3$2) {
+      var d$3 = $as_Lhexgrid_core_Dir(d$3$2);
+      return $p_Lhexgrid_core_GameState__$anonfun$canMove$2__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z(this$2, from, d$3)
+    })
+  })(this, from)))
+});
+$c_Lhexgrid_core_GameState.prototype.canMove__Lhexgrid_core_TilePos__Lhexgrid_core_Dir__Z = (function(pos, dir) {
+  var x1 = $ct_T2__O__O__(new $c_T2(), this.tileAt__Lhexgrid_core_TilePos__s_Option(pos), this.tileAt__Lhexgrid_core_TilePos__s_Option(pos.neighbor__Lhexgrid_core_Dir__Lhexgrid_core_TilePos(dir)));
+  if ((x1 !== null)) {
+    var p2 = $as_s_Option(x1._1__O());
+    var p3 = $as_s_Option(x1._2__O());
+    if ((p2 instanceof $c_s_Some)) {
+      var x4 = $as_s_Some(p2);
+      var from = $as_Lhexgrid_core_Tiles$GameTile(x4.value__O());
+      if ((p3 instanceof $c_s_Some)) {
+        var x5 = $as_s_Some(p3);
+        var to = $as_Lhexgrid_core_Tiles$GameTile(x5.value__O());
+        return from.isJoined__Lhexgrid_core_Tile__Lhexgrid_core_Dir__Z(to, dir)
+      }
+    }
+  };
+  return false
 });
 $c_Lhexgrid_core_GameState.prototype.copy__Lhexgrid_core_TileMap__sci_List__Lhexgrid_core_TileMap__sci_List__sci_List__sci_List__Lhexgrid_core_GameState = (function(tileMap, tileStack, monsters, playerTurns, blobs, cardStack) {
   return new $c_Lhexgrid_core_GameState(tileMap, tileStack, monsters, playerTurns, blobs, cardStack)
@@ -17033,6 +17262,9 @@ $c_sc_AbstractIterator.prototype.toString__T = (function() {
 $c_sc_AbstractIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
 });
+$c_sc_AbstractIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
+});
 $c_sc_AbstractIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
 });
@@ -17248,6 +17480,9 @@ function $f_sc_SeqOps__sorted__s_math_Ordering__O($thiz, ord) {
 }
 function $f_sc_SeqOps__sortBy__F1__s_math_Ordering__O($thiz, f, ord) {
   return $thiz.sorted__s_math_Ordering__O(ord.on__F1__s_math_Ordering(f))
+}
+function $f_sc_SeqOps__indices__sci_Range($thiz) {
+  return $m_sci_Range$().apply__I__I__sci_Range$Exclusive(0, $thiz.length__I())
 }
 function $f_sc_SeqOps__lengthCompare__I__I($thiz, len) {
   return $thiz.scala$collection$SeqOps$$super$sizeCompare__I__I(len)
@@ -18837,9 +19072,11 @@ var $d_Lhexgrid_GameAction$SelectTileTarget = new $TypeData().initClass({
 });
 $c_Lhexgrid_GameAction$SelectTileTarget.prototype.$classData = $d_Lhexgrid_GameAction$SelectTileTarget;
 /** @constructor */
-function $c_Lhexgrid_GamePhase$GameOver(winner) {
+function $c_Lhexgrid_GamePhase$GameOver(winner, noValidPlacement) {
   this.Lhexgrid_GamePhase$GameOver__f_winner = null;
+  this.Lhexgrid_GamePhase$GameOver__f_noValidPlacement = false;
   this.Lhexgrid_GamePhase$GameOver__f_winner = winner;
+  this.Lhexgrid_GamePhase$GameOver__f_noValidPlacement = noValidPlacement;
   $ct_O__(this);
   $f_s_Product__$init$__V(this)
 }
@@ -18853,15 +19090,30 @@ $h_Lhexgrid_GamePhase$GameOver.prototype = $c_Lhexgrid_GamePhase$GameOver.protot
 $c_Lhexgrid_GamePhase$GameOver.prototype.winner__Lhexgrid_core_Player = (function() {
   return this.Lhexgrid_GamePhase$GameOver__f_winner
 });
+$c_Lhexgrid_GamePhase$GameOver.prototype.noValidPlacement__Z = (function() {
+  return this.Lhexgrid_GamePhase$GameOver__f_noValidPlacement
+});
 $c_Lhexgrid_GamePhase$GameOver.prototype.productPrefix__T = (function() {
   return "GameOver"
 });
 $c_Lhexgrid_GamePhase$GameOver.prototype.productArity__I = (function() {
-  return 1
+  return 2
 });
 $c_Lhexgrid_GamePhase$GameOver.prototype.productElement__I__O = (function(x$1) {
   var x1 = x$1;
-  return ((x1 === 0) ? this.winner__Lhexgrid_core_Player() : $s_sr_Statics__ioobe__I__O(x$1))
+  switch (x1) {
+    case 0: {
+      return this.winner__Lhexgrid_core_Player();
+      break
+    }
+    case 1: {
+      return this.noValidPlacement__Z();
+      break
+    }
+    default: {
+      return $s_sr_Statics__ioobe__I__O(x$1)
+    }
+  }
 });
 $c_Lhexgrid_GamePhase$GameOver.prototype.productIterator__sc_Iterator = (function() {
   return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
@@ -18870,7 +19122,11 @@ $c_Lhexgrid_GamePhase$GameOver.prototype.canEqual__O__Z = (function(x$1) {
   return (x$1 instanceof $c_Lhexgrid_GamePhase$GameOver)
 });
 $c_Lhexgrid_GamePhase$GameOver.prototype.hashCode__I = (function() {
-  return $m_sr_ScalaRunTime$()._hashCode__s_Product__I(this)
+  var acc = (-889275714);
+  acc = $s_sr_Statics__mix__I__I__I(acc, $f_T__hashCode__I(this.productPrefix__T()));
+  acc = $s_sr_Statics__mix__I__I__I(acc, $s_sr_Statics__anyHash__O__I(this.winner__Lhexgrid_core_Player()));
+  acc = $s_sr_Statics__mix__I__I__I(acc, (this.noValidPlacement__Z() ? 1231 : 1237));
+  return $s_sr_Statics__finalizeHash__I__I__I(acc, 2)
 });
 $c_Lhexgrid_GamePhase$GameOver.prototype.toString__T = (function() {
   return $m_sr_ScalaRunTime$()._toString__s_Product__T(this)
@@ -18882,9 +19138,14 @@ $c_Lhexgrid_GamePhase$GameOver.prototype.equals__O__Z = (function(x$1) {
     var x1 = x$1;
     if (((x1 instanceof $c_Lhexgrid_GamePhase$GameOver) || false)) {
       var GameOver$1 = $as_Lhexgrid_GamePhase$GameOver(x$1);
-      var x = this.winner__Lhexgrid_core_Player();
-      var x$2 = GameOver$1.winner__Lhexgrid_core_Player();
-      if (((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))) {
+      if ((this.noValidPlacement__Z() === GameOver$1.noValidPlacement__Z())) {
+        var x = this.winner__Lhexgrid_core_Player();
+        var x$2 = GameOver$1.winner__Lhexgrid_core_Player();
+        var $$x1 = ((x === null) ? (x$2 === null) : x.equals__O__Z(x$2))
+      } else {
+        var $$x1 = false
+      };
+      if ($$x1) {
         return GameOver$1.canEqual__O__Z(this)
       } else {
         return false
@@ -20106,6 +20367,9 @@ $c_Lhexgrid_drawables_BlobDrawable.prototype.$classData = $d_Lhexgrid_drawables_
 var $p_Lhexgrid_drawables_MonsterDrawable__alpha__D = (function($thiz) {
   return $thiz.Lhexgrid_drawables_MonsterDrawable__f_alpha
 });
+var $p_Lhexgrid_drawables_MonsterDrawable__is__Lhexgrid_gui_Decorator__Z = (function($thiz, d) {
+  return $thiz.decorators__sci_Set().contains__O__Z(d)
+});
 /** @constructor */
 function $c_Lhexgrid_drawables_MonsterDrawable(decorators, dc) {
   this.Lhexgrid_drawables_MonsterDrawable__f_decorators = null;
@@ -20115,7 +20379,7 @@ function $c_Lhexgrid_drawables_MonsterDrawable(decorators, dc) {
   this.Lhexgrid_drawables_MonsterDrawable__f_dc = dc;
   $ct_O__(this);
   $f_s_Product__$init$__V(this);
-  this.Lhexgrid_drawables_MonsterDrawable__f_alpha = (decorators.contains__O__Z($m_Lhexgrid_gui_Decorators$Overlay$()) ? 0.5 : 1.0)
+  this.Lhexgrid_drawables_MonsterDrawable__f_alpha = ($p_Lhexgrid_drawables_MonsterDrawable__is__Lhexgrid_gui_Decorator__Z(this, $m_Lhexgrid_gui_Decorators$Overlay$()) ? 0.5 : 1.0)
 }
 $c_Lhexgrid_drawables_MonsterDrawable.prototype = new $h_O();
 $c_Lhexgrid_drawables_MonsterDrawable.prototype.constructor = $c_Lhexgrid_drawables_MonsterDrawable;
@@ -20141,11 +20405,13 @@ $c_Lhexgrid_drawables_MonsterDrawable.prototype.draw__Lhexgrid_core_Monster__Lhe
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fill();
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().stroke();
   this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D().fillStyle = $m_sjs_js_Any$().fromString__T__sjs_js_Any("black");
-  var qual$1 = this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
-  var x$1 = ((("" + self.level__I()) + ".") + self.power__I());
-  var x$2 = pos.x__I();
-  var x$3 = pos.y__I();
-  qual$1.fillText(x$1, x$2, x$3)
+  if ((!$p_Lhexgrid_drawables_MonsterDrawable__is__Lhexgrid_gui_Decorator__Z(this, $m_Lhexgrid_gui_Decorators$Empty$()))) {
+    var qual$1 = this.Lhexgrid_drawables_MonsterDrawable__f_dc.ctx__Lorg_scalajs_dom_raw_CanvasRenderingContext2D();
+    var x$1 = ((("" + self.level__I()) + ".") + self.power__I());
+    var x$2 = pos.x__I();
+    var x$3 = pos.y__I();
+    qual$1.fillText(x$1, x$2, x$3)
+  }
 });
 $c_Lhexgrid_drawables_MonsterDrawable.prototype.decorate__Lhexgrid_gui_Decorator__Lhexgrid_drawables_MonsterDrawable = (function(d) {
   return this.copy__sci_Set__Lhexgrid_gui_DrawContext__Lhexgrid_drawables_MonsterDrawable($as_sci_Set(this.decorators__sci_Set().$plus__O__sci_SetOps(d)), this.Lhexgrid_drawables_MonsterDrawable__f_dc)
@@ -20411,6 +20677,56 @@ var $d_Lhexgrid_drawables_TileDrawable = new $TypeData().initClass({
   Ljava_io_Serializable: 1
 });
 $c_Lhexgrid_drawables_TileDrawable.prototype.$classData = $d_Lhexgrid_drawables_TileDrawable;
+/** @constructor */
+function $c_Lhexgrid_gui_Decorators$Empty$() {
+  $ct_O__(this);
+  $n_Lhexgrid_gui_Decorators$Empty$ = this;
+  $f_s_Product__$init$__V(this)
+}
+$c_Lhexgrid_gui_Decorators$Empty$.prototype = new $h_O();
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.constructor = $c_Lhexgrid_gui_Decorators$Empty$;
+/** @constructor */
+function $h_Lhexgrid_gui_Decorators$Empty$() {
+  /*<skip>*/
+}
+$h_Lhexgrid_gui_Decorators$Empty$.prototype = $c_Lhexgrid_gui_Decorators$Empty$.prototype;
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.productPrefix__T = (function() {
+  return "Empty"
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.productArity__I = (function() {
+  return 0
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.productElement__I__O = (function(x$1) {
+  var x1 = x$1;
+  return $s_sr_Statics__ioobe__I__O(x$1)
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.productIterator__sc_Iterator = (function() {
+  return $m_sr_ScalaRunTime$().typedProductIterator__s_Product__sc_Iterator(this)
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.hashCode__I = (function() {
+  return 67081517
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.toString__T = (function() {
+  return "Empty"
+});
+var $d_Lhexgrid_gui_Decorators$Empty$ = new $TypeData().initClass({
+  Lhexgrid_gui_Decorators$Empty$: 0
+}, false, "hexgrid.gui.Decorators$Empty$", {
+  Lhexgrid_gui_Decorators$Empty$: 1,
+  O: 1,
+  Lhexgrid_gui_Decorator: 1,
+  s_Product: 1,
+  s_Equals: 1,
+  Ljava_io_Serializable: 1
+});
+$c_Lhexgrid_gui_Decorators$Empty$.prototype.$classData = $d_Lhexgrid_gui_Decorators$Empty$;
+var $n_Lhexgrid_gui_Decorators$Empty$;
+function $m_Lhexgrid_gui_Decorators$Empty$() {
+  if ((!$n_Lhexgrid_gui_Decorators$Empty$)) {
+    $n_Lhexgrid_gui_Decorators$Empty$ = new $c_Lhexgrid_gui_Decorators$Empty$()
+  };
+  return $n_Lhexgrid_gui_Decorators$Empty$
+}
 /** @constructor */
 function $c_Lhexgrid_gui_Decorators$Highlighted$() {
   $ct_O__(this);
@@ -22571,6 +22887,9 @@ function $f_sc_SetOps__apply__O__Z($thiz, elem) {
 function $f_sc_SetOps__subsetOf__sc_Set__Z($thiz, that) {
   return $thiz.forall__F1__Z(that)
 }
+function $f_sc_SetOps__intersect__sc_Set__sc_SetOps($thiz, that) {
+  return $as_sc_SetOps($thiz.filter__F1__O(that))
+}
 function $f_sc_SetOps__concat__sc_IterableOnce__sc_SetOps($thiz, that) {
   var x1 = that;
   if ($is_sc_Iterable(x1)) {
@@ -23597,6 +23916,9 @@ $c_sci_MapKeyIterator.prototype.toString__T = (function() {
 $c_sci_MapKeyIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
 });
+$c_sci_MapKeyIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
+});
 $c_sci_MapKeyIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
 });
@@ -23697,6 +24019,9 @@ $c_sci_MapKeyValueTupleHashIterator.prototype.toString__T = (function() {
 });
 $c_sci_MapKeyValueTupleHashIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
+$c_sci_MapKeyValueTupleHashIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
 $c_sci_MapKeyValueTupleHashIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
@@ -23804,6 +24129,9 @@ $c_sci_MapKeyValueTupleIterator.prototype.toString__T = (function() {
 $c_sci_MapKeyValueTupleIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
 });
+$c_sci_MapKeyValueTupleIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
+});
 $c_sci_MapKeyValueTupleIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
 });
@@ -23905,6 +24233,9 @@ $c_sci_MapValueIterator.prototype.toString__T = (function() {
 });
 $c_sci_MapValueIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
+$c_sci_MapValueIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
 $c_sci_MapValueIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
@@ -24137,6 +24468,9 @@ $c_sci_NewVectorIterator.prototype.toString__T = (function() {
 });
 $c_sci_NewVectorIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
+$c_sci_NewVectorIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
 $c_sci_NewVectorIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
@@ -24401,6 +24735,9 @@ $c_sci_SetHashIterator.prototype.toString__T = (function() {
 $c_sci_SetHashIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
 });
+$c_sci_SetHashIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
+});
 $c_sci_SetHashIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
 });
@@ -24502,6 +24839,9 @@ $c_sci_SetIterator.prototype.toString__T = (function() {
 });
 $c_sci_SetIterator.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
+});
+$c_sci_SetIterator.prototype.exists__F1__Z = (function(p) {
+  return $f_sc_IterableOnceOps__exists__F1__Z(this, p)
 });
 $c_sci_SetIterator.prototype.copyToArray__O__I = (function(xs) {
   return $f_sc_IterableOnceOps__copyToArray__O__I(this, xs)
@@ -25839,6 +26179,9 @@ $c_Lhexgrid_core_Tiles$Path.prototype.rotateRight__Lhexgrid_core_Tiles$GameTile 
 $c_Lhexgrid_core_Tiles$Path.prototype.rotateLeft__Lhexgrid_core_Tiles$GameTile = (function() {
   return $f_Lhexgrid_core_Tiles$GameTile__rotateLeft__Lhexgrid_core_Tiles$GameTile(this)
 });
+$c_Lhexgrid_core_Tiles$Path.prototype.rotations__sci_Set = (function() {
+  return $f_Lhexgrid_core_Tile__rotations__sci_Set(this)
+});
 $c_Lhexgrid_core_Tiles$Path.prototype.canPlaceNextTo__Lhexgrid_core_Tile__Lhexgrid_core_Dir__Z = (function(that, dir) {
   return $f_Lhexgrid_core_Tile__canPlaceNextTo__Lhexgrid_core_Tile__Lhexgrid_core_Dir__Z(this, that, dir)
 });
@@ -25938,6 +26281,9 @@ $c_Lhexgrid_core_Tiles$Path.prototype.equals__O__Z = (function(x$1) {
       return false
     }
   }
+});
+$c_Lhexgrid_core_Tiles$Path.prototype.rotate__I__Lhexgrid_core_Tile = (function(n) {
+  return this.rotate__I__Lhexgrid_core_Tiles$Path(n)
 });
 $c_Lhexgrid_core_Tiles$Path.prototype.rotate__I__Lhexgrid_core_Tiles$GameTile = (function(n) {
   return this.rotate__I__Lhexgrid_core_Tiles$Path(n)
@@ -30482,6 +30828,9 @@ $c_sc_SeqView$Sorted.prototype.filter__F1__O = (function(pred) {
 $c_sc_SeqView$Sorted.prototype.tail__O = (function() {
   return $f_sc_IterableOps__tail__O(this)
 });
+$c_sc_SeqView$Sorted.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_IterableOps__flatMap__F1__O(this, f)
+});
 $c_sc_SeqView$Sorted.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
 });
@@ -30686,6 +31035,9 @@ $c_sc_SeqView$Sorted$ReverseSorted.prototype.filter__F1__O = (function(pred) {
 });
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.tail__O = (function() {
   return $f_sc_IterableOps__tail__O(this)
+});
+$c_sc_SeqView$Sorted$ReverseSorted.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_IterableOps__flatMap__F1__O(this, f)
 });
 $c_sc_SeqView$Sorted$ReverseSorted.prototype.foreach__F1__V = (function(f) {
   $f_sc_IterableOnceOps__foreach__F1__V(this, f)
@@ -31350,6 +31702,9 @@ $c_sc_AbstractSet.prototype.apply__O__Z = (function(elem) {
 $c_sc_AbstractSet.prototype.subsetOf__sc_Set__Z = (function(that) {
   return $f_sc_SetOps__subsetOf__sc_Set__Z(this, that)
 });
+$c_sc_AbstractSet.prototype.intersect__sc_Set__sc_SetOps = (function(that) {
+  return $f_sc_SetOps__intersect__sc_Set__sc_SetOps(this, that)
+});
 $c_sc_AbstractSet.prototype.concat__sc_IterableOnce__sc_SetOps = (function(that) {
   return $f_sc_SetOps__concat__sc_IterableOnce__sc_SetOps(this, that)
 });
@@ -31509,6 +31864,9 @@ $c_sc_AbstractSeq.prototype.sorted__s_math_Ordering__O = (function(ord) {
 });
 $c_sc_AbstractSeq.prototype.sortBy__F1__s_math_Ordering__O = (function(f, ord) {
   return $f_sc_SeqOps__sortBy__F1__s_math_Ordering__O(this, f, ord)
+});
+$c_sc_AbstractSeq.prototype.indices__sci_Range = (function() {
+  return $f_sc_SeqOps__indices__sci_Range(this)
 });
 $c_sc_AbstractSeq.prototype.lengthCompare__I__I = (function(len) {
   return $f_sc_SeqOps__lengthCompare__I__I(this, len)
@@ -33298,6 +33656,9 @@ $c_sci_Set$EmptySet$.prototype.filter__F1__sci_Set = (function(pred) {
 $c_sci_Set$EmptySet$.prototype.subsetOf__sc_Set__Z = (function(that) {
   return true
 });
+$c_sci_Set$EmptySet$.prototype.intersect__sc_Set__sci_Set = (function(that) {
+  return this
+});
 $c_sci_Set$EmptySet$.prototype.contains__O__Z = (function(elem) {
   return false
 });
@@ -33318,6 +33679,9 @@ $c_sci_Set$EmptySet$.prototype.excl__O__sci_SetOps = (function(elem) {
 });
 $c_sci_Set$EmptySet$.prototype.incl__O__sci_SetOps = (function(elem) {
   return this.incl__O__sci_Set(elem)
+});
+$c_sci_Set$EmptySet$.prototype.intersect__sc_Set__sc_SetOps = (function(that) {
+  return this.intersect__sc_Set__sci_Set(that)
 });
 $c_sci_Set$EmptySet$.prototype.filter__F1__O = (function(pred) {
   return this.filter__F1__sci_Set(pred)
@@ -33502,6 +33866,9 @@ $c_sci_Set$Set1.prototype.iterator__sc_Iterator = (function() {
 $c_sci_Set$Set1.prototype.foreach__F1__V = (function(f) {
   f.apply__O__O(this.sci_Set$Set1__f_elem1)
 });
+$c_sci_Set$Set1.prototype.exists__F1__Z = (function(p) {
+  return $uZ(p.apply__O__O(this.sci_Set$Set1__f_elem1))
+});
 $c_sci_Set$Set1.prototype.forall__F1__Z = (function(p) {
   return $uZ(p.apply__O__O(this.sci_Set$Set1__f_elem1))
 });
@@ -33627,6 +33994,9 @@ $c_sci_Set$Set2.prototype.scala$collection$immutable$Set$Set2$$getElem__I__O = (
 $c_sci_Set$Set2.prototype.foreach__F1__V = (function(f) {
   f.apply__O__O(this.sci_Set$Set2__f_elem1);
   f.apply__O__O(this.sci_Set$Set2__f_elem2)
+});
+$c_sci_Set$Set2.prototype.exists__F1__Z = (function(p) {
+  return ($uZ(p.apply__O__O(this.sci_Set$Set2__f_elem1)) || $uZ(p.apply__O__O(this.sci_Set$Set2__f_elem2)))
 });
 $c_sci_Set$Set2.prototype.forall__F1__Z = (function(p) {
   return ($uZ(p.apply__O__O(this.sci_Set$Set2__f_elem1)) && $uZ(p.apply__O__O(this.sci_Set$Set2__f_elem2)))
@@ -33789,6 +34159,9 @@ $c_sci_Set$Set3.prototype.foreach__F1__V = (function(f) {
   f.apply__O__O(this.sci_Set$Set3__f_elem1);
   f.apply__O__O(this.sci_Set$Set3__f_elem2);
   f.apply__O__O(this.sci_Set$Set3__f_elem3)
+});
+$c_sci_Set$Set3.prototype.exists__F1__Z = (function(p) {
+  return (($uZ(p.apply__O__O(this.sci_Set$Set3__f_elem1)) || $uZ(p.apply__O__O(this.sci_Set$Set3__f_elem2))) || $uZ(p.apply__O__O(this.sci_Set$Set3__f_elem3)))
 });
 $c_sci_Set$Set3.prototype.forall__F1__Z = (function(p) {
   return (($uZ(p.apply__O__O(this.sci_Set$Set3__f_elem1)) && $uZ(p.apply__O__O(this.sci_Set$Set3__f_elem2))) && $uZ(p.apply__O__O(this.sci_Set$Set3__f_elem3)))
@@ -33973,6 +34346,9 @@ $c_sci_Set$Set4.prototype.foreach__F1__V = (function(f) {
   f.apply__O__O(this.sci_Set$Set4__f_elem2);
   f.apply__O__O(this.sci_Set$Set4__f_elem3);
   f.apply__O__O(this.sci_Set$Set4__f_elem4)
+});
+$c_sci_Set$Set4.prototype.exists__F1__Z = (function(p) {
+  return ((($uZ(p.apply__O__O(this.sci_Set$Set4__f_elem1)) || $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem2))) || $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem3))) || $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem4)))
 });
 $c_sci_Set$Set4.prototype.forall__F1__Z = (function(p) {
   return ((($uZ(p.apply__O__O(this.sci_Set$Set4__f_elem1)) && $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem2))) && $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem3))) && $uZ(p.apply__O__O(this.sci_Set$Set4__f_elem4)))
@@ -34414,6 +34790,9 @@ $c_sci_Map$Map1.prototype.map__F1__O = (function(f) {
 $c_sci_Map$Map1.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
 });
+$c_sci_Map$Map1.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
+});
 $c_sci_Map$Map1.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
 });
@@ -34553,6 +34932,9 @@ $c_sci_Map$Map2.prototype.map__F1__O = (function(f) {
 });
 $c_sci_Map$Map2.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_sci_Map$Map2.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_sci_Map$Map2.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -34736,6 +35118,9 @@ $c_sci_Map$Map3.prototype.map__F1__O = (function(f) {
 });
 $c_sci_Map$Map3.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_sci_Map$Map3.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_sci_Map$Map3.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -34949,6 +35334,9 @@ $c_sci_Map$Map4.prototype.map__F1__O = (function(f) {
 });
 $c_sci_Map$Map4.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_sci_Map$Map4.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_sci_Map$Map4.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -35365,11 +35753,17 @@ $c_sci_HashSet.prototype.filterImpl__F1__Z__sci_HashSet = (function(pred, isFlip
   var newRootNode = this.rootNode__sci_BitmapIndexedSetNode().filterImpl__F1__Z__sci_BitmapIndexedSetNode(pred, isFlipped);
   return ($is(newRootNode, this.rootNode__sci_BitmapIndexedSetNode()) ? this : ((newRootNode.size__I() === 0) ? $m_sci_HashSet$().empty__sci_HashSet() : new $c_sci_HashSet(newRootNode)))
 });
+$c_sci_HashSet.prototype.intersect__sc_Set__sci_HashSet = (function(that) {
+  return $as_sci_HashSet($f_sc_SetOps__intersect__sc_Set__sc_SetOps(this, that))
+});
 $c_sci_HashSet.prototype.drop__I__sci_HashSet = (function(n) {
   return $as_sci_HashSet($f_sc_IterableOps__drop__I__O(this, n))
 });
 $c_sci_HashSet.prototype.drop__I__O = (function(n) {
   return this.drop__I__sci_HashSet(n)
+});
+$c_sci_HashSet.prototype.intersect__sc_Set__sc_SetOps = (function(that) {
+  return this.intersect__sc_Set__sci_HashSet(that)
 });
 $c_sci_HashSet.prototype.filterImpl__F1__Z__O = (function(pred, isFlipped) {
   return this.filterImpl__F1__Z__sci_HashSet(pred, isFlipped)
@@ -36409,6 +36803,9 @@ $c_sjsr_WrappedVarArgs.prototype.indexOf__O__I__I = (function(elem, from) {
 $c_sjsr_WrappedVarArgs.prototype.sortBy__F1__s_math_Ordering__O = (function(f, ord) {
   return $f_sc_SeqOps__sortBy__F1__s_math_Ordering__O(this, f, ord)
 });
+$c_sjsr_WrappedVarArgs.prototype.indices__sci_Range = (function() {
+  return $f_sc_SeqOps__indices__sci_Range(this)
+});
 $c_sjsr_WrappedVarArgs.prototype.isEmpty__Z = (function() {
   return $f_sc_SeqOps__isEmpty__Z(this)
 });
@@ -36550,6 +36947,9 @@ $c_sci_HashMap.prototype.map__F1__O = (function(f) {
 });
 $c_sci_HashMap.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_sci_HashMap.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_sci_HashMap.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -38031,6 +38431,9 @@ $c_scm_ArraySeq.prototype.map__F1__O = (function(f) {
 });
 $c_scm_ArraySeq.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_scm_ArraySeq.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_scm_ArraySeq.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -40904,6 +41307,9 @@ $c_scm_HashMap.prototype.map__F1__O = (function(f) {
 });
 $c_scm_HashMap.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_scm_HashMap.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_scm_HashMap.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -44263,6 +44669,9 @@ $c_scm_ListBuffer.prototype.map__F1__O = (function(f) {
 $c_scm_ListBuffer.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
 });
+$c_scm_ListBuffer.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
+});
 $c_scm_ListBuffer.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
 });
@@ -44449,6 +44858,9 @@ $c_scm_ArrayBuffer.prototype.map__F1__O = (function(f) {
 });
 $c_scm_ArrayBuffer.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_scm_ArrayBuffer.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_scm_ArrayBuffer.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
@@ -44686,6 +45098,9 @@ $c_sjs_js_WrappedArray.prototype.appended__O__O = (function(elem) {
 $c_sjs_js_WrappedArray.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
 });
+$c_sjs_js_WrappedArray.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
+});
 $c_sjs_js_WrappedArray.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
 });
@@ -44876,6 +45291,9 @@ $c_scm_ArrayDeque.prototype.map__F1__O = (function(f) {
 });
 $c_scm_ArrayDeque.prototype.strictOptimizedMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedMap__scm_Builder__F1__O(this, b, f)
+});
+$c_scm_ArrayDeque.prototype.flatMap__F1__O = (function(f) {
+  return $f_sc_StrictOptimizedIterableOps__flatMap__F1__O(this, f)
 });
 $c_scm_ArrayDeque.prototype.strictOptimizedFlatMap__scm_Builder__F1__O = (function(b, f) {
   return $f_sc_StrictOptimizedIterableOps__strictOptimizedFlatMap__scm_Builder__F1__O(this, b, f)
